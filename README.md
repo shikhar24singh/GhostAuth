@@ -1,94 +1,97 @@
-# GhostNet frontend
+# GhostAuth frontend
 
-A React + TypeScript frontend for a final-year project exploring adaptive Zero Trust access in learning networks. The prototype demonstrates role-based resource access, risk scenarios, verification, session revocation, and an audit trail.
+React + TypeScript implementation of the GhostAuth mobile Figma design. It includes all 33 screens and preview panels, the original fingerprint mark, locally bundled Arimo/Cousine fonts, and working navigation and controls.
 
-**This is a frontend demonstration.** Identities, device details, locations, risk scores, and events are synthetic. There is no backend, real authentication, MFA provider, device telemetry, behavioral model, or dataset integration. The prototype produces no research measurements or security guarantees.
+Design: [GhostAuth in Figma](https://www.figma.com/design/TM015DhFupKb6VtwjUoUFo/GhostNet?node-id=10-1645).
 
 ## Run locally
 
-Use **Node.js 24 LTS** and npm. Node 24 supports both the Vite toolchain and the native TypeScript stripping used by the test command.
+Use Node.js 24 and npm:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite, usually `http://127.0.0.1:5173`. No environment variables or API credentials are required.
+Open the URL printed by Vite, usually `http://127.0.0.1:5173`. No environment variables or API credentials are required.
 
 ```sh
-npm test           # Demo policy and state-transition tests
-npm run build     # TypeScript checks and production build in dist/
-npm run preview   # Serve the built frontend locally
+npm test          # State and access-transition tests
+npm run build     # TypeScript checks and production output in dist/
+npm run preview   # Serve the production build locally
 ```
 
-The tests cover role restrictions, verification, blocked and revoked sessions, audit events, and immutable state updates. They do not exercise the browser UI or prove backend security.
+## Android test APK
 
-## Try the demo
+The Android 0.2.0 project packages the frontend with local assets, GhostAuth launcher branding, native Back-button handling and display insets. It adds a Keystore-protected PIN verifier, persistent retry delays, the Android biometric prompt and short-lived native access approval. Create your own PIN in the APK; **123456 applies only to the browser demo**. Changing a native PIN and enabling/disabling fingerprint require the existing PIN. Build it with `npm run android:apk`; the APK is written to `artifacts/GhostAuth-debug.apk`. Java 21 and Android SDK 36 are required. See [Android build and phone installation](android/README.md) for setup, commands and preview boundaries.
 
-The app initially opens the **administrator overview** so the interface can be explored immediately. To see the sign-in screen, use **Sign out of demo** beside the sidebar profile. On small screens, open navigation first. Select a role, choose **Fill demo details**, then submit the form. The form only validates email format and password length; it does not authenticate an account. Do not enter real credentials.
+## Try the frontend
 
-Use the role selector below the sidebar profile to compare resource availability:
+Start with **Set up GhostAuth**. Review privacy choices, create and confirm a six-digit demo PIN, try fingerprint enrollment, and choose apps to protect. You can skip onboarding by opening `/#home`; the initial demo PIN is **123456**.
 
-| Resource | Student | Faculty | Administrator |
-| --- | --- | --- | --- |
-| Course materials | Available | Available | Available |
-| Academic records | Available | Available | Available |
-| Research cloud | Restricted | Available | Available |
-| Admin console | Restricted | Restricted | Available |
+- **Apps:** open protection details and preview identity verification. Search, select or deselect apps with **Choose apps**. Saving an empty selection shows the empty state.
+- **Activity:** view sample events and new verification attempts. Open the sample restricted event and choose **Preview restricted session** to try a blocked session.
+- **Settings:** change the PIN, configure fingerprint previews, save privacy preferences, reset the learning preview, and review permissions.
+- **Reset saved preferences:** restore the default app selection and privacy choices from Settings. The confirmation can be canceled, and resetting does not clear an active session restriction.
+- **Permissions:** simulate revoking the protection service to see the limited-protection state. Restoring permission requires a fresh identity check.
+- **Restricted session:** PINs, fingerprints and direct success URLs cannot bypass it. **Start a new demo session** in Settings explicitly clears the simulated restriction while retaining your choices.
 
-These permissions also depend on the current demo session:
+Navigation uses URL hashes and supports browser back/forward. Unknown hashes show the welcome screen. **Save selection** and **Save preferences** store app and privacy choices on this browser, including an empty selection and disabled privacy options. These survive reloads and reopening the frontend at the same address. Unsaved edits are discarded on reload. Storage is separate for each browser, device and origin (scheme, host and port).
 
-| Scenario | Simulated behavior |
-| --- | --- |
-| Normal activity | Risk score 12; permitted resources open as previews. |
-| New device | Risk score 48; permitted resources require extra verification. Use code **123456**. Successful verification lowers the demo score to 24 and restores access allowed by the role. |
-| Suspicious activity | Risk score 86; protected resources are blocked. Switching roles or attempting verification does not bypass the block. Select Normal activity or reset to leave this scenario. |
+Demo identity/session state remains in React memory. Reloading resets the PIN to **123456**, fingerprint/permission simulations, verification, restrictions and security events. No PIN, biometric setting, access approval or event data is stored with preferences. Existing activity is synthetic; new demo attempts use the current time in IST. Disabling security history pauses new event recording.
 
-In **Active sessions**, revoking a remote session leaves the current session unchanged. Revoking the current session blocks protected resources and stays revoked across role and scenario changes. **Reset demo** starts a fresh session for the selected role and clears accumulated demo events. Signing in again also starts fresh.
+If device storage is unavailable, choices still apply to the current session, with a visible failure message and **Try saving again**. An unsuccessful reset keeps the saved choices and the confirmation open. Invalid or incompatible saved data falls back to defaults without crashing or overwriting it until you explicitly save or reset.
 
-All state lives in React memory. Reloading restores the initial administrator demo; the current URL hash can preserve the selected page. Audit dates and times are deterministic sample data, displayed in IST, rather than live activity.
+The interface fills phone widths in portrait and landscape, and centers a 390px frame on desktop. Content scrolls within the screen while the header and navigation stay visible. Touch targets are at least 48 CSS pixels, with space for display cutouts and bottom system bars. PIN entry uses the built-in keypad or a hardware keyboard; search uses the phone keyboard.
 
-## Pages
+## Review on an Android phone
 
-Navigation uses URL hashes, with browser back/forward support:
+Connect the phone and computer to the same Wi-Fi. Build the frontend, then bind the preview to the computer's Wi-Fi IPv4 address:
 
-| Hash | View |
-| --- | --- |
-| `#overview` | Access summary, risk factors, sessions, and recent events |
-| `#resources` | Resource previews and access decisions |
-| `#sessions` | Synthetic devices and session revocation |
-| `#audit` | Searchable events, filtered by allowed/challenged/denied decisions |
+```sh
+npm run build
+npm run preview -- --host YOUR_WIFI_IPV4 --port 4173 --strictPort
+```
 
-Sign-in, verification, access-restriction details, and revocation confirmation are UI states rather than separate routes. Unknown hashes fall back to the overview.
+Replace `YOUR_WIFI_IPV4` with the computer's address, then open the printed Network URL in Chrome on the phone. Keep the preview process running during the review. Check setup, the PIN keypad, search, Settings dialogs, and portrait/landscape scrolling.
+
+The October 10, 2026 review passed automated mobile checks, and the user confirmed that the preview loads and looks right on their Android phone. The phone model and Android/browser versions were not recorded. See `design/figma/android-review.md` for scope and results.
+
+## Preview boundaries
+
+This is a frontend research demonstration. Fingerprint checks, Android permissions, risk signals, learning and protected-app handoff are explicit simulations. The browser does not collect device signals, scan biometrics, enforce protection over other apps or provide authentication. Recovery is not enrolled. Use a demo PIN.
+
+The installed Android APK now provides local PIN/biometric verification; browser authentication remains simulated. Production integration still needs native permissions, installed-app selection, protection/app-launch services, authoritative risk decisions, a recovery flow, and security-event storage. Native authentication still needs physical phone validation.
 
 ## Code map
 
-```text
-src/
-  main.tsx                    React entry point
-  App.tsx                     App shell, page views, navigation, and action handlers
-  styles.css                  Responsive workspace styles
-  components/
-    AuthScreen.tsx            Demo sign-in form and role selection
-    AuthScreen.css            Sign-in styles
-    Modal.tsx                 Shared dialog with keyboard/focus handling
-  lib/
-    types.ts                  Domain types for roles, resources, sessions, and events
-    demo-data.ts              Synthetic users, resources, signals, and initial records
-    demo-state.ts             Pure policy and state-transition functions
-tests/
-  demo-state.test.ts          Node test-runner coverage for demo behavior
+| File | Purpose |
+| --- | --- |
+| `src/App.tsx` | Exports the mobile frontend |
+| `src/mobile/GhostAuthApp.tsx` | Screens, navigation and interaction handlers |
+| `src/mobile/screens.ts` | Copy and route definitions for all 33 screens |
+| `src/mobile/state.ts` | App selection, preferences and verification transitions |
+| `src/mobile/preferences.ts` | Versioned browser storage for app and privacy choices |
+| `src/mobile/mobile.css` | Figma typography, colors and responsive layout |
+| `src/components/Modal.tsx` | Shared confirmation dialog and focus handling |
+| `public/assets/ghostauth-logo.png` | Original approved GhostAuth mark |
+| `public/fonts/` | Bundled fonts and their licenses |
+| `design/figma/` | Design contexts, prototype maps and validation records |
+| `tests/mobile-state.test.ts` | Mobile state regression tests |
+| `tests/mobile-browser.cjs` | Optional production browser interaction checks |
+| `tests/android-review.cjs` | Android touch, viewport, scrolling and dialog regression checks |
+| `tests/preferences.test.ts` | Saved-data validation and reset behavior |
+| `tests/preferences-browser.cjs` | Reload/reopen, reset confirmation and storage-failure checks |
+
+The prior dashboard's domain fixtures and tests remain under `src/lib/` and `tests/demo-state.test.ts`; they are not used by the mobile entry point.
+
+## Browser checks
+
+Build first, then run with an available Playwright installation:
+
+```sh
+npm run build
+node tests/mobile-browser.cjs
 ```
 
-## Next integration steps
-
-The existing separation between UI, data, and pure transitions provides clear places to connect a backend:
-
-1. Replace the `signedIn` flag and `AuthScreen` callback in `App.tsx` with server-backed sign-in, sign-out, session restoration, and expiry handling. The server must derive roles from the authenticated identity; the demo role selector is not an authorization mechanism.
-2. Replace `createDemoState` and `demo-data.ts` fixtures with API responses for the current user, resources, sessions, and audit events. Add loading, empty, and request-error states.
-3. Replace `requestResource` and `getResourceDecision` at resource-action boundaries with server policy decisions and protected content requests. Every protected backend endpoint must enforce authorization, even if the frontend hides or disables an action.
-4. Replace `verifyMfa` and the fixed code with a backend challenge lifecycle and a real verification provider. Replace `revokeSession` with server-side revocation, then refresh affected session and access state.
-5. Supply risk factors and decisions from the planned analysis service. Connect periodic refresh or server events so updated risk and revoked/expired sessions update the interface. Decide which application signals can actually be collected before connecting the paper's datasets or training a model.
-6. Persist audit events on the server with authoritative timestamps. Keep the current synthetic scenarios as an explicit development/demo mode for presentations and regression checks.
-
-`src/lib/types.ts` is a starting point for response shapes, not a finalized API contract. Frontend checks and this demo's tests must never become the only access controls.
+If Playwright is installed outside this project, set `PLAYWRIGHT_MODULE` to its package path. Optionally set `CHROME_EXECUTABLE` to a Chrome executable; otherwise Playwright uses its installed Chromium. Tests launch an isolated headless browser, exercise the main flows, and check desktop layouts plus all 33 routes in Chromium mobile emulation at 320×568, 360×640, 390×844, 412×915 and 844×390. Touch navigation, reduced-height search, long activity lists, PIN fallback and simulated system insets are also checked. Screenshots and reports are written to the ignored `tmp/mobile-qa/` directory.

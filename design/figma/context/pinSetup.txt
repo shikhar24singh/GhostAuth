@@ -1,0 +1,179 @@
+const imgIconArrowRight = "https://www.figma.com/api/mcp/asset/701a9c6d-9215-40f1-b9cc-af73feace337.svg";
+
+type ButtonProps = {
+  className?: string;
+  label?: string;
+  style?: "Primary";
+};
+
+function Button({ className, label = "Continue", style = "Primary" }: ButtonProps) {
+  return (
+    <div className={className || "bg-[var(--gn-action,#2448d8)] content-stretch flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] w-[342px]"} data-node-id="8:64">
+      <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-background,#f5f4f0)] w-[265px]" data-node-id="8:65">
+        {label}
+      </p>
+      <div className="relative shrink-0 size-[20px]" data-node-id="8:66" data-name="Icon / ArrowRight">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconArrowRight} />
+      </div>
+    </div>
+  );
+}
+
+function AppHeader({ className }: { className?: string }) {
+  return (
+    <div className={className || "[word-break:break-word] content-stretch flex h-[70px] items-center justify-between leading-[0] px-[24px] relative text-[color:var(--gn-text,#191919)] w-[390px]"} data-node-id="8:110" data-name="App header">
+      <p className="font-['Arimo:Bold'] font-bold relative shrink-0 text-[0px] tracking-[-1.4px] w-[180px]" data-node-id="8:111">
+        <span className="leading-[32px] text-[28px]">ghostnet</span>
+        <span className="leading-[32px] text-[#2448d8] text-[28px]">.</span>
+      </p>
+      <div className="font-['Cousine:Regular'] not-italic relative shrink-0 text-[11px] tracking-[0.8px] w-[130px]" data-node-id="8:112">
+        <p className="leading-[16px] mb-0">ANDROID</p>
+        <p className="leading-[16px]">PERSONAL SECURITY</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Component03CreatePin() {
+  return (
+    <div className="bg-[var(--gn-background,#f5f4f0)] content-stretch flex flex-col gap-[var(--gn-space-0,0px)] items-start p-[var(--gn-space-0,0px)] relative size-full" data-node-id="10:1324" data-name="03 / Create PIN">
+      <div className="[word-break:break-word] content-stretch flex font-['Arimo:Regular'] font-normal gap-[var(--gn-space-0,0px)] items-start justify-between leading-[18px] px-[var(--gn-space-24,24px)] py-[8px] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] w-[390px]" data-node-id="10:1325" data-name="Android status bar">
+        <p className="relative shrink-0 w-[100px]" data-node-id="10:1326">
+          9:41
+        </p>
+        <p className="relative shrink-0 text-right w-[125px] whitespace-pre-wrap" data-node-id="10:1327">{`5G  ·  100%`}</p>
+      </div>
+      <AppHeader className="[word-break:break-word] content-stretch flex h-[70px] items-center justify-between leading-[0] px-[24px] relative shrink-0 text-[color:var(--gn-text,#191919)] w-[390px]" />
+      <div className="bg-[var(--gn-text,#191919)] h-px relative shrink-0 w-[390px]" data-node-id="10:1331" data-name="Divider" />
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--gn-space-8,8px)] items-start min-h-px p-[var(--gn-space-24,24px)] relative w-[390px]" data-node-id="10:1332" data-name="Content">
+        <p className="[word-break:break-word] font-['Cousine:Regular'] leading-[16px] not-italic relative shrink-0 text-[11px] text-[color:var(--gn-text,#191919)] tracking-[0.8px] w-[342px]" data-node-id="10:1333">
+          SETUP / 02
+        </p>
+        <div className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[0] relative shrink-0 text-[46px] text-[color:var(--gn-text,#191919)] tracking-[-2px] w-[342px]" data-node-id="10:1334">
+          <p className="leading-[48px] mb-0">Create</p>
+          <p className="leading-[48px]">your PIN.</p>
+        </div>
+        <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-text,#191919)] w-[342px]" data-node-id="10:1335">
+          Choose six digits for verification and access to GhostNet settings.
+        </p>
+        <div className="content-stretch flex gap-[var(--gn-space-12,12px)] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[342px]" data-node-id="10:1339" data-name="PIN entry / six digits">
+          <div className="border border-[var(--gn-action,#2448d8)] border-solid content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[50px] items-center justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[40px]" data-node-id="10:1340" data-name="Digit 1" />
+          <div className="border border-[var(--gn-border,#d8d6cf)] border-solid content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[50px] items-center justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[40px]" data-node-id="10:1342" data-name="Digit 2" />
+          <div className="border border-[var(--gn-border,#d8d6cf)] border-solid content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[50px] items-center justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[40px]" data-node-id="10:1344" data-name="Digit 3" />
+          <div className="border border-[var(--gn-border,#d8d6cf)] border-solid content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[50px] items-center justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[40px]" data-node-id="10:1346" data-name="Digit 4" />
+          <div className="border border-[var(--gn-border,#d8d6cf)] border-solid content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[50px] items-center justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[40px]" data-node-id="10:1348" data-name="Digit 5" />
+          <div className="border border-[var(--gn-border,#d8d6cf)] border-solid content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[50px] items-center justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[40px]" data-node-id="10:1350" data-name="Digit 6" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--gn-space-8,8px)] items-start p-[var(--gn-space-0,0px)] relative shrink-0 w-[342px]" data-node-id="10:1352" data-name="Numeric keypad">
+          <div className="content-stretch cursor-pointer flex gap-[var(--gn-space-12,12px)] items-start p-[var(--gn-space-0,0px)] relative shrink-0 w-[342px]" data-node-id="10:1353" data-name="Keypad row">
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1354" data-name="Key 1">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1355">
+                1
+              </p>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1356" data-name="Key 2">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1357">
+                2
+              </p>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1358" data-name="Key 3">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1359">
+                3
+              </p>
+            </button>
+          </div>
+          <div className="content-stretch cursor-pointer flex gap-[var(--gn-space-12,12px)] items-start p-[var(--gn-space-0,0px)] relative shrink-0 w-[342px]" data-node-id="10:1360" data-name="Keypad row">
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1361" data-name="Key 4">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1362">
+                4
+              </p>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1363" data-name="Key 5">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1364">
+                5
+              </p>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1365" data-name="Key 6">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1366">
+                6
+              </p>
+            </button>
+          </div>
+          <div className="content-stretch cursor-pointer flex gap-[var(--gn-space-12,12px)] items-start p-[var(--gn-space-0,0px)] relative shrink-0 w-[342px]" data-node-id="10:1367" data-name="Keypad row">
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1368" data-name="Key 7">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1369">
+                7
+              </p>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1370" data-name="Key 8">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1371">
+                8
+              </p>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1372" data-name="Key 9">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1373">
+                9
+              </p>
+            </button>
+          </div>
+          <div className="content-stretch flex gap-[var(--gn-space-12,12px)] items-start p-[var(--gn-space-0,0px)] relative shrink-0 w-[342px]" data-node-id="10:1374" data-name="Keypad row">
+            <div className="content-stretch flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1375" data-name="Key">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1376">
+                ​
+              </p>
+            </div>
+            <button className="content-stretch cursor-pointer flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1377" data-name="Key 0">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1378">
+                0
+              </p>
+            </button>
+            <button className="content-stretch cursor-pointer flex flex-col gap-[var(--gn-space-0,0px)] h-[48px] items-start justify-center p-[var(--gn-space-0,0px)] relative shrink-0 w-[106px]" data-node-id="10:1379" data-name="Key ⌫">
+              <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[32px] text-[color:var(--gn-text,#191919)] text-center tracking-[-1px] w-[106px]" data-node-id="10:1380">
+                ⌫
+              </p>
+            </button>
+          </div>
+        </div>
+        <div className="flex-[1_0_0] min-h-px relative w-[342px]" data-node-id="10:1381" data-name="Flexible space" />
+        <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] w-[342px]" data-node-id="10:1382">
+          Avoid birthdays and repeated digits.
+        </p>
+        <Button className="bg-[var(--gn-action,#2448d8)] content-stretch cursor-pointer flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] shrink-0 w-[342px]" />
+      </div>
+      <div className="[word-break:break-word] content-stretch flex font-['Cousine:Regular'] gap-[var(--gn-space-0,0px)] items-start justify-between leading-[16px] not-italic px-[var(--gn-space-24,24px)] py-[12px] relative shrink-0 text-[11px] text-[color:var(--gn-text,#191919)] tracking-[0.8px] w-[390px]" data-node-id="10:1336" data-name="Footer">
+        <p className="relative shrink-0 w-[160px]" data-node-id="10:1337">
+          GHOSTNET AUTH
+        </p>
+        <p className="relative shrink-0 w-[100px]" data-node-id="10:1338">
+          ANDROID
+        </p>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: GhostNet/small: Font(family: "Arimo", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0), GhostNet/brand: Font(family: "Arimo", style: Bold, size: 28, weight: 700, lineHeight: 32, letterSpacing: -1.399999976158142), GhostNet/label: Font(family: "Cousine", style: Regular, size: 11, weight: 400, lineHeight: 16, letterSpacing: 0.800000011920929), GhostNet/display: Font(family: "Arimo", style: Regular, size: 46, weight: 400, lineHeight: 48, letterSpacing: -2), GhostNet/body: Font(family: "Arimo", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), GhostNet/heading: Font(family: "Arimo", style: Regular, size: 32, weight: 400, lineHeight: 36, letterSpacing: -1).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## App header
+**Node ID:** 8:110
+
+GhostNet App header — ink, paper and cobalt. Reuse instances.
+
+## Style=Primary
+**Node ID:** 8:64
+
+GhostNet Style=Primary — ink, paper and cobalt. Reuse instances.
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

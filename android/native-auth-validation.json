@@ -1,0 +1,30 @@
+{
+  "validatedOn": "2026-10-11",
+  "version": "0.2.0",
+  "nodeTests": {
+    "passed": 27,
+    "failed": 0
+  },
+  "javaSecurityTests": {
+    "passed": 4,
+    "failed": 0,
+    "coverage": [
+      "PBKDF2 differential check against independent JDK implementation",
+      "Wrong PIN, invalid verifier/salt and per-salt derivation",
+      "Retry delay escalation and ceiling",
+      "Session expiry and invalid clocks"
+    ]
+  },
+  "uiChecks": [
+    "Native bridge enrollment, PIN confirmation and real-method fingerprint controls",
+    "Native PIN check rejects the demo PIN and retains credentials across reload",
+    "Canceled and late biometric results cannot authorize access",
+    "Native approval expires on background events, reload and the 30-second deadline",
+    "PIN changes and biometric disable require the existing native PIN",
+    "Preference reset and reload preserve native PIN lockout; unavailable bridge fails closed",
+    "Devices without enrolled strong biometrics retain the PIN fallback"
+  ],
+  "browserErrors": [],
+  "uiMode": "Headless Chromium using a deterministic mocked Capacitor bridge; no Android emulator",
+  "physicalValidation": "Pending: actual Keystore encryption, persistence/reboot lockout, Android prompt and biometric enrollment invalidation"
+}

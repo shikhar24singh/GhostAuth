@@ -1,0 +1,153 @@
+const imgIconArrowRight = "https://www.figma.com/api/mcp/asset/d9966b8d-be6d-4c73-a203-09ba221bcd81.svg";
+const imgIconArrowRight1 = "https://www.figma.com/api/mcp/asset/d1a1a99d-97b1-4f20-8c49-ec598719de47.svg";
+
+type ButtonProps = {
+  className?: string;
+  label?: string;
+  style?: "Primary" | "Secondary";
+};
+
+function Button({ className, label = "Continue", style = "Primary" }: ButtonProps) {
+  const isPrimary = style === "Primary";
+  const isSecondary = style === "Secondary";
+  return (
+    <div className={className || `content-stretch flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] w-[342px] ${isSecondary ? "bg-[var(--gn-background,#f5f4f0)] border border-[var(--gn-text,#191919)] border-solid" : "bg-[var(--gn-action,#2448d8)]"}`} id={isSecondary ? "node-8_69" : "node-8_64"}>
+      {isPrimary && (
+        <>
+          <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-background,#f5f4f0)] w-[265px]" data-node-id="8:65">
+            {label}
+          </p>
+          <div className="relative shrink-0 size-[20px]" data-node-id="8:66" data-name="Icon / ArrowRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconArrowRight} />
+          </div>
+        </>
+      )}
+      {isSecondary && (
+        <>
+          <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-text,#191919)] w-[265px]" data-node-id="8:70">
+            {label}
+          </p>
+          <div className="relative shrink-0 size-[20px]" data-node-id="8:71" data-name="Icon / ArrowRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconArrowRight1} />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function AppHeader({ className }: { className?: string }) {
+  return (
+    <div className={className || "[word-break:break-word] content-stretch flex h-[70px] items-center justify-between leading-[0] px-[24px] relative text-[color:var(--gn-text,#191919)] w-[390px]"} data-node-id="8:110" data-name="App header">
+      <p className="font-['Arimo:Bold'] font-bold relative shrink-0 text-[0px] tracking-[-1.4px] w-[180px]" data-node-id="8:111">
+        <span className="leading-[32px] text-[28px]">ghostnet</span>
+        <span className="leading-[32px] text-[#2448d8] text-[28px]">.</span>
+      </p>
+      <div className="font-['Cousine:Regular'] not-italic relative shrink-0 text-[11px] tracking-[0.8px] w-[130px]" data-node-id="8:112">
+        <p className="leading-[16px] mb-0">ANDROID</p>
+        <p className="leading-[16px]">PERSONAL SECURITY</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Component08LearningPeriod() {
+  return (
+    <div className="bg-[var(--gn-background,#f5f4f0)] content-stretch flex flex-col gap-[var(--gn-space-0,0px)] items-start p-[var(--gn-space-0,0px)] relative size-full" data-node-id="10:1602" data-name="08 / Learning period">
+      <div className="[word-break:break-word] content-stretch flex font-['Arimo:Regular'] font-normal gap-[var(--gn-space-0,0px)] items-start justify-between leading-[18px] px-[var(--gn-space-24,24px)] py-[8px] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] w-[390px]" data-node-id="10:1603" data-name="Android status bar">
+        <p className="relative shrink-0 w-[100px]" data-node-id="10:1604">
+          9:41
+        </p>
+        <p className="relative shrink-0 text-right w-[125px] whitespace-pre-wrap" data-node-id="10:1605">{`5G  ·  100%`}</p>
+      </div>
+      <AppHeader className="[word-break:break-word] content-stretch flex h-[70px] items-center justify-between leading-[0] px-[24px] relative shrink-0 text-[color:var(--gn-text,#191919)] w-[390px]" />
+      <div className="bg-[var(--gn-text,#191919)] h-px relative shrink-0 w-[390px]" data-node-id="10:1609" data-name="Divider" />
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--gn-space-8,8px)] items-start min-h-px p-[var(--gn-space-24,24px)] relative w-[390px]" data-node-id="10:1610" data-name="Content">
+        <p className="[word-break:break-word] font-['Cousine:Regular'] leading-[16px] not-italic relative shrink-0 text-[11px] text-[color:var(--gn-text,#191919)] tracking-[0.8px] w-[342px]" data-node-id="10:1611">
+          SETUP COMPLETE
+        </p>
+        <div className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[0] relative shrink-0 text-[46px] text-[color:var(--gn-text,#191919)] tracking-[-2px] w-[342px]" data-node-id="10:1612">
+          <p className="leading-[48px] mb-0">Getting to</p>
+          <p className="leading-[48px]">know you.</p>
+        </div>
+        <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-text,#191919)] w-[342px]" data-node-id="10:1613">
+          Your behavior profile will build gradually as you use GhostNet.
+        </p>
+        <div className="bg-[var(--gn-text,#191919)] h-[2px] relative shrink-0 w-[342px]" data-node-id="10:1617" data-name="Divider" />
+        <p className="[word-break:break-word] font-['Cousine:Regular'] leading-[16px] not-italic relative shrink-0 text-[11px] text-[color:var(--gn-text,#191919)] tracking-[0.8px] w-[342px]" data-node-id="10:1618">
+          PROTECTION IS ALREADY ACTIVE
+        </p>
+        <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] w-[342px]" data-node-id="10:1619">
+          Verification stays conservative while there is not enough data to recognize your normal patterns.
+        </p>
+        <div className="content-stretch flex h-[70px] items-center justify-between relative shrink-0 w-[342px]" data-node-id="10:1620" data-name="List item">
+          <div className="[word-break:break-word] content-stretch flex flex-col font-['Arimo:Regular'] font-normal gap-[2px] items-start p-[var(--gn-space-0,0px)] relative shrink-0 text-[color:var(--gn-text,#191919)] w-[292px]" data-node-id="I10:1620;8:98" data-name="Labels">
+            <p className="leading-[22px] relative shrink-0 text-[16px] tracking-[-0.2px] w-[292px]" data-node-id="I10:1620;8:99">{`Touch & interaction patterns`}</p>
+            <p className="leading-[18px] relative shrink-0 text-[12px] w-[292px]" data-node-id="I10:1620;8:100">
+              Collected with your consent.
+            </p>
+          </div>
+        </div>
+        <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[342px]" data-node-id="10:1626" data-name="Divider" />
+        <div className="content-stretch flex h-[70px] items-center justify-between relative shrink-0 w-[342px]" data-node-id="10:1627" data-name="List item">
+          <div className="[word-break:break-word] content-stretch flex flex-col font-['Arimo:Regular'] font-normal gap-[2px] items-start p-[var(--gn-space-0,0px)] relative shrink-0 text-[color:var(--gn-text,#191919)] w-[292px]" data-node-id="I10:1627;8:98" data-name="Labels">
+            <p className="leading-[22px] relative shrink-0 text-[16px] tracking-[-0.2px] w-[292px]" data-node-id="I10:1627;8:99">
+              Movement signals
+            </p>
+            <p className="leading-[18px] relative shrink-0 text-[12px] w-[292px]" data-node-id="I10:1627;8:100">
+              Used only where Android permits.
+            </p>
+          </div>
+        </div>
+        <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[342px]" data-node-id="10:1633" data-name="Divider" />
+        <div className="flex-[1_0_0] min-h-px relative w-[342px]" data-node-id="10:1634" data-name="Flexible space" />
+        <Button className="bg-[var(--gn-action,#2448d8)] content-stretch cursor-pointer flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] shrink-0 w-[342px]" label="Open GhostNet" />
+        <Button className="bg-[var(--gn-background,#f5f4f0)] border border-[var(--gn-text,#191919)] border-solid content-stretch cursor-pointer flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] shrink-0 w-[342px]" label="Review data choices" style="Secondary" />
+      </div>
+      <div className="[word-break:break-word] content-stretch flex font-['Cousine:Regular'] gap-[var(--gn-space-0,0px)] items-start justify-between leading-[16px] not-italic px-[var(--gn-space-24,24px)] py-[12px] relative shrink-0 text-[11px] text-[color:var(--gn-text,#191919)] tracking-[0.8px] w-[390px]" data-node-id="10:1614" data-name="Footer">
+        <p className="relative shrink-0 w-[160px]" data-node-id="10:1615">
+          GHOSTNET AUTH
+        </p>
+        <p className="relative shrink-0 w-[100px]" data-node-id="10:1616">
+          ANDROID
+        </p>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: GhostNet/small: Font(family: "Arimo", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0), GhostNet/brand: Font(family: "Arimo", style: Bold, size: 28, weight: 700, lineHeight: 32, letterSpacing: -1.399999976158142), GhostNet/label: Font(family: "Cousine", style: Regular, size: 11, weight: 400, lineHeight: 16, letterSpacing: 0.800000011920929), GhostNet/display: Font(family: "Arimo", style: Regular, size: 46, weight: 400, lineHeight: 48, letterSpacing: -2), GhostNet/body: Font(family: "Arimo", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), GhostNet/row: Font(family: "Arimo", style: Regular, size: 16, weight: 400, lineHeight: 22, letterSpacing: -0.20000000298023224).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## App header
+**Node ID:** 8:110
+
+GhostNet App header — ink, paper and cobalt. Reuse instances.
+
+## List item
+**Node ID:** 8:97
+
+GhostNet List item — ink, paper and cobalt. Reuse instances.
+
+## Style=Primary
+**Node ID:** 8:64
+
+GhostNet Style=Primary — ink, paper and cobalt. Reuse instances.
+
+## Style=Secondary
+**Node ID:** 8:69
+
+GhostNet Style=Secondary — ink, paper and cobalt. Reuse instances.
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

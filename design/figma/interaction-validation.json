@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-10",
+  "dead": [],
+  "overflow": [],
+  "broken": [],
+  "clickReactions": 136,
+  "screens": 33,
+  "logicChecks": {
+    "method": "Read-only evaluation of saved Figma reaction definitions, not viewer playback",
+    "results": [
+      {
+        "name": "Unselect Mail decrements count",
+        "passed": true
+      },
+      {
+        "name": "Manage app selection shares state",
+        "passed": true
+      },
+      {
+        "name": "PIN is limited to six digits",
+        "passed": true
+      },
+      {
+        "name": "Demo PIN succeeds",
+        "passed": true
+      },
+      {
+        "name": "Incorrect PIN shows retry",
+        "passed": true
+      },
+      {
+        "name": "New PIN is saved and confirmation clears entry",
+        "passed": true
+      },
+      {
+        "name": "Matching confirmation continues",
+        "passed": true
+      },
+      {
+        "name": "User-created PIN verifies",
+        "passed": true
+      },
+      {
+        "name": "Backspace removes one digit",
+        "passed": true
+      },
+      {
+        "name": "Incomplete PIN shows help",
+        "passed": true
+      },
+      {
+        "name": "Search filters Mail only",
+        "passed": true
+      },
+      {
+        "name": "Privacy checkbox toggles off",
+        "passed": true
+      },
+      {
+        "name": "Privacy checkbox toggles on",
+        "passed": true
+      },
+      {
+        "name": "No selected apps opens empty state",
+        "passed": true
+      }
+    ],
+    "passed": 14,
+    "total": 14
+  },
+  "polish": {
+    "mutatedNodeIds": [
+      "I10:1558;8:86",
+      "I10:1568;8:86",
+      "I10:1578;8:86",
+      "I10:1588;8:86",
+      "I10:1768;8:86",
+      "I10:1778;8:86",
+      "I10:1788;8:86",
+      "I10:1798;8:86",
+      "I10:2336;8:86",
+      "I10:2346;8:86",
+      "I10:2356;8:86",
+      "10:1900",
+      "10:1921",
+      "10:1989",
+      "10:2009",
+      "10:2010",
+      "10:2055",
+      "10:2138",
+      "I10:2452;8:100"
+    ]
+  },
+  "limitations": [
+    "Search uses explicit preset filters.",
+    "Android permissions, fingerprint checks and launching protected apps are labeled simulations.",
+    "Validated saved Figma reaction definitions and screenshots; did not operate the prototype viewer."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "validatedOn": "2026-10-11",
+  "checks": [
+    "Android shell hides the sample status row and honors native display insets",
+    "Native Back bridge dismisses dialogs, navigates routes and exits at the root",
+    "Native shell fills portrait and landscape viewports without obscuring navigation"
+  ],
+  "mode": "Mocked Capacitor bridge in headless Chromium; no physical Android test"
+}

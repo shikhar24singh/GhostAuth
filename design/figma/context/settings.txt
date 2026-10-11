@@ -1,0 +1,187 @@
+const imgFrame = "https://www.figma.com/api/mcp/asset/903ef5a0-2e2e-4b63-8213-ee9cb5e5af7f.svg";
+const imgIconChevronRight = "https://www.figma.com/api/mcp/asset/cd1a30c9-ab0f-4073-8d15-a35ea918199b.svg";
+const imgFrame1 = "https://www.figma.com/api/mcp/asset/0db09737-5dfc-49ec-bd15-bdc2ca07096b.svg";
+const imgFrame2 = "https://www.figma.com/api/mcp/asset/e367d122-a122-434f-8494-5770dc31c927.svg";
+
+function IconGrid2X2({ className }: { className?: string }) {
+  return (
+    <div className={className || "relative size-[20px]"} data-node-id="12:2" data-name="Icon / Grid2X2">
+      <div className="absolute left-0 size-[20px] top-0" data-node-id="12:3" data-name="Frame">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+      </div>
+    </div>
+  );
+}
+
+type NavigationItemProps = {
+  className?: string;
+  state?: "Active" | "Rest";
+};
+
+function NavigationItem({ className, state = "Active" }: NavigationItemProps) {
+  const isRest = state === "Rest";
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[4px] h-[58px] items-center justify-center relative w-[114px]"} id={isRest ? "node-8_119" : "node-8_113"}>
+      <IconGrid2X2 className="relative shrink-0 size-[20px]" />
+      <p className={`[word-break:break-word] font-["Arimo:Regular"] font-normal leading-[18px] relative shrink-0 text-[12px] text-center w-[100px] ${isRest ? "text-[color:var(--gn-text,#191919)]" : "text-[color:var(--gn-action,#2448d8)]"}`} id={isRest ? "node-8_124" : "node-8_118"}>
+        Apps
+      </p>
+    </div>
+  );
+}
+
+function AppHeader({ className }: { className?: string }) {
+  return (
+    <div className={className || "[word-break:break-word] content-stretch flex h-[70px] items-center justify-between leading-[0] px-[24px] relative text-[color:var(--gn-text,#191919)] w-[390px]"} data-node-id="8:110" data-name="App header">
+      <p className="font-['Arimo:Bold'] font-bold relative shrink-0 text-[0px] tracking-[-1.4px] w-[180px]" data-node-id="8:111">
+        <span className="leading-[32px] text-[28px]">ghostnet</span>
+        <span className="leading-[32px] text-[#2448d8] text-[28px]">.</span>
+      </p>
+      <div className="font-['Cousine:Regular'] not-italic relative shrink-0 text-[11px] tracking-[0.8px] w-[130px]" data-node-id="8:112">
+        <p className="leading-[16px] mb-0">ANDROID</p>
+        <p className="leading-[16px]">PERSONAL SECURITY</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Component21Settings() {
+  return (
+    <div className="bg-[var(--gn-background,#f5f4f0)] content-stretch flex flex-col gap-[var(--gn-space-0,0px)] items-start p-[var(--gn-space-0,0px)] relative size-full" data-node-id="10:2261" data-name="21 / Settings">
+      <div className="[word-break:break-word] content-stretch flex font-['Arimo:Regular'] font-normal gap-[var(--gn-space-0,0px)] items-start justify-between leading-[18px] px-[var(--gn-space-24,24px)] py-[8px] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] w-[390px]" data-node-id="10:2262" data-name="Android status bar">
+        <p className="relative shrink-0 w-[100px]" data-node-id="10:2263">
+          9:41
+        </p>
+        <p className="relative shrink-0 text-right w-[125px] whitespace-pre-wrap" data-node-id="10:2264">{`5G  ·  100%`}</p>
+      </div>
+      <AppHeader className="[word-break:break-word] content-stretch flex h-[70px] items-center justify-between leading-[0] px-[24px] relative shrink-0 text-[color:var(--gn-text,#191919)] w-[390px]" />
+      <div className="bg-[var(--gn-text,#191919)] h-px relative shrink-0 w-[390px]" data-node-id="10:2268" data-name="Divider" />
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--gn-space-8,8px)] items-start min-h-px p-[var(--gn-space-24,24px)] relative w-[390px]" data-node-id="10:2269" data-name="Content">
+        <p className="[word-break:break-word] font-['Cousine:Regular'] leading-[16px] not-italic relative shrink-0 text-[11px] text-[color:var(--gn-text,#191919)] tracking-[0.8px] w-[342px]" data-node-id="10:2270">
+          YOUR PREFERENCES
+        </p>
+        <div className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[0] relative shrink-0 text-[46px] text-[color:var(--gn-text,#191919)] tracking-[-2px] w-[342px]" data-node-id="10:2271">
+          <p className="leading-[48px] mb-0">Make it</p>
+          <p className="leading-[48px]">yours.</p>
+        </div>
+        <a className="content-stretch cursor-pointer flex h-[70px] items-center justify-between relative shrink-0 w-[342px]" data-node-id="10:2292" data-name="List item">
+          <div className="[word-break:break-word] content-stretch flex flex-col font-['Arimo:Regular'] font-normal gap-[2px] items-start p-[var(--gn-space-0,0px)] relative shrink-0 text-[color:var(--gn-text,#191919)] text-left w-[292px]" data-node-id="I10:2292;8:98" data-name="Labels">
+            <p className="leading-[22px] relative shrink-0 text-[16px] tracking-[-0.2px] w-[292px]" data-node-id="I10:2292;8:99">{`PIN & fingerprint`}</p>
+            <p className="leading-[18px] relative shrink-0 text-[12px] w-[292px]" data-node-id="I10:2292;8:100">
+              Manage identity verification
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[18px]" data-node-id="I10:2292;8:101" data-name="Icon / ChevronRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconChevronRight} />
+          </div>
+        </a>
+        <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[342px]" data-node-id="10:2298" data-name="Divider" />
+        <a className="content-stretch cursor-pointer flex h-[70px] items-center justify-between relative shrink-0 w-[342px]" data-node-id="10:2299" data-name="List item">
+          <div className="[word-break:break-word] content-stretch flex flex-col font-['Arimo:Regular'] font-normal gap-[2px] items-start p-[var(--gn-space-0,0px)] relative shrink-0 text-[color:var(--gn-text,#191919)] text-left w-[292px]" data-node-id="I10:2299;8:98" data-name="Labels">
+            <p className="leading-[22px] relative shrink-0 text-[16px] tracking-[-0.2px] w-[292px]" data-node-id="I10:2299;8:99">{`Privacy & data`}</p>
+            <p className="leading-[18px] relative shrink-0 text-[12px] w-[292px]" data-node-id="I10:2299;8:100">
+              Choose what GhostNet can use
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[18px]" data-node-id="I10:2299;8:101" data-name="Icon / ChevronRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconChevronRight} />
+          </div>
+        </a>
+        <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[342px]" data-node-id="10:2305" data-name="Divider" />
+        <a className="content-stretch cursor-pointer flex h-[70px] items-center justify-between relative shrink-0 w-[342px]" data-node-id="10:2306" data-name="List item">
+          <div className="[word-break:break-word] content-stretch flex flex-col font-['Arimo:Regular'] font-normal gap-[2px] items-start p-[var(--gn-space-0,0px)] relative shrink-0 text-[color:var(--gn-text,#191919)] text-left w-[292px]" data-node-id="I10:2306;8:98" data-name="Labels">
+            <p className="leading-[22px] relative shrink-0 text-[16px] tracking-[-0.2px] w-[292px]" data-node-id="I10:2306;8:99">
+              Permissions
+            </p>
+            <p className="leading-[18px] relative shrink-0 text-[12px] w-[292px]" data-node-id="I10:2306;8:100">
+              Review protection access
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[18px]" data-node-id="I10:2306;8:101" data-name="Icon / ChevronRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconChevronRight} />
+          </div>
+        </a>
+        <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[342px]" data-node-id="10:2312" data-name="Divider" />
+        <a className="content-stretch cursor-pointer flex h-[70px] items-center justify-between relative shrink-0 w-[342px]" data-node-id="10:2313" data-name="List item">
+          <div className="[word-break:break-word] content-stretch flex flex-col font-['Arimo:Regular'] font-normal gap-[2px] items-start p-[var(--gn-space-0,0px)] relative shrink-0 text-[color:var(--gn-text,#191919)] text-left w-[292px]" data-node-id="I10:2313;8:98" data-name="Labels">
+            <p className="leading-[22px] relative shrink-0 text-[16px] tracking-[-0.2px] w-[292px]" data-node-id="I10:2313;8:99">
+              Recovery
+            </p>
+            <p className="leading-[18px] relative shrink-0 text-[12px] w-[292px]" data-node-id="I10:2313;8:100">
+              Plan for lost access
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[18px]" data-node-id="I10:2313;8:101" data-name="Icon / ChevronRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconChevronRight} />
+          </div>
+        </a>
+        <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[342px]" data-node-id="10:2319" data-name="Divider" />
+        <div className="flex-[1_0_0] min-h-px relative w-[342px]" data-node-id="10:2320" data-name="Flexible space" />
+        <div className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[0] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] w-[342px]" data-node-id="10:2321">
+          <p className="leading-[18px] mb-0">GhostNet for Android</p>
+          <p className="leading-[18px]">Research prototype · version 0.1</p>
+        </div>
+      </div>
+      <div className="bg-[var(--gn-border,#d8d6cf)] h-px relative shrink-0 w-[390px]" data-node-id="10:2273" data-name="Divider" />
+      <div className="content-stretch flex gap-[var(--gn-space-0,0px)] h-[66px] items-start px-[var(--gn-space-24,24px)] py-[4px] relative shrink-0 w-[390px]" data-node-id="10:2272" data-name="Bottom navigation">
+        <NavigationItem className="content-stretch cursor-pointer flex flex-col gap-[4px] h-[58px] items-center justify-center relative shrink-0 w-[114px]" state="Rest" />
+        <a className="content-stretch cursor-pointer flex flex-col gap-[4px] h-[58px] items-center justify-center relative shrink-0 w-[114px]" data-node-id="10:2280" data-name="Navigation item">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I10:2280;12:19" data-name="Navigation icon">
+            <div className="absolute left-0 size-[20px] top-0" data-node-id="I10:2280;12:19;12:8" data-name="Frame">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] text-[color:var(--gn-text,#191919)] text-center w-[100px]" data-node-id="I10:2280;8:124">
+            Activity
+          </p>
+        </a>
+        <div className="content-stretch flex flex-col gap-[4px] h-[58px] items-center justify-center relative shrink-0 w-[114px]" data-node-id="10:2286" data-name="Navigation item">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I10:2286;12:14" data-name="Navigation icon">
+            <div className="absolute left-0 size-[20px] top-0" data-node-id="I10:2286;12:14;12:11" data-name="Frame">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] text-[color:var(--gn-action,#2448d8)] text-center w-[100px]" data-node-id="I10:2286;8:118">
+            Settings
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: GhostNet/small: Font(family: "Arimo", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0), GhostNet/brand: Font(family: "Arimo", style: Bold, size: 28, weight: 700, lineHeight: 32, letterSpacing: -1.399999976158142), GhostNet/label: Font(family: "Cousine", style: Regular, size: 11, weight: 400, lineHeight: 16, letterSpacing: 0.800000011920929), GhostNet/display: Font(family: "Arimo", style: Regular, size: 46, weight: 400, lineHeight: 48, letterSpacing: -2), GhostNet/row: Font(family: "Arimo", style: Regular, size: 16, weight: 400, lineHeight: 22, letterSpacing: -0.20000000298023224).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## App header
+**Node ID:** 8:110
+
+GhostNet App header — ink, paper and cobalt. Reuse instances.
+
+## List item
+**Node ID:** 8:97
+
+GhostNet List item — ink, paper and cobalt. Reuse instances.
+
+## State=Rest
+**Node ID:** 8:119
+
+GhostNet State=Rest — ink, paper and cobalt. Reuse instances.
+
+## State=Active
+**Node ID:** 8:113
+
+GhostNet State=Active — ink, paper and cobalt. Reuse instances.
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

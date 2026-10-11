@@ -1,0 +1,84 @@
+const imgIconArrowRight = "https://www.figma.com/api/mcp/asset/6d5437a6-1297-44d7-8e33-a50912dad647.svg";
+const imgIconArrowRight1 = "https://www.figma.com/api/mcp/asset/180e7bdd-8f0c-4b85-aa1a-619f312d3973.svg";
+
+type ButtonProps = {
+  className?: string;
+  label?: string;
+  style?: "Primary" | "Secondary";
+};
+
+function Button({ className, label = "Continue", style = "Primary" }: ButtonProps) {
+  const isPrimary = style === "Primary";
+  const isSecondary = style === "Secondary";
+  return (
+    <div className={className || `content-stretch flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] w-[342px] ${isSecondary ? "bg-[var(--gn-background,#f5f4f0)] border border-[var(--gn-text,#191919)] border-solid" : "bg-[var(--gn-action,#2448d8)]"}`} id={isSecondary ? "node-8_69" : "node-8_64"}>
+      {isPrimary && (
+        <>
+          <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-background,#f5f4f0)] w-[265px]" data-node-id="8:65">
+            {label}
+          </p>
+          <div className="relative shrink-0 size-[20px]" data-node-id="8:66" data-name="Icon / ArrowRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconArrowRight} />
+          </div>
+        </>
+      )}
+      {isSecondary && (
+        <>
+          <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[15px] text-[color:var(--gn-text,#191919)] w-[265px]" data-node-id="8:70">
+            {label}
+          </p>
+          <div className="relative shrink-0 size-[20px]" data-node-id="8:71" data-name="Icon / ArrowRight">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconArrowRight1} />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function Component31RecoveryInformation() {
+  return (
+    <div className="bg-[#f5f4f0] content-stretch flex flex-col gap-[20px] items-start pb-[24px] pt-[48px] px-[24px] relative size-full" data-node-id="20:1072" data-name="31 / Recovery information">
+      <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[#191919] text-[28px] w-[342px]" data-node-id="20:1073">
+        ghostnet.
+      </p>
+      <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[#191919] text-[11px] w-[342px]" data-node-id="20:1074">
+        PROTOTYPE PREVIEW
+      </p>
+      <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[36px] relative shrink-0 text-[#191919] text-[32px] w-[342px]" data-node-id="20:1075">
+        Recovery is not set up.
+      </p>
+      <p className="[word-break:break-word] font-['Arimo:Regular'] font-normal leading-[22px] relative shrink-0 text-[#191919] text-[15px] w-[342px]" data-node-id="20:1076">
+        This research prototype has no enrolled recovery method. Try the fingerprint preview, or return to settings. Recovery never overrides a high-risk restriction.
+      </p>
+      <Button className="bg-[var(--gn-action,#2448d8)] content-stretch cursor-pointer flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] shrink-0 w-[342px]" label="Try fingerprint" />
+      <Button className="bg-[var(--gn-background,#f5f4f0)] border border-[var(--gn-text,#191919)] border-solid content-stretch cursor-pointer flex h-[52px] items-center justify-between px-[var(--gn-space-16,16px)] relative rounded-[var(--gn-radius-control,3px)] shrink-0 w-[342px]" label="Back to recovery" style="Secondary" />
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: GhostNet/body: Font(family: "Arimo", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Style=Primary
+**Node ID:** 8:64
+
+GhostNet Style=Primary — ink, paper and cobalt. Reuse instances.
+
+## Style=Secondary
+**Node ID:** 8:69
+
+GhostNet Style=Secondary — ink, paper and cobalt. Reuse instances.
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

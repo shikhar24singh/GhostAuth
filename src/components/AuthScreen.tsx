@@ -33,7 +33,7 @@ export default function AuthScreen({ onSignIn }: AuthScreenProps) {
 
   function fillDemoCredentials() {
     setEmail(USERS[role].email);
-    setPassword('GhostNet2026!');
+    setPassword('GhostAuth2026!');
     setErrors({});
     setNotice('Demo details added. You can now enter the workspace.');
   }
@@ -67,10 +67,10 @@ export default function AuthScreen({ onSignIn }: AuthScreenProps) {
 
   return (
     <main className="auth-screen">
-      <section className="auth-story" aria-label="About GhostNet">
-        <div className="auth-brand" aria-label="GhostNet">
+      <section className="auth-story" aria-label="About GhostAuth">
+        <div className="auth-brand" aria-label="GhostAuth">
           <span className="auth-brand-icon"><ShieldCheck size={24} strokeWidth={1.7} /></span>
-          <span>ghostnet<span className="auth-brand-dot">.</span></span>
+          <span>ghostauth<span className="auth-brand-dot">.</span></span>
         </div>
 
         <div className="auth-story-content">
@@ -97,7 +97,7 @@ export default function AuthScreen({ onSignIn }: AuthScreenProps) {
           </div>
         </div>
 
-        <footer className="auth-story-footer"><span>GHOSTNET RESEARCH PROJECT</span><span>Adaptive trust. Continuous care.</span></footer>
+        <footer className="auth-story-footer"><span>GHOSTAUTH RESEARCH PROJECT</span><span>Adaptive trust. Continuous care.</span></footer>
       </section>
 
       <section className="auth-entry" aria-labelledby={`${id}-heading`}>
@@ -107,7 +107,7 @@ export default function AuthScreen({ onSignIn }: AuthScreenProps) {
           <div className="auth-form-symbol"><LockKeyhole size={25} strokeWidth={1.6} aria-hidden="true" /></div>
           <span className="auth-eyebrow">LEARNING NETWORK SECURITY</span>
           <h2 id={`${id}-heading`}>Your next session.<br /><span>Verified.</span></h2>
-          <p className="auth-intro">Welcome to GhostNet. Step into your workspace and explore adaptive access in action.</p>
+          <p className="auth-intro">Welcome to GhostAuth. Step into your workspace and explore adaptive access in action.</p>
 
           <form className="auth-form" onSubmit={handleSubmit} noValidate>
             <fieldset className="auth-roles">
@@ -124,7 +124,7 @@ export default function AuthScreen({ onSignIn }: AuthScreenProps) {
 
             <div className="auth-field">
               <label htmlFor={`${id}-email`}>Email address</label>
-              <input id={`${id}-email`} type="email" autoComplete="off" placeholder="you@ghostnet.example" value={email} onChange={(event) => { setEmail(event.target.value); setNotice(''); }} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? `${id}-email-error` : undefined} />
+              <input id={`${id}-email`} type="email" autoComplete="off" placeholder="you@ghostauth.example" value={email} onChange={(event) => { setEmail(event.target.value); setNotice(''); }} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? `${id}-email-error` : undefined} />
               {errors.email && <p className="auth-error" id={`${id}-email-error`} role="alert">{errors.email}</p>}
             </div>
 

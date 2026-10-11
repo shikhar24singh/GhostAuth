@@ -1,0 +1,798 @@
+[
+  {
+    "id": "10:1255",
+    "name": "01 / Welcome",
+    "controls": [
+      {
+        "id": "10:1272",
+        "name": "Button",
+        "text": "Set up GhostNet",
+        "dest": [
+          "10:1278"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1278",
+    "name": "02 / Privacy introduction",
+    "controls": [
+      {
+        "id": "10:1292",
+        "name": "List item",
+        "text": "Your apps, your choice | Only apps you select are protected.",
+        "dest": []
+      },
+      {
+        "id": "10:1299",
+        "name": "List item",
+        "text": "No message or photo collection | App content stays outside GhostNet.",
+        "dest": []
+      },
+      {
+        "id": "10:1306",
+        "name": "List item",
+        "text": "Understand every signal | Review and manage behavioral data.",
+        "dest": [
+          "10:2322"
+        ]
+      },
+      {
+        "id": "10:1314",
+        "name": "Button",
+        "text": "Continue",
+        "dest": [
+          "10:1324"
+        ]
+      },
+      {
+        "id": "10:1319",
+        "name": "Button",
+        "text": "Back",
+        "dest": [
+          "10:1255"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1324",
+    "name": "03 / Create PIN",
+    "controls": [
+      {
+        "id": "10:1383",
+        "name": "Button",
+        "text": "Continue",
+        "dest": [
+          "10:1388"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1388",
+    "name": "04 / Confirm PIN",
+    "controls": [
+      {
+        "id": "10:1446",
+        "name": "Button",
+        "text": "Confirm PIN",
+        "dest": [
+          "10:1456"
+        ]
+      },
+      {
+        "id": "10:1451",
+        "name": "Button",
+        "text": "Start again",
+        "dest": [
+          "10:1324"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1456",
+    "name": "05 / Biometric setup",
+    "controls": [
+      {
+        "id": "10:1485",
+        "name": "Button",
+        "text": "Enable fingerprint",
+        "dest": [
+          "10:1495"
+        ]
+      },
+      {
+        "id": "10:1490",
+        "name": "Button",
+        "text": "Set up later",
+        "dest": [
+          "10:1495"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1495",
+    "name": "06 / Permissions",
+    "controls": [
+      {
+        "id": "10:1510",
+        "name": "List item",
+        "text": "App usage access | Detect which app is opened.",
+        "dest": [
+          "10:2380"
+        ]
+      },
+      {
+        "id": "10:1517",
+        "name": "List item",
+        "text": "Protection service | Show verification when required.",
+        "dest": [
+          "10:2380"
+        ]
+      },
+      {
+        "id": "10:1524",
+        "name": "List item",
+        "text": "Notifications | Know when protection needs attention.",
+        "dest": [
+          "10:2380"
+        ]
+      },
+      {
+        "id": "10:1535",
+        "name": "Button",
+        "text": "Continue to app selection",
+        "dest": [
+          "10:1540"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1540",
+    "name": "07 / Select applications",
+    "controls": [
+      {
+        "id": "10:1558",
+        "name": "App row",
+        "text": "Mail | Messages & accounts",
+        "dest": []
+      },
+      {
+        "id": "10:1568",
+        "name": "App row",
+        "text": "Photos | Personal library",
+        "dest": []
+      },
+      {
+        "id": "10:1578",
+        "name": "App row",
+        "text": "Files | Documents & downloads",
+        "dest": []
+      },
+      {
+        "id": "10:1588",
+        "name": "App row",
+        "text": "Browser | Browsing & saved logins",
+        "dest": []
+      },
+      {
+        "id": "10:1597",
+        "name": "Button",
+        "text": "Protect 3 apps",
+        "dest": [
+          "10:1602"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1602",
+    "name": "08 / Learning period",
+    "controls": [
+      {
+        "id": "10:1620",
+        "name": "List item",
+        "text": "Touch & interaction patterns | Collected with your consent.",
+        "dest": []
+      },
+      {
+        "id": "10:1627",
+        "name": "List item",
+        "text": "Movement signals | Used only where Android permits.",
+        "dest": []
+      },
+      {
+        "id": "10:1635",
+        "name": "Button",
+        "text": "Open GhostNet",
+        "dest": [
+          "10:1645"
+        ]
+      },
+      {
+        "id": "10:1640",
+        "name": "Button",
+        "text": "Review data choices",
+        "dest": [
+          "10:2322"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1645",
+    "name": "09 / App protection",
+    "controls": [
+      {
+        "id": "10:1684",
+        "name": "App row",
+        "text": "Mail | Messages & accounts",
+        "dest": [
+          "10:1812"
+        ]
+      },
+      {
+        "id": "10:1694",
+        "name": "App row",
+        "text": "Photos | Personal library",
+        "dest": [
+          "10:1812"
+        ]
+      },
+      {
+        "id": "10:1704",
+        "name": "App row",
+        "text": "Files | Documents & downloads",
+        "dest": [
+          "10:1812"
+        ]
+      },
+      {
+        "id": "10:1715",
+        "name": "Button",
+        "text": "Choose apps",
+        "dest": [
+          "10:1752"
+        ]
+      },
+      {
+        "id": "10:1658",
+        "name": "Navigation item",
+        "text": "Apps",
+        "dest": []
+      },
+      {
+        "id": "10:1664",
+        "name": "Navigation item",
+        "text": "Activity",
+        "dest": [
+          "10:2154"
+        ]
+      },
+      {
+        "id": "10:1670",
+        "name": "Navigation item",
+        "text": "Settings",
+        "dest": [
+          "10:2261"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1720",
+    "name": "10 / No protected apps",
+    "controls": [
+      {
+        "id": "10:1742",
+        "name": "Button",
+        "text": "Choose apps",
+        "dest": [
+          "10:1752"
+        ]
+      },
+      {
+        "id": "10:1747",
+        "name": "Button",
+        "text": "Check permissions",
+        "dest": [
+          "10:2380"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1752",
+    "name": "11 / Manage applications",
+    "controls": [
+      {
+        "id": "10:1766",
+        "name": "Input",
+        "text": "Search installed apps",
+        "dest": []
+      },
+      {
+        "id": "10:1768",
+        "name": "App row",
+        "text": "Mail | Messages & accounts",
+        "dest": []
+      },
+      {
+        "id": "10:1778",
+        "name": "App row",
+        "text": "Photos | Personal library",
+        "dest": []
+      },
+      {
+        "id": "10:1788",
+        "name": "App row",
+        "text": "Files | Documents & downloads",
+        "dest": []
+      },
+      {
+        "id": "10:1798",
+        "name": "App row",
+        "text": "Browser | Browsing & saved logins",
+        "dest": []
+      },
+      {
+        "id": "10:1807",
+        "name": "Button",
+        "text": "Save selection",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1812",
+    "name": "12 / App protection details",
+    "controls": [
+      {
+        "id": "10:1827",
+        "name": "List item",
+        "text": "Protection | On · adaptive verification",
+        "dest": []
+      },
+      {
+        "id": "10:1834",
+        "name": "List item",
+        "text": "Current session | Additional verification required",
+        "dest": [
+          "10:1862"
+        ]
+      },
+      {
+        "id": "10:1841",
+        "name": "List item",
+        "text": "Recent activity | Review access attempts",
+        "dest": [
+          "10:2154"
+        ]
+      },
+      {
+        "id": "10:1852",
+        "name": "Button",
+        "text": "Preview identity check",
+        "dest": [
+          "10:1912"
+        ]
+      },
+      {
+        "id": "10:1857",
+        "name": "Button",
+        "text": "Back to apps",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1862",
+    "name": "13 / Session details",
+    "controls": [
+      {
+        "id": "10:1877",
+        "name": "List item",
+        "text": "Network changed | You recently joined another network.",
+        "dest": []
+      },
+      {
+        "id": "10:1884",
+        "name": "List item",
+        "text": "Behavior profile | Still learning your normal interactions.",
+        "dest": []
+      },
+      {
+        "id": "10:1891",
+        "name": "List item",
+        "text": "Device checks | Available checks passed.",
+        "dest": []
+      },
+      {
+        "id": "10:1902",
+        "name": "Button",
+        "text": "Verify identity",
+        "dest": [
+          "10:1912"
+        ]
+      },
+      {
+        "id": "10:1907",
+        "name": "Button",
+        "text": "Back",
+        "dest": [
+          "10:1812"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1912",
+    "name": "14 / PIN verification",
+    "controls": [
+      {
+        "id": "10:1970",
+        "name": "Button",
+        "text": "Verify PIN",
+        "dest": [
+          "10:2127"
+        ]
+      },
+      {
+        "id": "10:1975",
+        "name": "Button",
+        "text": "Cancel",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:1980",
+    "name": "15 / PIN retry",
+    "controls": [
+      {
+        "id": "10:2041",
+        "name": "Button",
+        "text": "Try again",
+        "dest": [
+          "10:1912"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2046",
+    "name": "16 / Biometric verification",
+    "controls": [
+      {
+        "id": "10:2075",
+        "name": "Button",
+        "text": "Verify with fingerprint",
+        "dest": [
+          "10:2127"
+        ]
+      },
+      {
+        "id": "10:2080",
+        "name": "Button",
+        "text": "Cancel",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2085",
+    "name": "17 / High-risk restriction",
+    "controls": [
+      {
+        "id": "10:2107",
+        "name": "List item",
+        "text": "Review the reason | See the available security checks.",
+        "dest": [
+          "10:1862"
+        ]
+      },
+      {
+        "id": "10:2114",
+        "name": "List item",
+        "text": "Need help? | Review recovery options.",
+        "dest": [
+          "10:2430"
+        ]
+      },
+      {
+        "id": "10:2122",
+        "name": "Button",
+        "text": "Return to safety",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2127",
+    "name": "18 / Verification success",
+    "controls": [
+      {
+        "id": "10:2148",
+        "name": "Button",
+        "text": "Continue to Mail",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2154",
+    "name": "19 / Activity log",
+    "controls": [
+      {
+        "id": "10:2189",
+        "name": "List item",
+        "text": "Mail · verified with PIN | 09:41 · additional verification",
+        "dest": [
+          "10:2212"
+        ]
+      },
+      {
+        "id": "10:2196",
+        "name": "List item",
+        "text": "Photos · access allowed | 09:22 · low session risk",
+        "dest": [
+          "10:2212"
+        ]
+      },
+      {
+        "id": "10:2203",
+        "name": "List item",
+        "text": "Mail · access restricted | 08:57 · high session risk",
+        "dest": [
+          "10:2085"
+        ]
+      },
+      {
+        "id": "10:2167",
+        "name": "Navigation item",
+        "text": "Apps",
+        "dest": [
+          "10:1645"
+        ]
+      },
+      {
+        "id": "10:2173",
+        "name": "Navigation item",
+        "text": "Activity",
+        "dest": []
+      },
+      {
+        "id": "10:2179",
+        "name": "Navigation item",
+        "text": "Settings",
+        "dest": [
+          "10:2261"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2212",
+    "name": "20 / Event details",
+    "controls": [
+      {
+        "id": "10:2227",
+        "name": "List item",
+        "text": "Decision | Allowed after PIN verification.",
+        "dest": []
+      },
+      {
+        "id": "10:2234",
+        "name": "List item",
+        "text": "Trigger | Network change detected.",
+        "dest": []
+      },
+      {
+        "id": "10:2241",
+        "name": "List item",
+        "text": "Session risk | Medium before verification.",
+        "dest": []
+      },
+      {
+        "id": "10:2248",
+        "name": "List item",
+        "text": "Data retained | App name, time, reason and result.",
+        "dest": []
+      },
+      {
+        "id": "10:2256",
+        "name": "Button",
+        "text": "Back to activity",
+        "dest": [
+          "10:2154"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2261",
+    "name": "21 / Settings",
+    "controls": [
+      {
+        "id": "10:2292",
+        "name": "List item",
+        "text": "PIN & fingerprint | Manage identity verification",
+        "dest": [
+          "10:1456"
+        ]
+      },
+      {
+        "id": "10:2299",
+        "name": "List item",
+        "text": "Privacy & data | Choose what GhostNet can use",
+        "dest": [
+          "10:2322"
+        ]
+      },
+      {
+        "id": "10:2306",
+        "name": "List item",
+        "text": "Permissions | Review protection access",
+        "dest": [
+          "10:2380"
+        ]
+      },
+      {
+        "id": "10:2313",
+        "name": "List item",
+        "text": "Recovery | Plan for lost access",
+        "dest": [
+          "10:2430"
+        ]
+      },
+      {
+        "id": "10:2274",
+        "name": "Navigation item",
+        "text": "Apps",
+        "dest": [
+          "10:1645"
+        ]
+      },
+      {
+        "id": "10:2280",
+        "name": "Navigation item",
+        "text": "Activity",
+        "dest": [
+          "10:2154"
+        ]
+      },
+      {
+        "id": "10:2286",
+        "name": "Navigation item",
+        "text": "Settings",
+        "dest": []
+      }
+    ]
+  },
+  {
+    "id": "10:2322",
+    "name": "22 / Privacy and data",
+    "controls": [
+      {
+        "id": "10:2336",
+        "name": "App row",
+        "text": "Behavior signals | Touch timing within GhostNet",
+        "dest": []
+      },
+      {
+        "id": "10:2346",
+        "name": "App row",
+        "text": "Movement signals | Device motion, when available",
+        "dest": []
+      },
+      {
+        "id": "10:2356",
+        "name": "App row",
+        "text": "Security history | Keep access decisions on this device",
+        "dest": []
+      },
+      {
+        "id": "10:2370",
+        "name": "Button",
+        "text": "Save preferences",
+        "dest": [
+          "10:2261"
+        ]
+      },
+      {
+        "id": "10:2375",
+        "name": "Button",
+        "text": "Reset learned profile",
+        "dest": [
+          "10:1602"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2380",
+    "name": "23 / Protection needs attention",
+    "controls": [
+      {
+        "id": "10:2395",
+        "name": "List item",
+        "text": "App usage access | Enabled",
+        "dest": []
+      },
+      {
+        "id": "10:2402",
+        "name": "List item",
+        "text": "Protection service | Action required · open Android settings",
+        "dest": [
+          "10:1495"
+        ]
+      },
+      {
+        "id": "10:2409",
+        "name": "List item",
+        "text": "Notifications | Enabled",
+        "dest": []
+      },
+      {
+        "id": "10:2420",
+        "name": "Button",
+        "text": "Open Android settings",
+        "dest": [
+          "10:1495"
+        ]
+      },
+      {
+        "id": "10:2425",
+        "name": "Button",
+        "text": "Back to GhostNet",
+        "dest": [
+          "10:1645"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "10:2430",
+    "name": "24 / Recovery help",
+    "controls": [
+      {
+        "id": "10:2445",
+        "name": "List item",
+        "text": "Fingerprint available | Try device biometric verification.",
+        "dest": [
+          "10:2046"
+        ]
+      },
+      {
+        "id": "10:2452",
+        "name": "List item",
+        "text": "Forgot your PIN | Use the recovery method configured at setup.",
+        "dest": []
+      },
+      {
+        "id": "10:2464",
+        "name": "Button",
+        "text": "Back to settings",
+        "dest": [
+          "10:2261"
+        ]
+      }
+    ]
+  }
+]

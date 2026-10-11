@@ -1,0 +1,17 @@
+{
+  "appId": "com.ghostauth.app",
+  "appName": "GhostAuth",
+  "webDir": "dist",
+  "backgroundColor": "#F5F4F0",
+  "loggingBehavior": "none",
+  "android": {
+    "backgroundColor": "#F5F4F0"
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "style": "LIGHT",
+      "hidden": false
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "Complete onboarding, mismatched PIN handling and fingerprint enrollment",
+    "Live case-insensitive search, no-result recovery and saved selection",
+    "PIN incomplete, wrong, keypad, backspace, correct and protected-app handoff",
+    "Saved privacy preferences and keyboard-dismissable confirmation",
+    "Restricted session blocks success and biometric route bypass",
+    "Explicit session reset and fingerprint failure/success previews",
+    "Revoked permission blocks access; restoration requires fresh verification",
+    "Empty selection and selecting an app again",
+    "Unverified direct success route requires PIN",
+    "390px Figma frame, 46px heading and original logo loaded",
+    "No horizontal overflow at 320, 390 and 1440 pixels",
+    "Only explicitly saved app and privacy choices survive reload and a reopened tab",
+    "Restored preferences never restore a verified session",
+    "Cancel and failed reset retain saved choices and offer a usable confirmation",
+    "Confirmed reset restores defaults across reload without bypassing an active restriction",
+    "An intentionally empty app selection persists",
+    "Malformed saved data falls back without crashing or silently overwriting it",
+    "Unavailable storage leaves the frontend usable; retry saves once storage is available",
+    "Android touch review: 33 routes at 5 viewport sizes",
+    "No uncaught browser errors",
+    "Android shell hides the sample status row and honors native display insets",
+    "Native Back bridge dismisses dialogs, navigates routes and exits at the root",
+    "Native shell fills portrait and landscape viewports without obscuring navigation"
+  ],
+  "errors": []
+}

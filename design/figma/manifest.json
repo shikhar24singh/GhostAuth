@@ -1,0 +1,9 @@
+{
+  "name": "GhostNet Android Design Builder",
+  "id": "ghostnet-android-design-builder",
+  "api": "1.0.0",
+  "main": "builder.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": { "allowedDomains": ["none"] }
+}

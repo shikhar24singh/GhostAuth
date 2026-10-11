@@ -1,0 +1,42 @@
+{
+  "routeCount": 33,
+  "layoutChecks": 165,
+  "sizes": [
+    [
+      320,
+      568
+    ],
+    [
+      360,
+      640
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      412,
+      915
+    ],
+    [
+      844,
+      390
+    ]
+  ],
+  "checks": [
+    "All defined routes fit phone viewports",
+    "Touch controls are at least 48 CSS pixels",
+    "Phone layouts fill portrait and landscape widths; landscape shows an app before scrolling",
+    "Dialogs fit and close with touch",
+    "Search remains usable in a reduced viewport",
+    "Fingerprint preview has a working PIN alternative",
+    "PIN keypad works with touch and browser Back clears input",
+    "Permission Fix control works with touch",
+    "Long activity keeps navigation visible without hiding the last row",
+    "Simulated display insets preserve navigation space"
+  ],
+  "limitations": [
+    "Chromium mobile emulation, not a physical Android device",
+    "Native keyboard and display-cutout behavior require phone review"
+  ]
+}

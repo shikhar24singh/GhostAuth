@@ -1,0 +1,10 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const React = require('react');
+const {renderToStaticMarkup} = require('react-dom/server');
+const icons = require('lucide-react');
+const names = ['ArrowRight','ArrowLeft','ArrowUpRight','Check','X','Mail','Image','Folder','Globe','Fingerprint','LockKeyhole','Settings','Activity','Grid2X2','ChevronRight','ShieldCheck','CircleAlert','KeyRound','Eye','Bell','Smartphone','Wifi','MapPin','Clock','Minus','Plus','Delete','Search'];
+const svg = Object.fromEntries(names.map(name => [name, renderToStaticMarkup(React.createElement(icons[name],{size:24,strokeWidth:1.5,color:'#191919'}))]));
+const logo=fs.readFileSync(path.join(__dirname,'../../assets/branding/ghostnet-app-icon-v5.png')).toString('base64');
+fs.writeFileSync(path.join(__dirname,'builder.js'), 'const ASSETS='+JSON.stringify({logo,icons:svg})+';\n'+fs.readFileSync(path.join(__dirname,'builder-source.js'),'utf8'));
+console.log('Prepared Figma builder with approved logo and '+names.length+' vector icons.');

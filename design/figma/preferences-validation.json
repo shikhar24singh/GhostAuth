@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Only explicitly saved app and privacy choices survive reload and a reopened tab",
+    "Restored preferences never restore a verified session",
+    "Cancel and failed reset retain saved choices and offer a usable confirmation",
+    "Confirmed reset restores defaults across reload without bypassing an active restriction",
+    "An intentionally empty app selection persists",
+    "Malformed saved data falls back without crashing or silently overwriting it",
+    "Unavailable storage leaves the frontend usable; retry saves once storage is available"
+  ],
+  "errors": []
+}

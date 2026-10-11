@@ -1,0 +1,31 @@
+{
+  "validatedOn": "2026-10-11",
+  "appName": "GhostAuth",
+  "applicationId": "com.ghostauth.app",
+  "version": "0.2.0",
+  "versionCode": 2,
+  "artifact": "artifacts/GhostAuth-debug.apk",
+  "bytes": 6461018,
+  "sha256": "e0cda9e3f99098a7414e2ce5ce5e621593584919797cd97e4cf2d8dbeeffe1f6",
+  "minimumSdk": 24,
+  "targetSdk": 36,
+  "build": "assembleDebug and app:testDebugUnitTest passed",
+  "lint": {
+    "warnings": 30,
+    "errors": 0
+  },
+  "signature": "APK v2 verified",
+  "checks": [
+    "Current production frontend and bundled assets verified",
+    "Bridge logging disabled; no remote server configured",
+    "Biometric permissions and locally registered GhostAuth plugin compiled",
+    "HTTP full and resumed downloads match APK bytes"
+  ],
+  "physicalAndroidTest": "Pending PIN/Keystore persistence and biometric prompt validation on a phone",
+  "simulatedFeatures": [
+    "permissions",
+    "installed app selection",
+    "risk and behavior learning",
+    "app protection and handoff"
+  ]
+}
