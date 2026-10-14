@@ -23,6 +23,27 @@ async function run() {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   page.on('pageerror', error => errors.push(error.message));
   const url = 'http://127.0.0.1:4178/';
+  if (process.argv.includes('--appearance-only')) {
+    checks.push(...await require('./appearance-browser.cjs')(browser, url, output));
+    console.log(JSON.stringify({ checks, errors }, null, 2)); return;
+  }
+  if (process.argv.includes('--history-only')) {
+    checks.push(...await require('./native-history-browser.cjs')(browser, url, output));
+    console.log(JSON.stringify({ checks, errors }, null, 2)); return;
+  }
+  if (process.argv.includes('--native-only')) {
+    checks.push(...await require('./native-shell-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-auth-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-device-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-launch-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-protection-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-fingerprint-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-history-browser.cjs')(browser, url, output));
+    checks.push(...await require('./appearance-browser.cjs')(browser, url, output));
+    fs.writeFileSync(path.join(output, 'native-report.json'), JSON.stringify({ checks, errors }, null, 2));
+    console.log(JSON.stringify({ checks, errors }, null, 2));
+    return;
+  }
   const btn = label => page.getByRole('button', { name: label, exact: true });
   const screen = async name => { await page.getByRole('heading', { name, exact: true }).waitFor(); };
   const shot = async name => { await page.evaluate(() => document.fonts.ready); return page.screenshot({ path: path.join(output, name + '.png'), fullPage: true }); };
@@ -106,6 +127,12 @@ async function run() {
   checks.push(`Android touch review: ${android.routeCount} routes at ${android.sizes.length} viewport sizes`);
   checks.push(...await require('./native-shell-browser.cjs')(browser, url, output));
   checks.push(...await require('./native-auth-browser.cjs')(browser, url, output));
+  checks.push(...await require('./native-device-browser.cjs')(browser, url, output));
+  checks.push(...await require('./native-launch-browser.cjs')(browser, url, output));
+  checks.push(...await require('./native-protection-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-fingerprint-browser.cjs')(browser, url, output));
+    checks.push(...await require('./native-history-browser.cjs')(browser, url, output));
+    checks.push(...await require('./appearance-browser.cjs')(browser, url, output));
   assert.deepEqual(errors, []); checks.push('No uncaught browser errors');
   fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ checks, errors }, null, 2));
   console.log(JSON.stringify({ checks, errors, screenshots: output }, null, 2));

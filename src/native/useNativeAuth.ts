@@ -58,6 +58,10 @@ export function useNativeAuth(onLock: () => void, route: string) {
         }).catch(() => { if (!disposed) { setStatus(null); setError('Native authentication is unavailable. Restart GhostAuth.'); } });
       }
     });
+    const failedListener = AndroidAuth.addListener('biometricFailed', () => {
+      if (!disposed && working.current) setError('Fingerprint did not match. Try again or use your PIN.');
+    });
+    void failedListener.catch(() => {});
     void listener.then(handle => {
       if (disposed) { void handle.remove(); return; }
       monitoring.current = true; void refresh();
@@ -73,6 +77,7 @@ export function useNativeAuth(onLock: () => void, route: string) {
       disposed = true; generation.current++;
       document.removeEventListener('visibilitychange', visibility);
       void listener.then(handle => handle.remove()).catch(() => {});
+      void failedListener.then(handle => handle.remove()).catch(() => {});
     };
   }, [ended, refresh]);
 
@@ -83,7 +88,7 @@ export function useNativeAuth(onLock: () => void, route: string) {
     return () => window.clearTimeout(timer);
   }, [status, ended]);
 
-  async function run<T extends AuthStatus>(operation: () => Promise<T>): Promise<T | null> {
+  async function run<T extends AuthStatus>(operation: () => Promise<T>, onFailure?: (failure: unknown) => boolean): Promise<T | null> {
     if (!nativeAuthentication || !status || working.current) return null;
     const epoch = generation.current;
     working.current = true; setBusy(true); setError('');
@@ -91,15 +96,17 @@ export function useNativeAuth(onLock: () => void, route: string) {
       const result = await operation();
       checkedStatus(result);
       if (epoch !== generation.current) return null;
+      setError('');
       setStatus(result);
       return result;
     } catch (failure) {
       if (epoch === generation.current) {
-        setError(authError(failure)); generation.current++;
+        setError(onFailure?.(failure) ? '' : authError(failure)); generation.current++;
         setStatus(previous => previous ? { ...previous, sessionValid: false, sessionRemainingMillis: 0 } : null);
       }
       return null;
     } finally { working.current = false; setBusy(false); }
   }
-  return { status, error, busy, run, refresh, clearError: () => setError('') };
+  const cancel = () => { ended(); setError(''); void AndroidAuth.lock().catch(() => {}); };
+  return { status, error, busy, run, refresh, cancel, clearError: () => setError('') };
 }

@@ -2,7 +2,7 @@
 
 GhostAuth is an Android personal-security research prototype with a React + TypeScript interface built from its Figma design. It includes 33 screens, the approved fingerprint mark, bundled Arimo/Cousine fonts, app and privacy preferences, and a Capacitor Android build with native PIN and biometric verification.
 
-**Current Android version: 0.2.0.** Native authentication is implemented; protecting other apps, Android permission flows, risk scoring and behavior learning remain previews. Physical-device authentication validation is pending.
+**Current Android version: 0.6.1.** Native authentication, installed-app discovery with actual app icons, verified app launching, persistent local security history, and usage/notification permission status are implemented. An experimental accessibility service now covers selected apps when they open. Risk scoring and behavior learning remain previews. The user reports the 0.3.0 catalog/preferences, permission settings, PIN persistence/reboot lockout and biometric prompt/enrollment review groups passed on a phone; the user also reports the three proposed 0.5.1 Presto fingerprint/protection review groups passed on 2026-10-13. Icon display and additional detailed scenarios remain unreported.
 
 [Figma design](https://www.figma.com/design/TM015DhFupKb6VtwjUoUFo/GhostNet?node-id=10-1645) · [Android setup and authentication details](android/README.md)
 
@@ -12,11 +12,17 @@ GhostAuth is an Android personal-security research prototype with a React + Type
 | --- | --- | --- |
 | Screens and navigation | 33 screens, hash navigation and responsive layouts | Same interface with native Back handling and system insets |
 | PIN verification | Simulated; a fresh demo uses `123456` | Your own six-digit PIN, verified by native code; no default PIN |
-| Fingerprint verification | Explicit simulated results | Android biometric prompt using an enrolled strong biometric, with PIN fallback |
+| Fingerprint verification | Explicit simulated results | Enabled fingerprint starts automatically when opening a protected app; PIN is the secondary option |
 | PIN and fingerprint settings | Changes apply to the demo session | Changing the PIN or enabling/disabling fingerprint requires the current PIN |
 | Saved preferences | App selection and privacy choices persist when explicitly saved | Same choices persist separately in the installed app |
-| Verification lifetime | Temporary frontend state | At most 30 seconds; approval clears on backgrounding, reload or restart |
-| App protection, permissions and behavior learning | Simulated | Still simulated; does not block or launch other apps |
+| App selection | Four sample apps | Launchable apps with Android-provided icons in the current profile, selected and saved by package name |
+| Permissions | Simulated grants/revocations | Actual usage-access and notification status; buttons open Android Settings and returning refreshes status |
+| Verification lifetime | Temporary frontend state | At most 30 seconds, bound to one package and consumed at launch; clears on backgrounding, reload or restart |
+| Dark mode | Saved browser appearance | Settings toggle with native persistence, dark screens/protection shield and matching Android bar icons |
+| Security history | In-memory sample events | Latest 100 real app-verification outcomes saved encrypted on-device; pause recording or clear history |
+| Verified app launching | Handoff preview | Immediately opens the verified package using a single-use native approval |
+| App protection | Simulated | User-enabled accessibility service covers selected apps and requires verification; subject to Android/OEM limitations |
+| Behavior learning | Simulated | Not implemented |
 
 ## Run the browser preview
 
@@ -39,6 +45,12 @@ Start with **Set up GhostAuth** to review privacy choices, create a demo PIN, tr
 - **Restricted sessions:** identity checks cannot override a simulated restriction. **Start a new demo session** clears it explicitly.
 
 App and privacy choices persist only after **Save selection** or **Save preferences**. Unsaved edits are discarded on reload. Resetting saved preferences restores those choices without replacing the PIN or bypassing an active restriction. Unavailable storage produces an error and a save retry option.
+
+Android starts with no selected apps. Sample-app choices from older Android builds are not migrated into package selections; choose installed apps once after updating. Existing privacy choices and native PIN/biometric credentials remain intact. Android discovers launchable apps only in the current profile, excludes GhostAuth, and does not read app content or usage history. Usage access and notifications are optional for local identity checks. Protection requires explicit consent in GhostAuth and enabling **GhostAuth protection** in Android Accessibility. Usage access and notifications alone do not activate it. Native selection and consent persist across process restarts; launch and foreground approvals never persist. Android Settings, launchers and the active keyboard cannot be selected for protection.
+
+Android **Activity** retains the latest 100 app-verification entries with package/label, local date/time, PIN or fingerprint method and outcome (verified, failed, canceled, locked out or unavailable). Turn **Security history** off in Privacy & data and save to pause new recording while retaining old entries. Use **Activity → Clear history** to delete the log; this preserves credentials, selections and recording consent. Resetting preferences restores default recording consent but keeps the log. Previous privacy consent is retained on upgrade, and no older in-memory history is invented or migrated. History never restores authorization.
+
+**Settings → Dark mode** changes appearance immediately and saves it on the device. Light remains the default. The appearance preference is independent of app/privacy preferences and survives their reset; it does not change credentials or history. Android stores the choice natively so its protection shield, app theme and bar icons follow it after reopening. Browser appearance is stored separately.
 
 In the browser, PIN/fingerprint settings, verification, permissions, restrictions and activity are held in memory. Reloading resets the demo PIN to `123456`; app and privacy preferences remain saved. Storage is separate for each browser, device and origin.
 
@@ -125,9 +137,13 @@ node tests/mobile-browser.cjs
 
 Set `PLAYWRIGHT_MODULE` to the package path if Playwright is installed outside the project. Optionally set `CHROME_EXECUTABLE` to an installed Chrome executable. The checks use an isolated headless browser and write screenshots/reports to the ignored `tmp/mobile-qa/` directory.
 
-Recorded checks include 27 Node tests, four Java security tests, production and APK builds, APK signature/download verification, and mobile UI checks across 33 routes at five viewport sizes. Android authentication UI checks use a mocked Capacitor bridge; they do not validate a physical Android Keystore or biometric sensor.
+The test suite includes 40 Node tests and 17 Java security tests, production and APK builds, APK download checks, and mobile UI checks across 33 routes at five viewport sizes. Version 0.5.1 also checks automatic fingerprint startup, the minimal lock screen, nonmatch errors, PIN fallback, direct launch and canceled/replaced biometric results. Version 0.6.1 adds saved dark mode, native theme/bar styling and browser checks for restart, reset, failed saves and dark fingerprint handoff. Version 0.6.0 adds history validation, encryption/retention policy tests and UI checks for recording, restart, privacy consent, deletion, stale reads and storage failures. Android authentication, device integration, launch, protection and history UI checks use a mocked Capacitor bridge; they do not validate a physical Android Keystore, biometric sensor, installed-app catalog, Settings app, actual app launch or accessibility overlays. The full 0.6.1 browser review passed 63 checks with no uncaught errors, including 41 native bridge checks.
 
-See [APK build results](android/build-validation.json), [native authentication checks](android/native-auth-validation.json) and [Android frontend review](design/figma/android-review.md). Actual PIN persistence, reboot lockout, biometric enrollment invalidation and system prompt behavior still need review on a physical phone.
+See [APK build results](android/build-validation.json), [earlier automated native authentication checks](android/native-auth-validation.json) and [Android frontend review](design/figma/android-review.md). Phone review of PIN persistence, reboot lockout, biometric prompts and enrollment invalidation passed according to the user's report; additional scenario coverage is tracked in the phone checklist.
+
+See the [device-integration checks](android/device-integration-validation.json) and use the [phone review checklist](android/device-review.md) for physical validation. Device integration follows Android's [package visibility declarations](https://developer.android.com/training/package-visibility/declaring) and [usage access API](https://developer.android.com/reference/android/app/usage/UsageStatsManager).
+
+For a focused native-bridge UI review, run `node tests/mobile-browser.cjs --native-only` with the same Playwright/Chrome configuration.
 
 ### View the browser preview on a phone
 
@@ -144,6 +160,7 @@ Open the printed HTTP URL from a phone on the same Wi-Fi. This serves the browse
 | --- | --- |
 | `src/mobile/` | Screen UI, routes, state, saved preferences and responsive styles |
 | `src/native/` | Android Back handling and native authentication bridge/lifecycle logic |
+| `src/native/useNativeDevice.ts` | Installed-app catalog, real permission status, Settings navigation and foreground refresh |
 | `src/components/Modal.tsx` | Shared confirmation dialog and focus handling |
 | `android/app/src/main/java/com/ghostauth/app/` | Native plugin, encrypted credential vault and PIN security policy |
 | `android/app/src/test/` | Android JVM security-policy tests |
@@ -157,4 +174,4 @@ The earlier dashboard fixtures and tests remain in `src/lib/` and `tests/demo-st
 
 ## Next integration work
 
-Native authentication provides local identity checks inside GhostAuth. A production app still needs installed-app discovery, real Android permission flows, protection/app-launch services, authoritative risk decisions, consent-based behavior learning, durable security-event storage and a recovery design.
+Native authentication provides local identity checks inside GhostAuth. Installed-app discovery and usage/notification Settings integration are in place. All four summary phone-review groups have passed according to the user's reports. Version 0.4.0 launches the selected package after PIN or biometric verification. Version 0.5.0 adds a user-enabled accessibility service for those external openings. Version 0.5.1 makes enabled fingerprint the primary check and opens the app immediately after verification. The user reports the three proposed 0.5.1 Presto phone-review groups passed on 2026-10-13: automatic fingerprint and direct launch with wrong-scan denial; PIN fallback, cancellation, re-entry and screen locking; notifications/Recents and opening after swiping GhostAuth away. Additional detailed/OEM cases remain tracked in the phone checklist. Version 0.6.0 implements persistent local security history. The next milestone is phone review of app-check outcomes, restart persistence, recording pause, Clear history and retained credentials. Authoritative risk decisions, consent-based behavior learning and a recovery design remain future work.

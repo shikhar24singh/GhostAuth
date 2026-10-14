@@ -4,4 +4,8 @@
     <string name="title_activity_main">GhostAuth</string>
     <string name="package_name">com.ghostauth.app</string>
     <string name="custom_url_scheme">com.ghostauth.app</string>
+    <string name="protection_name">GhostAuth protection</string>
+    <string name="protection_verify">Verify in GhostAuth</string>
+    <string name="protection_close">Close app</string>
+    <string name="protection_description">Detects selected apps opening and shows a GhostAuth lock screen until you verify with your PIN or fingerprint. Uses window package names only; does not read screen text, passwords, messages, or photos. You can disable it at any time in Android Accessibility settings. This is a research prototype; Android may briefly show app content before detection, and force-stopping GhostAuth or disabling this service stops protection.</string>
 </resources>

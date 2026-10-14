@@ -1,0 +1,219 @@
+{
+  "validatedOn": "2026-10-14",
+  "version": "0.6.1",
+  "nodeTests": {
+    "passed": 40,
+    "failed": 0
+  },
+  "javaSecurityTests": {
+    "passed": 17,
+    "failed": 0
+  },
+  "uiMode": "Headless installed Chrome using a deterministic mocked Capacitor bridge; no Android emulator or phone",
+  "uiChecks": [
+    "Android shell hides the sample status row and honors native display insets",
+    "Native Back bridge dismisses dialogs, navigates routes and exits at the root",
+    "Native shell fills portrait and landscape viewports without obscuring navigation",
+    "Native bridge enrollment, PIN confirmation and real-method fingerprint controls",
+    "Native PIN check rejects the demo PIN and retains credentials across reload",
+    "Canceled and late biometric results cannot authorize access",
+    "Native approval expires on background events, reload and the 30-second deadline",
+    "PIN changes and biometric disable require the existing native PIN",
+    "Preference reset and reload preserve native PIN lockout; unavailable bridge fails closed",
+    "Devices without enrolled strong biometrics retain the PIN fallback",
+    "Android catalog uses package identifiers, explicit selection, package search and saved reload",
+    "Native PNG icons render in selection and home lists; missing/broken icons fall back and refreshed icons recover",
+    "Upgrade retains saved privacy consent; explicit reset persists without restoring legacy sample choices",
+    "Usage and notification settings call the native bridge; returning refreshes actual status",
+    "Protection requires explicit consent and an Android accessibility connection",
+    "Stale native snapshots, settings errors, unavailable device bridge and uninstalled apps are handled",
+    "PIN fallback and automatic fingerprint approval launch the exact package, including duplicate labels",
+    "Automatic launch submits once and consumes approval without a success or Open step",
+    "Native expiry, mismatched package and background invalidation reject stale launches",
+    "Disabled or uninstalled targets clear verification and refresh the catalog",
+    "Nonmatching fingerprint displays an error without granting access; a later match opens directly",
+    "Minimal fingerprint screen and bottom-right PIN fallback fit portrait and landscape",
+    "Protection requires explicit disclosure/consent and an Android accessibility connection",
+    "Trusted blocked-app requests route to the exact package and open after native verification",
+    "Cancel and wrong PIN never allow a protected app; replacement requests invalidate prior verification",
+    "Service disconnection is visible; failed native saves do not change protection scope",
+    "Native protection scope survives reload and reset/disable preserve PIN and biometric credentials",
+    "Cold protected-app opening automatically starts one fingerprint prompt with only the GhostAuth mark, reader and PIN fallback",
+    "Android PIN fallback and wrong PIN remain locked; correct PIN opens directly",
+    "Choosing PIN cancels fingerprint and ignores late biometric proof",
+    "Fingerprint cancellation, retry and biometric lockout show errors without opening the app",
+    "Replacement requests reject old biometric proof; unenrolled or invalidated fingerprint starts with PIN",
+    "PIN success/failure and fingerprint nonmatch/success/cancel/lockout are distinct dated native history entries",
+    "History survives reload and a new WebView without restoring launch approval or leaking PIN values",
+    "Stored app labels and exact packages survive uninstall and distinguish apps sharing a label",
+    "Native privacy consent pauses new recording, retains old entries and overrides stale frontend copies",
+    "Clear cancel/failure/retry and reload preserve credentials, selection and recording choices",
+    "Clear discards stale frontend snapshots; malformed history does not block authentication and can be reset",
+    "Preference reset retains saved history and credentials while restoring recording consent and empty app scope",
+    "Native dark mode persists, overrides stale web cache, updates bar icons and handles failed saves safely",
+    "Dark fingerprint screen retains readable branding and directly opens the verified package"
+  ],
+  "browserErrors": [],
+  "physicalValidation": "Earlier 0.3.0 baseline and the three proposed 0.5.1 Presto groups have user-reported passes. The 0.6.0 history and new 0.6.1 native appearance behavior remain pending physical review.",
+  "deviceConnection": "No physical phone or emulator was exercised for 0.6.1; browser checks use mocked Capacitor bridges and actual native code was compiled/linted.",
+  "checklist": "android/device-review.md",
+  "fullBrowserReview": {
+    "version": "0.6.1",
+    "checks": 63,
+    "routes": 33,
+    "viewportSizes": 5,
+    "errors": []
+  },
+  "physicalDeviceReview": {
+    "reportedOn": "2026-10-12",
+    "source": "User-reported phone review; not independently observed by the agent",
+    "checklistVersion": "0.3.0",
+    "phoneModel": null,
+    "androidVersion": null,
+    "catalogAndPreferences": {
+      "checks": [
+        "Offline launchable-app catalog matches current profile, deduplicates packages and excludes GhostAuth/sample fallback apps",
+        "Search by label/package and saved selection survive force-close/reopen, including duplicate labels",
+        "Unsaved selection changes are discarded on reload",
+        "Upgrade from 0.2.0 retains privacy choices and credentials with empty app selection; explicit privacy reset persists",
+        "Uninstalling a selected app removes it on refresh and clears its verified state",
+        "Preference reset empties selection and retains enrolled PIN/biometric settings"
+      ],
+      "passed": 6
+    },
+    "pending": [
+      "Cancel Settings navigation / leave access denied",
+      "Protection-service status and behavior with both permissions granted",
+      "Portrait/landscape, long lists and Back navigation on the phone",
+      "PIN change with existing PIN",
+      "Background/late biometric callbacks and 30-second approval expiry",
+      "Device model, Android version and coverage of other Android versions"
+    ],
+    "additionalReportedGroups": [
+      {
+        "reportedOn": "2026-10-12",
+        "result": "passed",
+        "group": "Usage access / notifications / Settings return"
+      },
+      {
+        "reportedOn": "2026-10-12",
+        "result": "passed",
+        "group": "PIN persistence and reboot lockout"
+      },
+      {
+        "reportedOn": "2026-10-12",
+        "result": "passed",
+        "group": "Biometric prompt and enrollment invalidation"
+      }
+    ]
+  },
+  "appIconReview": {
+    "ui": "Selection/home lists show 32px images with decorative alt text",
+    "version": "0.3.1",
+    "nativeSource": "PackageManager application drawables rendered into bounded 96px local PNGs",
+    "checks": [
+      "PNG icon preservation and rejection of remote/non-PNG/oversized icon fields",
+      "Rendered icons in selection and home lists",
+      "Missing or corrupt icons retain an app-row fallback",
+      "Valid refreshed icons recover from a previous image failure"
+    ],
+    "physicalReview": "Pending phone confirmation of Android-provided/adaptive icons"
+  },
+  "verifiedLaunchReview": {
+    "version": "0.4.0",
+    "nativeApproval": "In-memory, package-bound, monotonic 30-second deadline; consumed before startActivity on the Android UI thread",
+    "tests": [
+      "Two JVM policy tests covering package mismatch, single consumption, expiry, revocation, clock rollback and process restart",
+      "Six mocked-bridge UI checks covering PIN/biometric launches, duplicate labels, repeated taps, canceled prompts, stale approval, removed/disabled targets and long labels"
+    ],
+    "physicalReview": "Direct Presto launch after fingerprint and fallback PIN passed in 0.5.1 according to the user on 2026-10-13; other packages/devices and detailed stale-launch cases were not separately reported.",
+    "externalOpeningEnforcement": "Experimental package-only accessibility guard in 0.5.0; manual enable required and OEM limitations apply"
+  },
+  "protectionReview": {
+    "version": "0.5.0",
+    "activation": "Explicit in-app consent plus manual Android Accessibility enable; no automatic grants",
+    "scope": "Native package selections persist; Settings, launcher and active keyboard are excluded",
+    "detection": "TYPE_WINDOW_STATE_CHANGED package only, no screen-content retrieval or gestures",
+    "shield": "Focusable opaque secure accessibility overlay blocks touch/keyboard input. Back/Close retain protection if HOME fails; actual MainActivity lifecycle dismisses the shield for native verification.",
+    "approval": "Five-second exact-package arrival allowance, then continuous foreground approval; leave/screen-off/reset/reconnect/restart revoke",
+    "uiChecks": 5,
+    "javaPolicyTests": 3,
+    "physicalReview": "Launcher, notification and Recents openings, re-entry, screen locking and opening after swiping GhostAuth away passed in 0.5.1 according to the user on 2026-10-13. Force-stop, service interruption, reboot, split-screen/PiP and other OEM scenarios remain unreported.",
+    "limitations": [
+      "Content may briefly appear before event detection",
+      "Disabling Accessibility, force-stop, missing events or OEM suspension stop protection",
+      "Split-screen, PiP and notification previews are not guaranteed protected"
+    ]
+  },
+  "fingerprintFirstReview": {
+    "version": "0.5.1",
+    "primary": "Enabled strong biometric automatically starts for app-detail and trusted external protection requests; PIN is secondary",
+    "screen": "Minimal GhostAuth mark and fingerprint reader/retry control with bottom-right Use PIN instead; secure system prompt appearance controlled by Android",
+    "launch": "Successful biometric or fallback PIN directly opens the exact package without a success screen or extra Open tap; native single-use approval remains enforced",
+    "failure": "Nonmatch event shows an error without approval; cancellation and Android lockout retain retry/PIN options; canceled/replaced requests ignore late proof",
+    "uiChecks": 5,
+    "physicalReview": "Passed for automatic fingerprint, direct launch, wrong-scan lock, PIN fallback, cancellation, re-entry and screen locking, based on the user report on 2026-10-13; further detailed cases remain unreported.",
+    "screenshots": [
+      "tmp/mobile-qa/native-fingerprint-primary.png",
+      "tmp/mobile-qa/native-fingerprint-error.png"
+    ]
+  },
+  "physicalDeviceReviews": [
+    {
+      "reportedOn": "2026-10-13",
+      "version": "0.5.1",
+      "result": "passed",
+      "source": "User-reported phone review; not independently observed by the agent",
+      "userReport": "done all these, it works fine",
+      "scope": [
+        "Opening Presto directly automatically requests fingerprint, a match opens immediately, and a wrong scan keeps it locked",
+        "PIN fallback, cancellation, leaving/reopening Presto and screen locking",
+        "Opening through notifications and Recents, including after swiping GhostAuth away"
+      ],
+      "phoneModel": null,
+      "androidVersion": null,
+      "coverageLimit": "Applies to the three summary groups proposed immediately before the user report. Additional detailed scenarios and other devices were not separately reported."
+    }
+  ],
+  "securityHistoryReview": {
+    "version": "0.6.0",
+    "store": "AES-256-GCM authenticated versioned AtomicFile under noBackupFilesDir with an independent history Keystore alias; sync and read-back before publication",
+    "metadata": [
+      "increasing id",
+      "app package",
+      "bounded stored label",
+      "wall-clock timestamp",
+      "PIN/fingerprint method",
+      "verified/failed/canceled/locked-out/unavailable outcome"
+    ],
+    "retention": "Latest 100 entries by insertion order, independent of clock rollback",
+    "consent": "First initialization honors the previously saved history choice; native consent is authoritative thereafter. Pausing retains existing data and stops new entries.",
+    "clear": "Confirmed Clear history deletes entries and invalidates older queued writes; preserves normal consent, native credentials, selections and lockout. Unreadable-store recovery pauses recording until explicitly enabled.",
+    "auth": "History snapshots cannot grant launch approval; only native app verification produces entries, with no credential management or sample/risk events",
+    "uiChecks": 7,
+    "javaPolicyTests": 5,
+    "javaCryptographyTests": 3,
+    "nodeTests": 5,
+    "physicalReview": "Pending actual Keystore/file persistence across process restart/reboot, privacy consent, clear/retry and credential retention on a phone",
+    "screenshots": [
+      "tmp/mobile-qa/native-history-activity.png",
+      "tmp/mobile-qa/native-history-empty.png"
+    ]
+  },
+  "appearanceReview": {
+    "version": "0.6.1",
+    "default": "Light",
+    "control": "Settings → Dark mode; applied immediately and saved independently from app/privacy preferences",
+    "nativeStore": "ghostauth_appearance SharedPreferences, with separate frontend cache; browser appearance stored independently",
+    "ui": "Shared dark palette, readable primary actions/inputs/dialogs and dark brand rendering; app icons keep original colors",
+    "native": "DayNight resources, API 31+ application night mode, AppCompat mode, SystemBars icon style, saved WebView background and matching secure protection shield",
+    "isolation": "Appearance/reset operations do not alter credential vault, biometric key, selected-app scope or security history",
+    "browserChecks": 4,
+    "nativeBridgeChecks": 2,
+    "physicalReview": "Pending real Android app/splash/biometric prompt/bar styling, OEM behavior and force-close/reboot retention",
+    "screenshots": [
+      "tmp/mobile-qa/native-dark-settings.png",
+      "tmp/mobile-qa/native-dark-fingerprint.png"
+    ]
+  }
+}

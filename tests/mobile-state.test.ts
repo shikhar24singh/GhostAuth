@@ -10,16 +10,17 @@ test('native mode never accepts demo PIN or simulated fingerprint actions', () =
   assert.equal(reducer({ ...native, fingerprint: true }, { type: 'verify-fingerprint', app: 'mail', time: '10:00' }).verified, null);
 });
 
-test('native verification honors restrictions, app selection and revoked permissions', () => {
+test('native local verification honors restrictions and selection without requiring an unimplemented service', () => {
   const native = { ...initialState(), nativeAuth: true, pin: '', events: [] };
   const proof = { type: 'native-verified', app: 'mail', time: '10:00', method: 'PIN' } as const;
   const verified = reducer(native, proof);
   assert.equal(canOpen(verified, 'mail'), true);
   assert.equal(canOpen(verified, 'photos'), false);
-  assert.equal(verified.events[0].method, 'PIN');
+  assert.equal(verified.events.length, 0, 'Native history is hydrated separately from launch approval');
   assert.equal(reducer(reducer(verified, { type: 'restrict' }), proof).verified, null);
   assert.equal(reducer(reducer(verified, { type: 'select', apps: ['photos'] }), proof).verified, null);
-  assert.equal(reducer(reducer(verified, { type: 'permission', permission: 'service', enabled: false }), proof).verified, null);
+  assert.equal(reducer(verified, { type: 'permission', permission: 'service', enabled: false }), verified);
+  assert.equal(reducer({ ...native, permissions: { usage: false, service: false, notifications: false } }, proof).verified, 'mail');
   assert.equal(reducer(initialState(), proof).verified, null);
 });
 

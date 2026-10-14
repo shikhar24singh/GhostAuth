@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#91A6FF</color>
+    <color name="colorPrimaryDark">#16181E</color>
+    <color name="colorAccent">#91A6FF</color>
+    <color name="ghostauth_paper">#16181E</color>
+</resources>

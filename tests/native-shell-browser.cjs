@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 // Exercises the shell against a mocked native bridge; this does not emulate Android itself.
 module.exports = async function reviewNativeShell(browser, url, output) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-  await require('./native-bridge-fixture.cjs')(context, { pin: '654321' });
+  await require('./native-bridge-fixture.cjs')(context, { pin: '654321', selected: ['com.example.mail'] });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));

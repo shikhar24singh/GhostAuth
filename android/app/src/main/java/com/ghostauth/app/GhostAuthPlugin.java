@@ -1,6 +1,7 @@
 package com.ghostauth.app;
 
 import android.os.Build;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
@@ -30,11 +31,20 @@ public class GhostAuthPlugin extends Plugin {
     private static final String BIO_ALIAS = "ghostauth.biometric.v1";
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private final AtomicLong generation = new AtomicLong();
-    private volatile long grantedAt = -1;
+    private final LaunchSession session = new LaunchSession();
     private volatile boolean foreground = true;
     private volatile BiometricPrompt prompt;
     private volatile PluginCall promptCall;
     private volatile boolean prompting;
+    private volatile boolean promptEnrollment;
+
+    private void recordHistory(PluginCall call, String method, String outcome) {
+        String pkg = call.getString("packageName");
+        if (pkg == null) return; // Credential management never masquerades as an app check.
+        android.content.Context context = getContext().getApplicationContext();
+        long ticket = HistoryStore.ticket(), time = System.currentTimeMillis();
+        worker.execute(() -> HistoryStore.record(context, ticket, time, pkg, method, outcome));
+    }
 
     private interface Work { void run(CredentialVault vault, long epoch) throws Exception; }
 
@@ -46,7 +56,7 @@ public class GhostAuthPlugin extends Plugin {
                 if (prompting) { call.reject("Finish the Android prompt first.", "BUSY"); return; }
                 work.run(new CredentialVault(getContext()), epoch);
             } catch (Exception ignored) {
-                grantedAt = -1;
+                session.clear();
                 call.reject("Authentication unavailable. Your credentials were kept. Restart GhostAuth and try again.", "AUTH_UNAVAILABLE");
             }
         });
@@ -76,7 +86,8 @@ public class GhostAuthPlugin extends Plugin {
 
     private JSObject status(JSONObject record) {
         long now = SystemClock.elapsedRealtime();
-        boolean valid = foreground && PinSecurity.sessionValid(grantedAt, now);
+        long remaining = foreground ? session.remaining(now) : 0;
+        boolean valid = remaining > 0;
         boolean enabled = false;
         if (record.has("bioCiphertext") && available()) {
             try { biometricCipher(record); enabled = true; } catch (Exception ignored) { /* PIN remains available. */ }
@@ -84,7 +95,7 @@ public class GhostAuthPlugin extends Plugin {
         return new JSObject().put("pinSet", record.has("verifier"))
             .put("biometricAvailable", available()).put("biometricEnabled", enabled)
             .put("lockedForSeconds", PinSecurity.remainingSeconds(record.optLong("lockedUntilElapsed"), now))
-            .put("sessionValid", valid).put("sessionRemainingMillis", valid ? PinSecurity.SESSION_MILLIS - (now - grantedAt) : 0);
+            .put("sessionValid", valid).put("sessionRemainingMillis", remaining);
     }
 
     @PluginMethod
@@ -96,8 +107,56 @@ public class GhostAuthPlugin extends Plugin {
     public void lock(PluginCall call) { endSession(); call.resolve(); }
 
     @PluginMethod
+    public void launchApp(PluginCall call) {
+        long epoch = generation.get();
+        String target = call.getString("packageName");
+        getActivity().runOnUiThread(() -> {
+            try {
+                // Resolution and the final authorization check run together on the UI
+                // thread, where foreground lifecycle transitions are also delivered.
+                Intent intent = AppLauncher.resolve(getContext(), target);
+                if (intent == null || (ProtectionPreferences.store(getContext()).contains("packages")
+                    && !ProtectionPreferences.packages(getContext()).contains(target))) {
+                    endSession();
+                    call.reject("This app is no longer available. Refresh your app selection.", "APP_UNAVAILABLE");
+                    return;
+                }
+                if (!foreground || generation.get() != epoch
+                    || !session.consume(target, SystemClock.elapsedRealtime())) {
+                    endSession();
+                    call.reject("Verify this app again before opening it.", "SESSION_ENDED");
+                    return;
+                }
+                // Approval is already consumed before Android receives the intent.
+                if (!ProtectionService.approveLaunch(target)) {
+                    endSession();
+                    call.reject("The protected app changed. Verify the current app again.", "SESSION_ENDED"); return;
+                }
+                getActivity().startActivity(intent);
+                endSession();
+                call.resolve();
+            } catch (RuntimeException unavailable) {
+                ProtectionService.launchFailed();
+                endSession();
+                call.reject("Android could not open this app. Verify again to retry.", "APP_UNAVAILABLE");
+            }
+        });
+    }
+
+    private boolean requireTarget(PluginCall call) {
+        session.clear();
+        String target = call.getString("packageName");
+        if (AppLauncher.resolve(getContext(), target) != null
+            && (!ProtectionPreferences.store(getContext()).contains("packages")
+                || ProtectionPreferences.packages(getContext()).contains(target))) return true;
+        call.reject("This app is no longer available. Refresh your app selection.", "APP_UNAVAILABLE");
+        return false;
+    }
+
+    @PluginMethod
     public void enrollPin(PluginCall call) {
         execute(call, (vault, epoch) -> {
+            session.clear();
             String pin = call.getString("pin");
             if (!PinSecurity.valid(pin)) { call.reject("Enter a six-digit PIN.", "INVALID_PIN"); return; }
             JSONObject record = vault.enroll(pin);
@@ -109,11 +168,14 @@ public class GhostAuthPlugin extends Plugin {
     @PluginMethod
     public void verifyPin(PluginCall call) {
         execute(call, (vault, epoch) -> {
+            if (!requireTarget(call)) return;
             JSONObject record = vault.read();
-            grantedAt = -1;
+            boolean locked = PinSecurity.remainingSeconds(record.optLong("lockedUntilElapsed"), SystemClock.elapsedRealtime()) > 0;
             boolean verified = vault.check(record, call.getString("pin"));
             requireForeground(epoch);
-            if (verified) grantedAt = SystemClock.elapsedRealtime();
+            recordHistory(call, "PIN", verified ? "verified" : locked ? "locked-out" : "failed");
+            if (verified) session.grant(call.getString("packageName"), SystemClock.elapsedRealtime());
+            requireForeground(epoch);
             JSObject result = status(record);
             result.put("verified", verified).put("expiresInSeconds", verified ? 30 : 0);
             call.resolve(result);
@@ -126,7 +188,7 @@ public class GhostAuthPlugin extends Plugin {
             String next = call.getString("newPin");
             if (!PinSecurity.valid(next)) { call.reject("Enter a six-digit PIN.", "INVALID_PIN"); return; }
             JSONObject record = vault.read();
-            grantedAt = -1;
+            session.clear();
             if (!vault.check(record, call.getString("currentPin"))) {
                 call.resolve(status(record).put("changed", false)); return;
             }
@@ -139,6 +201,7 @@ public class GhostAuthPlugin extends Plugin {
     @PluginMethod
     public void disableBiometric(PluginCall call) {
         execute(call, (vault, epoch) -> {
+            session.clear();
             JSONObject record = vault.read();
             if (!vault.check(record, call.getString("pin"))) {
                 call.resolve(status(record).put("changed", false)); return;
@@ -154,6 +217,7 @@ public class GhostAuthPlugin extends Plugin {
     @PluginMethod
     public void enableBiometric(PluginCall call) {
         execute(call, (vault, epoch) -> {
+            session.clear();
             JSONObject record = vault.read();
             if (!vault.check(record, call.getString("pin"))) {
                 call.resolve(status(record).put("changed", false)); return;
@@ -178,9 +242,10 @@ public class GhostAuthPlugin extends Plugin {
     @PluginMethod
     public void verifyBiometric(PluginCall call) {
         execute(call, (vault, epoch) -> {
-            grantedAt = -1;
+            if (!requireTarget(call)) return;
             JSONObject record = vault.read();
             if (!status(record).getBoolean("biometricEnabled", false)) {
+                recordHistory(call, "fingerprint", "unavailable");
                 call.reject("Fingerprint is unavailable. Use your PIN or enable it again with your PIN.", "BIOMETRIC_UNAVAILABLE"); return;
             }
             showPrompt(call, vault, record, biometricCipher(record), false, epoch);
@@ -189,6 +254,7 @@ public class GhostAuthPlugin extends Plugin {
 
     private void showPrompt(PluginCall call, CredentialVault vault, JSONObject record, Cipher cipher, boolean enroll, long epoch) {
         prompting = true;
+        promptEnrollment = enroll;
         promptCall = call;
         getActivity().runOnUiThread(() -> {
             try {
@@ -198,8 +264,22 @@ public class GhostAuthPlugin extends Plugin {
                         @Override
                         public void onAuthenticationError(int errorCode, CharSequence message) {
                             if (promptCall != call) return;
-                            promptCall = null; prompting = false; prompt = null; grantedAt = -1;
-                            call.reject("Fingerprint verification ended. Use your PIN or try again.", "BIOMETRIC_CANCELED");
+                            promptCall = null; prompting = false; prompt = null; session.clear();
+                            String code = errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON && !enroll ? "BIOMETRIC_USE_PIN"
+                                : errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT
+                                    ? "BIOMETRIC_LOCKOUT" : errorCode == BiometricPrompt.ERROR_CANCELED || errorCode == BiometricPrompt.ERROR_USER_CANCELED
+                                        ? "BIOMETRIC_CANCELED" : "BIOMETRIC_UNAVAILABLE";
+                            if (!enroll) recordHistory(call, "fingerprint", "BIOMETRIC_LOCKOUT".equals(code) ? "locked-out"
+                                : "BIOMETRIC_UNAVAILABLE".equals(code) ? "unavailable" : "canceled");
+                            call.reject("Fingerprint verification ended. Use your PIN or try again.", code);
+                        }
+
+                        @Override
+                        public void onAuthenticationFailed() {
+                            if (promptCall != call || !foreground || generation.get() != epoch) return;
+                            session.clear();
+                            if (!enroll) recordHistory(call, "fingerprint", "failed");
+                            notifyListeners("biometricFailed", new JSObject());
                         }
 
                         @Override
@@ -222,17 +302,19 @@ public class GhostAuthPlugin extends Plugin {
                                         byte[] marker = authorized.doFinal(CredentialVault.decode(record.getString("bioCiphertext")));
                                         if (!MessageDigest.isEqual(marker, CredentialVault.decode(record.getString("bioMarker"))))
                                             throw new IllegalStateException("Invalid biometric proof");
-                                        grantedAt = SystemClock.elapsedRealtime();
+                                        session.grant(call.getString("packageName"), SystemClock.elapsedRealtime());
                                     }
                                     requireForeground(epoch);
                                     JSObject response = status(record);
+                                    if (!enroll) recordHistory(call, "fingerprint", "verified");
                                     response.put(enroll ? "changed" : "verified", true).put("expiresInSeconds", enroll ? 0 : 30);
                                     promptCall = null; prompting = false; prompt = null;
                                     call.resolve(response);
                                 } catch (Exception ignored) {
-                                    grantedAt = -1;
+                                    session.clear();
                                     if (promptCall == call) {
                                         promptCall = null; prompting = false; prompt = null;
+                                        if (!enroll) recordHistory(call, "fingerprint", "unavailable");
                                         call.reject("Fingerprint proof unavailable. Use your PIN.", "BIOMETRIC_UNAVAILABLE");
                                     }
                                 }
@@ -240,14 +322,14 @@ public class GhostAuthPlugin extends Plugin {
                         }
                     });
                 BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(enroll ? "Enable GhostAuth fingerprint" : "Verify your identity")
-                    .setSubtitle("GhostAuth · Android biometric verification")
+                    .setTitle(enroll ? "Enable GhostAuth fingerprint" : "GhostAuth")
                     .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-                    .setNegativeButtonText("Use GhostAuth PIN").build();
+                    .setNegativeButtonText(enroll ? "Cancel" : "Use PIN instead").build();
                 prompt.authenticate(info, new BiometricPrompt.CryptoObject(cipher));
             } catch (Exception ignored) {
                 if (promptCall == call) {
                     promptCall = null; prompting = false; prompt = null;
+                    if (!enroll) recordHistory(call, "fingerprint", "unavailable");
                     call.reject("Fingerprint unavailable. Use your PIN.", "BIOMETRIC_UNAVAILABLE");
                 }
             }
@@ -255,8 +337,9 @@ public class GhostAuthPlugin extends Plugin {
     }
 
     private void endSession() {
-        generation.incrementAndGet(); grantedAt = -1;
+        generation.incrementAndGet(); session.clear();
         PluginCall pending = promptCall;
+        if (pending != null && !promptEnrollment) recordHistory(pending, "fingerprint", "canceled");
         promptCall = null; prompting = false;
         BiometricPrompt active = prompt; prompt = null;
         if (active != null) getActivity().runOnUiThread(active::cancelAuthentication);

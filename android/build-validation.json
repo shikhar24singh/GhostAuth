@@ -1,31 +1,49 @@
 {
-  "validatedOn": "2026-10-11",
+  "validatedOn": "2026-10-14",
   "appName": "GhostAuth",
   "applicationId": "com.ghostauth.app",
-  "version": "0.2.0",
-  "versionCode": 2,
+  "version": "0.6.1",
+  "versionCode": 9,
   "artifact": "artifacts/GhostAuth-debug.apk",
-  "bytes": 6461018,
-  "sha256": "e0cda9e3f99098a7414e2ce5ce5e621593584919797cd97e4cf2d8dbeeffe1f6",
+  "bytes": 6778957,
+  "sha256": "e12137d42d651cb45dcedf225bcfa8e3a777d3635f0aa257a6ae399d44411bc7",
   "minimumSdk": 24,
   "targetSdk": 36,
-  "build": "assembleDebug and app:testDebugUnitTest passed",
+  "build": "assembleDebug, app:testDebugUnitTest and lintDebug passed",
   "lint": {
-    "warnings": 30,
-    "errors": 0
+    "errors": 0,
+    "warnings": 30
   },
   "signature": "APK v2 verified",
   "checks": [
-    "Current production frontend and bundled assets verified",
-    "Bridge logging disabled; no remote server configured",
-    "Biometric permissions and locally registered GhostAuth plugin compiled",
-    "HTTP full and resumed downloads match APK bytes"
+    "Production frontend and bundled assets built and synced",
+    "Native authentication, device integration and package-only accessibility protection service compiled and registered",
+    "Accessibility service requires BIND_ACCESSIBILITY_SERVICE; screen-content retrieval and gestures disabled",
+    "40 Node tests and 17 JVM security tests passed",
+    "63 full browser checks passed, including 41 mocked native bridge checks and 33 routes at five viewport sizes",
+    "Focusable opaque secure lock screen blocks touch/keyboard input; Back/Close retain the shield until the target is left",
+    "Native saved scope, explicit consent, reconnect/disconnection status, reset and package-bound verification covered by policy/UI checks",
+    "APK v2 signature, version/SDK metadata and SHA-256 verified",
+    "Enabled fingerprint automatically starts on trusted external/app-detail requests with minimal branded UI and bottom-right PIN fallback",
+    "Nonmatch, cancellation, lockout, PIN switching, late proof and replacement requests covered by mocked UI checks; successful biometric/PIN opens directly",
+    "Independent encrypted AtomicFile history and read-only entry bridge compiled; native app checks produce verified/failed/canceled/locked-out/unavailable outcomes",
+    "Latest 100 entries, saved labels/packages/dates, privacy pause/upgrade consent, clear/retry/reset and stale snapshot behavior covered by native UI/policy checks",
+    "Three JVM cryptography tests cover AES-GCM roundtrip/fresh IVs, wrong keys, tampering and malformed ciphertext; physical Android Keystore/filesystem not exercised",
+    "Saved Settings dark mode, shared palette, readable brand mark, native DayNight/bar styling and matching opaque protection shield compiled and visually checked",
+    "Appearance persistence across reload/new tabs, reset preservation, native cache reconciliation, failed-save rollback and dark fingerprint handoff passed browser checks"
   ],
-  "physicalAndroidTest": "Pending PIN/Keystore persistence and biometric prompt validation on a phone",
+  "physicalAndroidTest": "Pending 0.6.1 appearance review on a phone: restart/reboot persistence, native shield, status/navigation bars, system biometric prompt and splash. The 0.6.0 native history phone review remains pending; earlier 0.5.1 Presto groups have user-reported passes. See android/device-review.md.",
   "simulatedFeatures": [
-    "permissions",
-    "installed app selection",
-    "risk and behavior learning",
-    "app protection and handoff"
-  ]
+    "risk and behavior learning"
+  ],
+  "protectionLimitations": [
+    "Experimental event-driven guard; content may appear before detection",
+    "Force-stop, disabled Accessibility, missed events and OEM interruption can stop protection",
+    "Split-screen, PiP and notification previews are not guaranteed protected"
+  ],
+  "previousPhysicalReview": {
+    "version": "0.5.1",
+    "reportedOn": "2026-10-13",
+    "source": "User-reported; see android/device-review.md for scope"
+  }
 }
