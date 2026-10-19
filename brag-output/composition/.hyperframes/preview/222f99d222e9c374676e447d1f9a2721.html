@@ -1,0 +1,1595 @@
+<!DOCTYPE html><html lang="en"><head><script data-hf-gsap-fallback>
+(function(){
+  var cdnBase="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/";
+  var loaded={};
+  function loadFallback(file){
+    if(loaded[file])return loaded[file];
+    return loaded[file]=new Promise(function(ok,fail){
+      var s=document.createElement("script");
+      s.src=cdnBase+file;s.hfGsapFallback=true;s.onload=ok;s.onerror=fail;
+      document.head.appendChild(s);
+    });
+  }
+  document.addEventListener("error",function(e){
+    var t=e.target;
+    if(!t||t.tagName!=="SCRIPT"||!t.src||t.hfGsapFallback)return;
+    var m=t.src.match(/gsap[^/]*\/dist\/(.+\.js)/);
+    if(m)loadFallback(m[1]).catch(function(){
+      reportError(new Error("GSAP could not load from "+t.src+" or "+cdnBase+m[1]+", so this preview's animations will not play."));
+    });
+  },true);
+})();
+</script>
+<meta name="hyperframes-studio-preview"><script>(function(){var seen=window.__hfPreviewErrors=[];
+addEventListener("error",function(e){seen.push(e.message||String(e))});})();</script>
+<base href="/api/projects/composition/preview/"><style data-hyperframes-text-rendering="true">html,body,*{text-rendering:geometricPrecision}</style><script data-hf-after-fonts-fallback="">document.addEventListener("DOMContentLoaded", function () {
+  if (window.__hfAfterFontsClaimed) return;
+  var T = "text/hf-after-fonts";
+  var all = [].slice.call(document.querySelectorAll('script[type="text/hf-after-fonts"], script[type="text/hf-after-fonts+module"]'));
+  if (!all.length) return;
+  console.warn("[hyperframes] the runtime has no web-font gate; composition scripts run without waiting for fonts");
+  var late = function (el) { return el.type !== T || el.matches('[defer][src], [defer][data-hf-inlined-src]'); };
+  var queue = all.filter(function (el) { return !late(el); }).concat(all.filter(late));
+  (function next() {
+    var el = queue.shift();
+    if (!el) return;
+    var s = document.createElement("script");
+    for (var i = 0; i < el.attributes.length; i++) s.setAttribute(el.attributes[i].name, el.attributes[i].value);
+    if (el.type === T) s.removeAttribute("type"); else s.type = "module";
+    s.async = el.hasAttribute("async");
+    s.text = el.text;
+    var waits = s.type !== "module" && s.hasAttribute("src") && !s.async && !s.noModule;
+    if (waits) { s.addEventListener("load", next); s.addEventListener("error", next); }
+    el.replaceWith(s);
+    if (!waits) next();
+  })();
+});
+//# sourceURL=hyperframes://after-fonts-fallback</script><meta charset="utf-8"><meta name="viewport" content="width=1920,height=1080"><title>GhostAuth — Your apps. Your access.</title><script data-hf-inlined-src="assets/vendor/gsap.min.js">!(function(t, e) {
+  "object" == typeof exports && "undefined" != typeof module ? e(exports) : "function" == typeof define && define.amd ? define(["exports"], e) : e((t = t || self).window = t.window || {});
+})(this, function(e) {
+  "use strict";
+  function _inheritsLoose(t2, e2) {
+    t2.prototype = Object.create(e2.prototype), (t2.prototype.constructor = t2).__proto__ = e2;
+  }
+  function _assertThisInitialized(t2) {
+    if (void 0 === t2) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    return t2;
+  }
+  function r(t2) {
+    return "string" == typeof t2;
+  }
+  function s(t2) {
+    return "function" == typeof t2;
+  }
+  function t(t2) {
+    return "number" == typeof t2;
+  }
+  function u(t2) {
+    return void 0 === t2;
+  }
+  function v(t2) {
+    return "object" == typeof t2;
+  }
+  function w(t2) {
+    return false !== t2;
+  }
+  function x() {
+    return "undefined" != typeof window;
+  }
+  function y(t2) {
+    return s(t2) || r(t2);
+  }
+  function R(t2) {
+    return (i = bt(t2, ht)) && Fe;
+  }
+  function S(t2, e2) {
+    return console.warn("Invalid property", t2, "set to", e2, "Missing plugin? gsap.registerPlugin()");
+  }
+  function T(t2, e2) {
+    return !e2 && console.warn(t2);
+  }
+  function U(t2, e2) {
+    return t2 && (ht[t2] = e2) && i && (i[t2] = e2) || ht;
+  }
+  function V() {
+    return 0;
+  }
+  function ga(t2) {
+    var e2, r2, i2 = t2[0];
+    if (v(i2) || s(i2) || (t2 = [t2]), !(e2 = (i2._gsap || {}).harness)) {
+      for (r2 = yt.length; r2-- && !yt[r2].targetTest(i2); ) ;
+      e2 = yt[r2];
+    }
+    for (r2 = t2.length; r2--; ) t2[r2] && (t2[r2]._gsap || (t2[r2]._gsap = new Xt(t2[r2], e2))) || t2.splice(r2, 1);
+    return t2;
+  }
+  function ha(t2) {
+    return t2._gsap || ga(Pt(t2))[0]._gsap;
+  }
+  function ia(t2, e2, r2) {
+    return (r2 = t2[e2]) && s(r2) ? t2[e2]() : u(r2) && t2.getAttribute && t2.getAttribute(e2) || r2;
+  }
+  function ja(t2, e2) {
+    return (t2 = t2.split(",")).forEach(e2) || t2;
+  }
+  function ka(t2) {
+    return Math.round(1e5 * t2) / 1e5 || 0;
+  }
+  function la(t2) {
+    return Math.round(1e7 * t2) / 1e7 || 0;
+  }
+  function ma(t2, e2) {
+    var r2 = e2.charAt(0), i2 = parseFloat(e2.substr(2));
+    return t2 = parseFloat(t2), "+" === r2 ? t2 + i2 : "-" === r2 ? t2 - i2 : "*" === r2 ? t2 * i2 : t2 / i2;
+  }
+  function na(t2, e2) {
+    for (var r2 = e2.length, i2 = 0; t2.indexOf(e2[i2]) < 0 && ++i2 < r2; ) ;
+    return i2 < r2;
+  }
+  function oa() {
+    var t2, e2, r2 = pt.length, i2 = pt.slice(0);
+    for (_t = {}, t2 = pt.length = 0; t2 < r2; t2++) (e2 = i2[t2]) && e2._lazy && (e2.render(e2._lazy[0], e2._lazy[1], true)._lazy = 0);
+  }
+  function pa(t2) {
+    return !!(t2._initted || t2._startAt || t2.add);
+  }
+  function qa(t2, e2, r2, i2) {
+    pt.length && !I && oa(), t2.render(e2, r2, i2 || !!(I && e2 < 0 && pa(t2))), pt.length && !I && oa();
+  }
+  function ra(t2) {
+    var e2 = parseFloat(t2);
+    return (e2 || 0 === e2) && (t2 + "").match(ot).length < 2 ? e2 : r(t2) ? t2.trim() : t2;
+  }
+  function sa(t2) {
+    return t2;
+  }
+  function ta(t2, e2) {
+    for (var r2 in e2) r2 in t2 || (t2[r2] = e2[r2]);
+    return t2;
+  }
+  function wa(t2, e2) {
+    for (var r2 in e2) "__proto__" !== r2 && "constructor" !== r2 && "prototype" !== r2 && (t2[r2] = v(e2[r2]) ? wa(t2[r2] || (t2[r2] = {}), e2[r2]) : e2[r2]);
+    return t2;
+  }
+  function xa(t2, e2) {
+    var r2, i2 = {};
+    for (r2 in t2) r2 in e2 || (i2[r2] = t2[r2]);
+    return i2;
+  }
+  function ya(t2) {
+    var e2 = t2.parent || L, r2 = t2.keyframes ? /* @__PURE__ */ (function _setKeyframeDefaults(i2) {
+      return function(t3, e3) {
+        for (var r3 in e3) r3 in t3 || "duration" === r3 && i2 || "ease" === r3 || (t3[r3] = e3[r3]);
+      };
+    })($(t2.keyframes)) : ta;
+    if (w(t2.inherit)) for (; e2; ) r2(t2, e2.vars.defaults), e2 = e2.parent || e2._dp;
+    return t2;
+  }
+  function Aa(t2, e2, r2, i2, n2) {
+    void 0 === r2 && (r2 = "_first"), void 0 === i2 && (i2 = "_last");
+    var a2, s2 = t2[i2];
+    if (n2) for (a2 = e2[n2]; s2 && s2[n2] > a2; ) s2 = s2._prev;
+    return s2 ? (e2._next = s2._next, s2._next = e2) : (e2._next = t2[r2], t2[r2] = e2), e2._next ? e2._next._prev = e2 : t2[i2] = e2, e2._prev = s2, e2.parent = e2._dp = t2, e2;
+  }
+  function Ba(t2, e2, r2, i2) {
+    void 0 === r2 && (r2 = "_first"), void 0 === i2 && (i2 = "_last");
+    var n2 = e2._prev, a2 = e2._next;
+    n2 ? n2._next = a2 : t2[r2] === e2 && (t2[r2] = a2), a2 ? a2._prev = n2 : t2[i2] === e2 && (t2[i2] = n2), e2._next = e2._prev = e2.parent = null;
+  }
+  function Ca(t2, e2) {
+    t2.parent && (!e2 || t2.parent.autoRemoveChildren) && t2.parent.remove && t2.parent.remove(t2), t2._act = 0;
+  }
+  function Da(t2, e2) {
+    if (t2 && (!e2 || e2._end > t2._dur || e2._start < 0)) for (var r2 = t2; r2; ) r2._dirty = 1, r2 = r2.parent;
+    return t2;
+  }
+  function Fa(t2, e2, r2, i2) {
+    return t2._startAt && (I ? t2._startAt.revert(ft) : t2.vars.immediateRender && !t2.vars.autoRevert || t2._startAt.render(e2, true, i2));
+  }
+  function Ha(t2) {
+    return t2._repeat ? wt(t2._tTime, t2 = t2.duration() + t2._rDelay) * t2 : 0;
+  }
+  function Ja(t2, e2) {
+    return (t2 - e2._start) * e2._ts + (0 <= e2._ts ? 0 : e2._dirty ? e2.totalDuration() : e2._tDur);
+  }
+  function Ka(t2) {
+    return t2._end = la(t2._start + (t2._tDur / Math.abs(t2._ts || t2._rts || q) || 0));
+  }
+  function La(t2, e2) {
+    var r2 = t2._dp;
+    return r2 && r2.smoothChildTiming && t2._ts && (t2._start = la(r2._time - (0 < t2._ts ? e2 / t2._ts : ((t2._dirty ? t2.totalDuration() : t2._tDur) - e2) / -t2._ts)), Ka(t2), r2._dirty || Da(r2, t2)), t2;
+  }
+  function Ma(t2, e2) {
+    var r2;
+    if ((e2._time || !e2._dur && e2._initted || e2._start < t2._time && (e2._dur || !e2.add)) && (r2 = Ja(t2.rawTime(), e2), (!e2._dur || Mt(0, e2.totalDuration(), r2) - e2._tTime > q) && e2.render(r2, true)), Da(t2, e2)._dp && t2._initted && t2._time >= t2._dur && t2._ts) {
+      if (t2._dur < t2.duration()) for (r2 = t2; r2._dp; ) 0 <= r2.rawTime() && r2.totalTime(r2._tTime), r2 = r2._dp;
+      t2._zTime = -q;
+    }
+  }
+  function Na(e2, r2, i2, n2) {
+    return r2.parent && Ca(r2), r2._start = la((t(i2) ? i2 : i2 || e2 !== L ? Ot(e2, i2, r2) : e2._time) + r2._delay), r2._end = la(r2._start + (r2.totalDuration() / Math.abs(r2.timeScale()) || 0)), Aa(e2, r2, "_first", "_last", e2._sort ? "_start" : 0), xt(r2) || (e2._recent = r2), n2 || Ma(e2, r2), e2._ts < 0 && La(e2, e2._tTime), e2;
+  }
+  function Oa(t2, e2) {
+    return (ht.ScrollTrigger || S("scrollTrigger", e2)) && ht.ScrollTrigger.create(e2, t2);
+  }
+  function Pa(t2, e2, r2, i2, n2) {
+    return Qt(t2, e2, n2), t2._initted ? !r2 && t2._pt && !I && (t2._dur && false !== t2.vars.lazy || !t2._dur && t2.vars.lazy) && f !== It.frame ? (pt.push(t2), t2._lazy = [n2, i2], 1) : void 0 : 1;
+  }
+  function Ua(t2, e2, r2, i2) {
+    var n2 = t2._repeat, a2 = la(e2) || 0, s2 = t2._tTime / t2._tDur;
+    return s2 && !i2 && (t2._time *= a2 / t2._dur), t2._dur = a2, t2._tDur = n2 ? n2 < 0 ? 1e10 : la(a2 * (n2 + 1) + t2._rDelay * n2) : a2, 0 < s2 && !i2 && La(t2, t2._tTime = t2._tDur * s2), t2.parent && Ka(t2), r2 || Da(t2.parent, t2), t2;
+  }
+  function Va(t2) {
+    return t2 instanceof Zt ? Da(t2) : Ua(t2, t2._dur);
+  }
+  function Ya(e2, r2, i2) {
+    var n2, a2, s2 = t(r2[1]), o2 = (s2 ? 2 : 1) + (e2 < 2 ? 0 : 1), u2 = r2[o2];
+    if (s2 && (u2.duration = r2[1]), u2.parent = i2, e2) {
+      for (n2 = u2, a2 = i2; a2 && !("immediateRender" in n2); ) n2 = a2.vars.defaults || {}, a2 = w(a2.vars.inherit) && a2.parent;
+      u2.immediateRender = w(n2.immediateRender), e2 < 2 ? u2.runBackwards = 1 : u2.startAt = r2[o2 - 1];
+    }
+    return new te(r2[0], u2, r2[1 + o2]);
+  }
+  function Za(t2, e2) {
+    return t2 || 0 === t2 ? e2(t2) : e2;
+  }
+  function _a(t2, e2) {
+    return r(t2) && (e2 = ut.exec(t2)) ? e2[1] : "";
+  }
+  function cb(t2, e2) {
+    return t2 && v(t2) && "length" in t2 && (!e2 && !t2.length || t2.length - 1 in t2 && v(t2[0])) && !t2.nodeType && t2 !== h;
+  }
+  function fb(r2) {
+    return r2 = Pt(r2)[0] || T("Invalid scope") || {}, function(t2) {
+      var e2 = r2.current || r2.nativeElement || r2;
+      return Pt(t2, e2.querySelectorAll ? e2 : e2 === r2 ? T("Invalid scope") || a.createElement("div") : r2);
+    };
+  }
+  function gb(t2) {
+    return t2.sort(function() {
+      return 0.5 - Math.random();
+    });
+  }
+  function hb(t2) {
+    if (s(t2)) return t2;
+    var p2 = v(t2) ? t2 : { each: t2 }, _2 = Vt(p2.ease), m2 = p2.from || 0, g2 = parseFloat(p2.base) || 0, y2 = {}, e2 = 0 < m2 && m2 < 1, T2 = isNaN(m2) || e2, b2 = p2.axis, w2 = m2, x2 = m2;
+    return r(m2) ? w2 = x2 = { center: 0.5, edges: 0.5, end: 1 }[m2] || 0 : !e2 && T2 && (w2 = m2[0], x2 = m2[1]), function(t3, e3, r2) {
+      var i2, n2, a2, s2, o2, u2, h2, l2, f2, d2 = (r2 || p2).length, c2 = y2[d2];
+      if (!c2) {
+        if (!(f2 = "auto" === p2.grid ? 0 : (p2.grid || [1, X])[1])) {
+          for (h2 = -X; h2 < (h2 = r2[f2++].getBoundingClientRect().left) && f2 < d2; ) ;
+          f2 < d2 && f2--;
+        }
+        for (c2 = y2[d2] = [], i2 = T2 ? Math.min(f2, d2) * w2 - 0.5 : m2 % f2, n2 = f2 === X ? 0 : T2 ? d2 * x2 / f2 - 0.5 : m2 / f2 | 0, l2 = X, u2 = h2 = 0; u2 < d2; u2++) a2 = u2 % f2 - i2, s2 = n2 - (u2 / f2 | 0), c2[u2] = o2 = b2 ? Math.abs("y" === b2 ? s2 : a2) : J(a2 * a2 + s2 * s2), h2 < o2 && (h2 = o2), o2 < l2 && (l2 = o2);
+        "random" === m2 && gb(c2), c2.max = h2 - l2, c2.min = l2, c2.v = d2 = (parseFloat(p2.amount) || parseFloat(p2.each) * (d2 < f2 ? d2 - 1 : b2 ? "y" === b2 ? d2 / f2 : f2 : Math.max(f2, d2 / f2)) || 0) * ("edges" === m2 ? -1 : 1), c2.b = d2 < 0 ? g2 - d2 : g2, c2.u = _a(p2.amount || p2.each) || 0, _2 = _2 && d2 < 0 ? jt(_2) : _2;
+      }
+      return d2 = (c2[t3] - c2.min) / c2.max || 0, la(c2.b + (_2 ? _2(d2) : d2) * c2.v) + c2.u;
+    };
+  }
+  function ib(i2) {
+    var n2 = Math.pow(10, ((i2 + "").split(".")[1] || "").length);
+    return function(e2) {
+      var r2 = la(Math.round(parseFloat(e2) / i2) * i2 * n2);
+      return (r2 - r2 % 1) / n2 + (t(e2) ? 0 : _a(e2));
+    };
+  }
+  function jb(h2, e2) {
+    var l2, f2, r2 = $(h2);
+    return !r2 && v(h2) && (l2 = r2 = h2.radius || X, h2.values ? (h2 = Pt(h2.values), (f2 = !t(h2[0])) && (l2 *= l2)) : h2 = ib(h2.increment)), Za(e2, r2 ? s(h2) ? function(t2) {
+      return f2 = h2(t2), Math.abs(f2 - t2) <= l2 ? f2 : t2;
+    } : function(e3) {
+      for (var r3, i2, n2 = parseFloat(f2 ? e3.x : e3), a2 = parseFloat(f2 ? e3.y : 0), s2 = X, o2 = 0, u2 = h2.length; u2--; ) (r3 = f2 ? (r3 = h2[u2].x - n2) * r3 + (i2 = h2[u2].y - a2) * i2 : Math.abs(h2[u2] - n2)) < s2 && (s2 = r3, o2 = u2);
+      return o2 = !l2 || s2 <= l2 ? h2[o2] : e3, f2 || o2 === e3 || t(e3) ? o2 : o2 + _a(e3);
+    } : ib(h2));
+  }
+  function kb(t2, e2, r2, i2) {
+    return Za($(t2) ? !e2 : true === r2 ? !!(r2 = 0) : !i2, function() {
+      return $(t2) ? t2[~~(Math.random() * t2.length)] : (r2 = r2 || 1e-5) && (i2 = r2 < 1 ? Math.pow(10, (r2 + "").length - 2) : 1) && Math.floor(Math.round((t2 - r2 / 2 + Math.random() * (e2 - t2 + 0.99 * r2)) / r2) * r2 * i2) / i2;
+    });
+  }
+  function ob(e2, r2, t2) {
+    return Za(t2, function(t3) {
+      return e2[~~r2(t3)];
+    });
+  }
+  function rb(t2) {
+    return t2.replace(tt, function(t3) {
+      var e2 = t3.indexOf("[") + 1, r2 = t3.substring(e2 || 7, e2 ? t3.indexOf("]") : t3.length - 1).split(et);
+      return kb(e2 ? r2 : +r2[0], e2 ? 0 : +r2[1], +r2[2] || 1e-5);
+    });
+  }
+  function ub(t2, e2, r2) {
+    var i2, n2, a2, s2 = t2.labels, o2 = X;
+    for (i2 in s2) (n2 = s2[i2] - e2) < 0 == !!r2 && n2 && o2 > (n2 = Math.abs(n2)) && (a2 = i2, o2 = n2);
+    return a2;
+  }
+  function wb(t2) {
+    return Ca(t2), t2.scrollTrigger && t2.scrollTrigger.kill(!!I), t2.progress() < 1 && Dt(t2, "onInterrupt"), t2;
+  }
+  function zb(t2) {
+    if (t2) if (t2 = !t2.name && t2.default || t2, x() || t2.headless) {
+      var e2 = t2.name, r2 = s(t2), i2 = e2 && !r2 && t2.init ? function() {
+        this._props = [];
+      } : t2, n2 = { init: V, render: ve, add: Jt, kill: Te, modifier: ye, rawVars: 0 }, a2 = { targetTest: 0, get: 0, getSetter: le, aliases: {}, register: 0 };
+      if (Lt(), t2 !== i2) {
+        if (mt[e2]) return;
+        ta(i2, ta(xa(t2, n2), a2)), bt(i2.prototype, bt(n2, xa(t2, a2))), mt[i2.prop = e2] = i2, t2.targetTest && (yt.push(i2), ct[e2] = 1), e2 = ("css" === e2 ? "CSS" : e2.charAt(0).toUpperCase() + e2.substr(1)) + "Plugin";
+      }
+      U(e2, i2), t2.register && t2.register(Fe, i2, we);
+    } else St.push(t2);
+  }
+  function Cb(t2, e2, r2) {
+    return (6 * (t2 += t2 < 0 ? 1 : 1 < t2 ? -1 : 0) < 1 ? e2 + (r2 - e2) * t2 * 6 : t2 < 0.5 ? r2 : 3 * t2 < 2 ? e2 + (r2 - e2) * (2 / 3 - t2) * 6 : e2) * zt + 0.5 | 0;
+  }
+  function Db(e2, r2, i2) {
+    var n2, a2, s2, o2, u2, h2, l2, f2, d2, c2, p2 = e2 ? t(e2) ? [e2 >> 16, e2 >> 8 & zt, e2 & zt] : 0 : Et.black;
+    if (!p2) {
+      if ("," === e2.substr(-1) && (e2 = e2.substr(0, e2.length - 1)), Et[e2]) p2 = Et[e2];
+      else if ("#" === e2.charAt(0)) {
+        if (e2.length < 6 && (e2 = "#" + (n2 = e2.charAt(1)) + n2 + (a2 = e2.charAt(2)) + a2 + (s2 = e2.charAt(3)) + s2 + (5 === e2.length ? e2.charAt(4) + e2.charAt(4) : "")), 9 === e2.length) return [(p2 = parseInt(e2.substr(1, 6), 16)) >> 16, p2 >> 8 & zt, p2 & zt, parseInt(e2.substr(7), 16) / 255];
+        p2 = [(e2 = parseInt(e2.substr(1), 16)) >> 16, e2 >> 8 & zt, e2 & zt];
+      } else if ("hsl" === e2.substr(0, 3)) if (p2 = c2 = e2.match(rt), r2) {
+        if (~e2.indexOf("=")) return p2 = e2.match(it), i2 && p2.length < 4 && (p2[3] = 1), p2;
+      } else o2 = +p2[0] % 360 / 360, u2 = p2[1] / 100, n2 = 2 * (h2 = p2[2] / 100) - (a2 = h2 <= 0.5 ? h2 * (u2 + 1) : h2 + u2 - h2 * u2), 3 < p2.length && (p2[3] *= 1), p2[0] = Cb(o2 + 1 / 3, n2, a2), p2[1] = Cb(o2, n2, a2), p2[2] = Cb(o2 - 1 / 3, n2, a2);
+      else p2 = e2.match(rt) || Et.transparent;
+      p2 = p2.map(Number);
+    }
+    return r2 && !c2 && (n2 = p2[0] / zt, a2 = p2[1] / zt, s2 = p2[2] / zt, h2 = ((l2 = Math.max(n2, a2, s2)) + (f2 = Math.min(n2, a2, s2))) / 2, l2 === f2 ? o2 = u2 = 0 : (d2 = l2 - f2, u2 = 0.5 < h2 ? d2 / (2 - l2 - f2) : d2 / (l2 + f2), o2 = l2 === n2 ? (a2 - s2) / d2 + (a2 < s2 ? 6 : 0) : l2 === a2 ? (s2 - n2) / d2 + 2 : (n2 - a2) / d2 + 4, o2 *= 60), p2[0] = ~~(o2 + 0.5), p2[1] = ~~(100 * u2 + 0.5), p2[2] = ~~(100 * h2 + 0.5)), i2 && p2.length < 4 && (p2[3] = 1), p2;
+  }
+  function Eb(t2) {
+    var r2 = [], i2 = [], n2 = -1;
+    return t2.split(Rt).forEach(function(t3) {
+      var e2 = t3.match(nt) || [];
+      r2.push.apply(r2, e2), i2.push(n2 += e2.length + 1);
+    }), r2.c = i2, r2;
+  }
+  function Fb(t2, e2, r2) {
+    var i2, n2, a2, s2, o2 = "", u2 = (t2 + o2).match(Rt), h2 = e2 ? "hsla(" : "rgba(", l2 = 0;
+    if (!u2) return t2;
+    if (u2 = u2.map(function(t3) {
+      return (t3 = Db(t3, e2, 1)) && h2 + (e2 ? t3[0] + "," + t3[1] + "%," + t3[2] + "%," + t3[3] : t3.join(",")) + ")";
+    }), r2 && (a2 = Eb(t2), (i2 = r2.c).join(o2) !== a2.c.join(o2))) for (s2 = (n2 = t2.replace(Rt, "1").split(nt)).length - 1; l2 < s2; l2++) o2 += n2[l2] + (~i2.indexOf(l2) ? u2.shift() || h2 + "0,0,0,0)" : (a2.length ? a2 : u2.length ? u2 : r2).shift());
+    if (!n2) for (s2 = (n2 = t2.split(Rt)).length - 1; l2 < s2; l2++) o2 += n2[l2] + u2[l2];
+    return o2 + n2[s2];
+  }
+  function Ib(t2) {
+    var e2, r2 = t2.join(" ");
+    if (Rt.lastIndex = 0, Rt.test(r2)) return e2 = Ft.test(r2), t2[1] = Fb(t2[1], e2), t2[0] = Fb(t2[0], e2, Eb(t2[1])), true;
+  }
+  function Rb(t2) {
+    var e2 = (t2 + "").split("("), r2 = Bt[e2[0]];
+    return r2 && 1 < e2.length && r2.config ? r2.config.apply(null, ~t2.indexOf("{") ? [(function _parseObjectInString(t3) {
+      for (var e3, r3, i2, n2 = {}, a2 = t3.substr(1, t3.length - 3).split(":"), s2 = a2[0], o2 = 1, u2 = a2.length; o2 < u2; o2++) r3 = a2[o2], e3 = o2 !== u2 - 1 ? r3.lastIndexOf(",") : r3.length, i2 = r3.substr(0, e3), n2[s2] = isNaN(i2) ? i2.replace(Nt, "").trim() : +i2, s2 = r3.substr(e3 + 1).trim();
+      return n2;
+    })(e2[1])] : (function _valueInParentheses(t3) {
+      var e3 = t3.indexOf("(") + 1, r3 = t3.indexOf(")"), i2 = t3.indexOf("(", e3);
+      return t3.substring(e3, ~i2 && i2 < r3 ? t3.indexOf(")", r3 + 1) : r3);
+    })(t2).split(",").map(ra)) : Bt._CE && Yt.test(t2) ? Bt._CE("", t2) : r2;
+  }
+  function Tb(t2, e2) {
+    for (var r2, i2 = t2._first; i2; ) i2 instanceof Zt ? Tb(i2, e2) : !i2.vars.yoyoEase || i2._yoyo && i2._repeat || i2._yoyo === e2 || (i2.timeline ? Tb(i2.timeline, e2) : (r2 = i2._ease, i2._ease = i2._yEase, i2._yEase = r2, i2._yoyo = e2)), i2 = i2._next;
+  }
+  function Vb(t2, e2, r2, i2) {
+    void 0 === r2 && (r2 = function easeOut(t3) {
+      return 1 - e2(1 - t3);
+    }), void 0 === i2 && (i2 = function easeInOut(t3) {
+      return t3 < 0.5 ? e2(2 * t3) / 2 : 1 - e2(2 * (1 - t3)) / 2;
+    });
+    var n2, a2 = { easeIn: e2, easeOut: r2, easeInOut: i2 };
+    return ja(t2, function(t3) {
+      for (var e3 in Bt[t3] = ht[t3] = a2, Bt[n2 = t3.toLowerCase()] = r2, a2) Bt[n2 + ("easeIn" === e3 ? ".in" : "easeOut" === e3 ? ".out" : ".inOut")] = Bt[t3 + "." + e3] = a2[e3];
+    }), a2;
+  }
+  function Wb(e2) {
+    return function(t2) {
+      return t2 < 0.5 ? (1 - e2(1 - 2 * t2)) / 2 : 0.5 + e2(2 * (t2 - 0.5)) / 2;
+    };
+  }
+  function Xb(r2, t2, e2) {
+    function Lm(t3) {
+      return 1 === t3 ? 1 : i2 * Math.pow(2, -10 * t3) * G((t3 - a2) * n2) + 1;
+    }
+    var i2 = 1 <= t2 ? t2 : 1, n2 = (e2 || (r2 ? 0.3 : 0.45)) / (t2 < 1 ? t2 : 1), a2 = n2 / Z * (Math.asin(1 / i2) || 0), s2 = "out" === r2 ? Lm : "in" === r2 ? function(t3) {
+      return 1 - Lm(1 - t3);
+    } : Wb(Lm);
+    return n2 = Z / n2, s2.config = function(t3, e3) {
+      return Xb(r2, t3, e3);
+    }, s2;
+  }
+  function Yb(e2, r2) {
+    function Tm(t3) {
+      return t3 ? --t3 * t3 * ((r2 + 1) * t3 + r2) + 1 : 0;
+    }
+    void 0 === r2 && (r2 = 1.70158);
+    var t2 = "out" === e2 ? Tm : "in" === e2 ? function(t3) {
+      return 1 - Tm(1 - t3);
+    } : Wb(Tm);
+    return t2.config = function(t3) {
+      return Yb(e2, t3);
+    }, t2;
+  }
+  var F, I, l, L, h, n, a, i, o, f, d, c, p, _, m, g, b, k, O, M, C, P, A, D, z, E, B, Y, N = { autoSleep: 120, force3D: "auto", nullTargetWarn: 1, units: { lineHeight: "" } }, j = { duration: 0.5, overwrite: false, delay: 0 }, X = 1e8, q = 1 / X, Z = 2 * Math.PI, W = Z / 4, H = 0, J = Math.sqrt, Q = Math.cos, G = Math.sin, K = "function" == typeof ArrayBuffer && ArrayBuffer.isView || function() {
+  }, $ = Array.isArray, tt = /random\([^)]+\)/g, et = /,\s*/g, rt = /(?:-?\.?\d|\.)+/gi, it = /[-+=.]*\d+[.e\-+]*\d*[e\-+]*\d*/g, nt = /[-+=.]*\d+[.e-]*\d*[a-z%]*/g, at = /[-+=.]*\d+\.?\d*(?:e-|e\+)?\d*/gi, st = /[+-]=-?[.\d]+/, ot = /[^,'"\[\]\s]+/gi, ut = /^[+\-=e\s\d]*\d+[.\d]*([a-z]*|%)\s*$/i, ht = {}, lt = { suppressEvents: true, isStart: true, kill: false }, ft = { suppressEvents: true, kill: false }, dt = { suppressEvents: true }, ct = {}, pt = [], _t = {}, mt = {}, gt = {}, vt = 30, yt = [], Tt = "", bt = function _merge(t2, e2) {
+    for (var r2 in e2) t2[r2] = e2[r2];
+    return t2;
+  }, wt = function _animationCycle(t2, e2) {
+    var r2 = Math.floor(t2 = la(t2 / e2));
+    return t2 && r2 === t2 ? r2 - 1 : r2;
+  }, xt = function _isFromOrFromStart(t2) {
+    var e2 = t2.data;
+    return "isFromStart" === e2 || "isStart" === e2;
+  }, kt = { _start: 0, endTime: V, totalDuration: V }, Ot = function _parsePosition(t2, e2, i2) {
+    var n2, a2, s2, o2 = t2.labels, u2 = t2._recent || kt, h2 = t2.duration() >= X ? u2.endTime(false) : t2._dur;
+    return r(e2) && (isNaN(e2) || e2 in o2) ? (a2 = e2.charAt(0), s2 = "%" === e2.substr(-1), n2 = e2.indexOf("="), "<" === a2 || ">" === a2 ? (0 <= n2 && (e2 = e2.replace(/=/, "")), ("<" === a2 ? u2._start : u2.endTime(0 <= u2._repeat)) + (parseFloat(e2.substr(1)) || 0) * (s2 ? (n2 < 0 ? u2 : i2).totalDuration() / 100 : 1)) : n2 < 0 ? (e2 in o2 || (o2[e2] = h2), o2[e2]) : (a2 = parseFloat(e2.charAt(n2 - 1) + e2.substr(n2 + 1)), s2 && i2 && (a2 = a2 / 100 * ($(i2) ? i2[0] : i2).totalDuration()), 1 < n2 ? _parsePosition(t2, e2.substr(0, n2 - 1), i2) + a2 : h2 + a2)) : null == e2 ? h2 : +e2;
+  }, Mt = function _clamp(t2, e2, r2) {
+    return r2 < t2 ? t2 : e2 < r2 ? e2 : r2;
+  }, Ct = [].slice, Pt = function toArray(t2, e2, i2) {
+    return l && !e2 && l.selector ? l.selector(t2) : !r(t2) || i2 || !n && Lt() ? $(t2) ? (function _flatten(t3, e3, i3) {
+      return void 0 === i3 && (i3 = []), t3.forEach(function(t4) {
+        return r(t4) && !e3 || cb(t4, 1) ? i3.push.apply(i3, Pt(t4)) : i3.push(t4);
+      }) || i3;
+    })(t2, i2) : cb(t2) ? Ct.call(t2, 0) : t2 ? [t2] : [] : Ct.call((e2 || a).querySelectorAll(t2), 0);
+  }, At = function mapRange(e2, t2, r2, i2, n2) {
+    var a2 = t2 - e2, s2 = i2 - r2;
+    return Za(n2, function(t3) {
+      return r2 + ((t3 - e2) / a2 * s2 || 0);
+    });
+  }, Dt = function _callback(t2, e2, r2) {
+    var i2, n2, a2, s2 = t2.vars, o2 = s2[e2], u2 = l, h2 = t2._ctx;
+    if (o2) return i2 = s2[e2 + "Params"], n2 = s2.callbackScope || t2, r2 && pt.length && oa(), h2 && (l = h2), a2 = i2 ? o2.apply(n2, i2) : o2.call(n2), l = u2, a2;
+  }, St = [], zt = 255, Et = { aqua: [0, zt, zt], lime: [0, zt, 0], silver: [192, 192, 192], black: [0, 0, 0], maroon: [128, 0, 0], teal: [0, 128, 128], blue: [0, 0, zt], navy: [0, 0, 128], white: [zt, zt, zt], olive: [128, 128, 0], yellow: [zt, zt, 0], orange: [zt, 165, 0], gray: [128, 128, 128], purple: [128, 0, 128], green: [0, 128, 0], red: [zt, 0, 0], pink: [zt, 192, 203], cyan: [0, zt, zt], transparent: [zt, zt, zt, 0] }, Rt = (function() {
+    var t2, e2 = "(?:\\b(?:(?:rgb|rgba|hsl|hsla)\\(.+?\\))|\\B#(?:[0-9a-f]{3,4}){1,2}\\b";
+    for (t2 in Et) e2 += "|" + t2 + "\\b";
+    return new RegExp(e2 + ")", "gi");
+  })(), Ft = /hsl[a]?\(/, It = (O = Date.now, M = 500, C = 33, P = O(), A = P, z = D = 1e3 / 240, g = { time: 0, frame: 0, tick: function tick() {
+    Al(true);
+  }, deltaRatio: function deltaRatio(t2) {
+    return b / (1e3 / (t2 || 60));
+  }, wake: function wake() {
+    o && (!n && x() && (h = n = window, a = h.document || {}, ht.gsap = Fe, (h.gsapVersions || (h.gsapVersions = [])).push(Fe.version), R(i || h.GreenSockGlobals || !h.gsap && h || {}), St.forEach(zb)), m = "undefined" != typeof requestAnimationFrame && requestAnimationFrame, p && g.sleep(), _ = m || function(t2) {
+      return setTimeout(t2, z - 1e3 * g.time + 1 | 0);
+    }, c = 1, Al(2));
+  }, sleep: function sleep() {
+    (m ? cancelAnimationFrame : clearTimeout)(p), c = 0, _ = V;
+  }, lagSmoothing: function lagSmoothing(t2, e2) {
+    M = t2 || 1 / 0, C = Math.min(e2 || 33, M);
+  }, fps: function fps(t2) {
+    D = 1e3 / (t2 || 240), z = 1e3 * g.time + D;
+  }, add: function add(n2, t2, e2) {
+    var a2 = t2 ? function(t3, e3, r2, i2) {
+      n2(t3, e3, r2, i2), g.remove(a2);
+    } : n2;
+    return g.remove(n2), E[e2 ? "unshift" : "push"](a2), Lt(), a2;
+  }, remove: function remove(t2, e2) {
+    ~(e2 = E.indexOf(t2)) && E.splice(e2, 1) && e2 <= k && k--;
+  }, _listeners: E = [] }), Lt = function _wake() {
+    return !c && It.wake();
+  }, Bt = {}, Yt = /^[\d.\-M][\d.\-,\s]/, Nt = /["']/g, jt = function _invertEase(e2) {
+    return function(t2) {
+      return 1 - e2(1 - t2);
+    };
+  }, Vt = function _parseEase(t2, e2) {
+    return t2 && (s(t2) ? t2 : Bt[t2] || Rb(t2)) || e2;
+  };
+  function Al(t2) {
+    var e2, r2, i2, n2, a2 = O() - A, s2 = true === t2;
+    if ((M < a2 || a2 < 0) && (P += a2 - C), (0 < (e2 = (i2 = (A += a2) - P) - z) || s2) && (n2 = ++g.frame, b = i2 - 1e3 * g.time, g.time = i2 /= 1e3, z += e2 + (D <= e2 ? 4 : D - e2), r2 = 1), s2 || (p = _(Al)), r2) for (k = 0; k < E.length; k++) E[k](i2, b, n2, t2);
+  }
+  function jn(t2) {
+    return t2 < Y ? B * t2 * t2 : t2 < 0.7272727272727273 ? B * Math.pow(t2 - 1.5 / 2.75, 2) + 0.75 : t2 < 0.9090909090909092 ? B * (t2 -= 2.25 / 2.75) * t2 + 0.9375 : B * Math.pow(t2 - 2.625 / 2.75, 2) + 0.984375;
+  }
+  ja("Linear,Quad,Cubic,Quart,Quint,Strong", function(t2, e2) {
+    var r2 = e2 < 5 ? e2 + 1 : e2;
+    Vb(t2 + ",Power" + (r2 - 1), e2 ? function(t3) {
+      return Math.pow(t3, r2);
+    } : function(t3) {
+      return t3;
+    }, function(t3) {
+      return 1 - Math.pow(1 - t3, r2);
+    }, function(t3) {
+      return t3 < 0.5 ? Math.pow(2 * t3, r2) / 2 : 1 - Math.pow(2 * (1 - t3), r2) / 2;
+    });
+  }), Bt.Linear.easeNone = Bt.none = Bt.Linear.easeIn, Vb("Elastic", Xb("in"), Xb("out"), Xb()), B = 7.5625, Y = 1 / 2.75, Vb("Bounce", function(t2) {
+    return 1 - jn(1 - t2);
+  }, jn), Vb("Expo", function(t2) {
+    return Math.pow(2, 10 * (t2 - 1)) * t2 + t2 * t2 * t2 * t2 * t2 * t2 * (1 - t2);
+  }), Vb("Circ", function(t2) {
+    return -(J(1 - t2 * t2) - 1);
+  }), Vb("Sine", function(t2) {
+    return 1 === t2 ? 1 : 1 - Q(t2 * W);
+  }), Vb("Back", Yb("in"), Yb("out"), Yb()), Bt.SteppedEase = Bt.steps = ht.SteppedEase = { config: function config(t2, e2) {
+    void 0 === t2 && (t2 = 1);
+    var r2 = 1 / t2, i2 = t2 + (e2 ? 0 : 1), n2 = e2 ? 1 : 0;
+    return function(t3) {
+      return ((i2 * Mt(0, 0.99999999, t3) | 0) + n2) * r2;
+    };
+  } }, j.ease = Bt["quad.out"], ja("onComplete,onUpdate,onStart,onRepeat,onReverseComplete,onInterrupt", function(t2) {
+    return Tt += t2 + "," + t2 + "Params,";
+  });
+  var Ut, Xt = function GSCache(t2, e2) {
+    this.id = H++, (t2._gsap = this).target = t2, this.harness = e2, this.get = e2 ? e2.get : ia, this.set = e2 ? e2.getSetter : le;
+  }, qt = ((Ut = Animation.prototype).delay = function delay(t2) {
+    return t2 || 0 === t2 ? (this.parent && this.parent.smoothChildTiming && this.startTime(this._start + t2 - this._delay), this._delay = t2, this) : this._delay;
+  }, Ut.duration = function duration(t2) {
+    return arguments.length ? this.totalDuration(0 < this._repeat ? t2 + (t2 + this._rDelay) * this._repeat : t2) : this.totalDuration() && this._dur;
+  }, Ut.totalDuration = function totalDuration(t2) {
+    return arguments.length ? (this._dirty = 0, Ua(this, this._repeat < 0 ? t2 : (t2 - this._repeat * this._rDelay) / (this._repeat + 1))) : this._tDur;
+  }, Ut.totalTime = function totalTime(t2, e2) {
+    if (Lt(), !arguments.length) return this._tTime;
+    var r2 = this._dp;
+    if (r2 && r2.smoothChildTiming && this._ts) {
+      for (La(this, t2), !r2._dp || r2.parent || Ma(r2, this); r2 && r2.parent; ) r2.parent._time !== r2._start + (0 <= r2._ts ? r2._tTime / r2._ts : (r2.totalDuration() - r2._tTime) / -r2._ts) && r2.totalTime(r2._tTime, true), r2 = r2.parent;
+      !this.parent && this._dp.autoRemoveChildren && (0 < this._ts && t2 < this._tDur || this._ts < 0 && 0 < t2 || !this._tDur && !t2) && Na(this._dp, this, this._start - this._delay);
+    }
+    return (this._tTime !== t2 || !this._dur && !e2 || this._initted && Math.abs(this._zTime) === q || !this._initted && this._dur && t2 || !t2 && !this._initted && (this.add || this._ptLookup)) && (this._ts || (this._pTime = t2), qa(this, t2, e2)), this;
+  }, Ut.time = function time(t2, e2) {
+    return arguments.length ? this.totalTime(Math.min(this.totalDuration(), t2 + Ha(this)) % (this._dur + this._rDelay) || (t2 ? this._dur : 0), e2) : this._time;
+  }, Ut.totalProgress = function totalProgress(t2, e2) {
+    return arguments.length ? this.totalTime(this.totalDuration() * t2, e2) : this.totalDuration() ? Math.min(1, this._tTime / this._tDur) : 0 <= this.rawTime() && this._initted ? 1 : 0;
+  }, Ut.progress = function progress(t2, e2) {
+    return arguments.length ? this.totalTime(this.duration() * (!this._yoyo || 1 & this.iteration() ? t2 : 1 - t2) + Ha(this), e2) : this.duration() ? Math.min(1, this._time / this._dur) : 0 < this.rawTime() ? 1 : 0;
+  }, Ut.iteration = function iteration(t2, e2) {
+    var r2 = this.duration() + this._rDelay;
+    return arguments.length ? this.totalTime(this._time + (t2 - 1) * r2, e2) : this._repeat ? wt(this._tTime, r2) + 1 : 1;
+  }, Ut.timeScale = function timeScale(t2, e2) {
+    if (!arguments.length) return this._rts === -q ? 0 : this._rts;
+    if (this._rts === t2) return this;
+    var r2 = this.parent && this._ts ? Ja(this.parent._time, this) : this._tTime;
+    return this._rts = +t2 || 0, this._ts = this._ps || t2 === -q ? 0 : this._rts, this.totalTime(Mt(-Math.abs(this._delay), this.totalDuration(), r2), false !== e2), Ka(this), (function _recacheAncestors(t3) {
+      for (var e3 = t3.parent; e3 && e3.parent; ) e3._dirty = 1, e3.totalDuration(), e3 = e3.parent;
+      return t3;
+    })(this);
+  }, Ut.paused = function paused(t2) {
+    return arguments.length ? (this._ps !== t2 && ((this._ps = t2) ? (this._pTime = this._tTime || Math.max(-this._delay, this.rawTime()), this._ts = this._act = 0) : (Lt(), this._ts = this._rts, this.totalTime(this.parent && !this.parent.smoothChildTiming ? this.rawTime() : this._tTime || this._pTime, 1 === this.progress() && Math.abs(this._zTime) !== q && (this._tTime -= q)))), this) : this._ps;
+  }, Ut.startTime = function startTime(t2) {
+    if (arguments.length) {
+      this._start = la(t2);
+      var e2 = this.parent || this._dp;
+      return !e2 || !e2._sort && this.parent || Na(e2, this, this._start - this._delay), this;
+    }
+    return this._start;
+  }, Ut.endTime = function endTime(t2) {
+    return this._start + (w(t2) ? this.totalDuration() : this.duration()) / Math.abs(this._ts || 1);
+  }, Ut.rawTime = function rawTime(t2) {
+    var e2 = this.parent || this._dp;
+    return e2 ? t2 && (!this._ts || this._repeat && this._time && this.totalProgress() < 1) ? this._tTime % (this._dur + this._rDelay) : this._ts ? Ja(e2.rawTime(t2), this) : this._tTime : this._tTime;
+  }, Ut.revert = function revert(t2) {
+    void 0 === t2 && (t2 = dt);
+    var e2 = I;
+    return I = t2, pa(this) && (this.timeline && this.timeline.revert(t2), this.totalTime(-0.01, t2.suppressEvents)), "nested" !== this.data && false !== t2.kill && this.kill(), I = e2, this;
+  }, Ut.globalTime = function globalTime(t2) {
+    for (var e2 = this, r2 = arguments.length ? t2 : e2.rawTime(); e2; ) r2 = e2._start + r2 / (Math.abs(e2._ts) || 1), e2 = e2._dp;
+    return !this.parent && this._sat ? this._sat.globalTime(t2) : r2;
+  }, Ut.repeat = function repeat(t2) {
+    return arguments.length ? (this._repeat = t2 === 1 / 0 ? -2 : t2, Va(this)) : -2 === this._repeat ? 1 / 0 : this._repeat;
+  }, Ut.repeatDelay = function repeatDelay(t2) {
+    if (arguments.length) {
+      var e2 = this._time;
+      return this._rDelay = t2, Va(this), e2 ? this.time(e2) : this;
+    }
+    return this._rDelay;
+  }, Ut.yoyo = function yoyo(t2) {
+    return arguments.length ? (this._yoyo = t2, this) : this._yoyo;
+  }, Ut.seek = function seek(t2, e2) {
+    return this.totalTime(Ot(this, t2), w(e2));
+  }, Ut.restart = function restart(t2, e2) {
+    return this.play().totalTime(t2 ? -this._delay : 0, w(e2)), this._dur || (this._zTime = -q), this;
+  }, Ut.play = function play(t2, e2) {
+    return null != t2 && this.seek(t2, e2), this.reversed(false).paused(false);
+  }, Ut.reverse = function reverse(t2, e2) {
+    return null != t2 && this.seek(t2 || this.totalDuration(), e2), this.reversed(true).paused(false);
+  }, Ut.pause = function pause(t2, e2) {
+    return null != t2 && this.seek(t2, e2), this.paused(true);
+  }, Ut.resume = function resume() {
+    return this.paused(false);
+  }, Ut.reversed = function reversed(t2) {
+    return arguments.length ? (!!t2 !== this.reversed() && this.timeScale(-this._rts || (t2 ? -q : 0)), this) : this._rts < 0;
+  }, Ut.invalidate = function invalidate() {
+    return this._initted = this._act = 0, this._zTime = -q, this;
+  }, Ut.isActive = function isActive() {
+    var t2, e2 = this.parent || this._dp, r2 = this._start;
+    return !(e2 && !(this._ts && this._initted && e2.isActive() && (t2 = e2.rawTime(true)) >= r2 && t2 < this.endTime(true) - q));
+  }, Ut.eventCallback = function eventCallback(t2, e2, r2) {
+    var i2 = this.vars;
+    return 1 < arguments.length ? (e2 ? (i2[t2] = e2, r2 && (i2[t2 + "Params"] = r2), "onUpdate" === t2 && (this._onUpdate = e2)) : delete i2[t2], this) : i2[t2];
+  }, Ut.then = function then(t2) {
+    var i2 = this, n2 = i2._prom;
+    return new Promise(function(e2) {
+      function Fo() {
+        var t3 = i2.then;
+        i2.then = null, n2 && n2(), s(r2) && (r2 = r2(i2)) && (r2.then || r2 === i2) && (i2.then = t3), e2(r2), i2.then = t3;
+      }
+      var r2 = s(t2) ? t2 : sa;
+      i2._initted && 1 === i2.totalProgress() && 0 <= i2._ts || !i2._tTime && i2._ts < 0 ? Fo() : i2._prom = Fo;
+    });
+  }, Ut.kill = function kill() {
+    wb(this);
+  }, Animation);
+  function Animation(t2) {
+    this.vars = t2, this._delay = +t2.delay || 0, (this._repeat = t2.repeat === 1 / 0 ? -2 : t2.repeat || 0) && (this._rDelay = t2.repeatDelay || 0, this._yoyo = !!t2.yoyo || !!t2.yoyoEase), this._ts = 1, Ua(this, +t2.duration, 1, 1), this.data = t2.data, l && (this._ctx = l).data.push(this), c || It.wake();
+  }
+  ta(qt.prototype, { _time: 0, _start: 0, _end: 0, _tTime: 0, _tDur: 0, _dirty: 0, _repeat: 0, _yoyo: false, parent: null, _initted: false, _rDelay: 0, _ts: 1, _dp: 0, ratio: 0, _zTime: -q, _prom: 0, _ps: false, _rts: 1 });
+  var Zt = (function(i2) {
+    function Timeline(t2, e3) {
+      var r2;
+      return void 0 === t2 && (t2 = {}), (r2 = i2.call(this, t2) || this).labels = {}, r2.smoothChildTiming = !!t2.smoothChildTiming, r2.autoRemoveChildren = !!t2.autoRemoveChildren, r2._sort = w(t2.sortChildren), L && Na(t2.parent || L, _assertThisInitialized(r2), e3), t2.reversed && r2.reverse(), t2.paused && r2.paused(true), t2.scrollTrigger && Oa(_assertThisInitialized(r2), t2.scrollTrigger), r2;
+    }
+    _inheritsLoose(Timeline, i2);
+    var e2 = Timeline.prototype;
+    return e2.to = function to(t2, e3, r2) {
+      return Ya(0, arguments, this), this;
+    }, e2.from = function from(t2, e3, r2) {
+      return Ya(1, arguments, this), this;
+    }, e2.fromTo = function fromTo(t2, e3, r2, i3) {
+      return Ya(2, arguments, this), this;
+    }, e2.set = function set(t2, e3, r2) {
+      return e3.duration = 0, e3.parent = this, ya(e3).repeatDelay || (e3.repeat = 0), e3.immediateRender = !!e3.immediateRender, new te(t2, e3, Ot(this, r2), 1), this;
+    }, e2.call = function call(t2, e3, r2) {
+      return Na(this, te.delayedCall(0, t2, e3), r2);
+    }, e2.staggerTo = function staggerTo(t2, e3, r2, i3, n2, a2, s2) {
+      return r2.duration = e3, r2.stagger = r2.stagger || i3, r2.onComplete = a2, r2.onCompleteParams = s2, r2.parent = this, new te(t2, r2, Ot(this, n2)), this;
+    }, e2.staggerFrom = function staggerFrom(t2, e3, r2, i3, n2, a2, s2) {
+      return r2.runBackwards = 1, ya(r2).immediateRender = w(r2.immediateRender), this.staggerTo(t2, e3, r2, i3, n2, a2, s2);
+    }, e2.staggerFromTo = function staggerFromTo(t2, e3, r2, i3, n2, a2, s2, o2) {
+      return i3.startAt = r2, ya(i3).immediateRender = w(i3.immediateRender), this.staggerTo(t2, e3, i3, n2, a2, s2, o2);
+    }, e2.render = function render(t2, e3, r2) {
+      var i3, n2, a2, s2, o2, u2, h2, l2, f2, d2, c2, p2, _2 = this._time, m2 = this._dirty ? this.totalDuration() : this._tDur, g2 = this._dur, v2 = t2 <= 0 ? 0 : la(t2), y2 = this._zTime < 0 != t2 < 0 && (this._initted || !g2);
+      if (this !== L && m2 < v2 && 0 <= t2 && (v2 = m2), v2 !== this._tTime || r2 || y2) {
+        if (_2 !== this._time && g2 && (v2 += this._time - _2, t2 += this._time - _2), i3 = v2, f2 = this._start, u2 = !(l2 = this._ts), y2 && (g2 || (_2 = this._zTime), !t2 && e3 || (this._zTime = t2)), this._repeat) {
+          if (c2 = this._yoyo, o2 = g2 + this._rDelay, this._repeat < -1 && t2 < 0) return this.totalTime(100 * o2 + t2, e3, r2);
+          if (i3 = la(v2 % o2), v2 === m2 ? (s2 = this._repeat, i3 = g2) : ((s2 = ~~(d2 = la(v2 / o2))) && s2 === d2 && (i3 = g2, s2--), g2 < i3 && (i3 = g2)), d2 = wt(this._tTime, o2), !_2 && this._tTime && d2 !== s2 && this._tTime - d2 * o2 - this._dur <= 0 && (d2 = s2), c2 && 1 & s2 && (i3 = g2 - i3, p2 = 1), s2 !== d2 && !this._lock) {
+            var T2 = c2 && 1 & d2, b2 = T2 === (c2 && 1 & s2);
+            if (s2 < d2 && (T2 = !T2), _2 = T2 ? 0 : v2 % g2 ? g2 : v2, this._lock = 1, this.render(_2 || (p2 ? 0 : la(s2 * o2)), e3, !g2)._lock = 0, this._tTime = v2, !e3 && this.parent && Dt(this, "onRepeat"), this.vars.repeatRefresh && !p2 && (this.invalidate()._lock = 1, d2 = s2), _2 && _2 !== this._time || u2 != !this._ts || this.vars.onRepeat && !this.parent && !this._act) return this;
+            if (g2 = this._dur, m2 = this._tDur, b2 && (this._lock = 2, _2 = T2 ? g2 : -1e-4, this.render(_2, true), this.vars.repeatRefresh && !p2 && this.invalidate()), this._lock = 0, !this._ts && !u2) return this;
+            Tb(this, p2);
+          }
+        }
+        if (this._hasPause && !this._forcing && this._lock < 2 && (h2 = (function _findNextPauseTween(t3, e4, r3) {
+          var i4;
+          if (e4 < r3) for (i4 = t3._first; i4 && i4._start <= r3; ) {
+            if ("isPause" === i4.data && i4._start > e4) return i4;
+            i4 = i4._next;
+          }
+          else for (i4 = t3._last; i4 && i4._start >= r3; ) {
+            if ("isPause" === i4.data && i4._start < e4) return i4;
+            i4 = i4._prev;
+          }
+        })(this, la(_2), la(i3))) && (v2 -= i3 - (i3 = h2._start)), this._tTime = v2, this._time = i3, this._act = !l2, this._initted || (this._onUpdate = this.vars.onUpdate, this._initted = 1, this._zTime = t2, _2 = 0), !_2 && v2 && g2 && !e3 && !d2 && (Dt(this, "onStart"), this._tTime !== v2)) return this;
+        if (_2 <= i3 && 0 <= t2) for (n2 = this._first; n2; ) {
+          if (a2 = n2._next, (n2._act || i3 >= n2._start) && n2._ts && h2 !== n2) {
+            if (n2.parent !== this) return this.render(t2, e3, r2);
+            if (n2.render(0 < n2._ts ? (i3 - n2._start) * n2._ts : (n2._dirty ? n2.totalDuration() : n2._tDur) + (i3 - n2._start) * n2._ts, e3, r2), i3 !== this._time || !this._ts && !u2) {
+              h2 = 0, a2 && (v2 += this._zTime = -q);
+              break;
+            }
+          }
+          n2 = a2;
+        }
+        else {
+          n2 = this._last;
+          for (var w2 = t2 < 0 ? t2 : i3; n2; ) {
+            if (a2 = n2._prev, (n2._act || w2 <= n2._end) && n2._ts && h2 !== n2) {
+              if (n2.parent !== this) return this.render(t2, e3, r2);
+              if (n2.render(0 < n2._ts ? (w2 - n2._start) * n2._ts : (n2._dirty ? n2.totalDuration() : n2._tDur) + (w2 - n2._start) * n2._ts, e3, r2 || I && pa(n2)), i3 !== this._time || !this._ts && !u2) {
+                h2 = 0, a2 && (v2 += this._zTime = w2 ? -q : q);
+                break;
+              }
+            }
+            n2 = a2;
+          }
+        }
+        if (h2 && !e3 && (this.pause(), h2.render(_2 <= i3 ? 0 : -q)._zTime = _2 <= i3 ? 1 : -1, this._ts)) return this._start = f2, Ka(this), this.render(t2, e3, r2);
+        this._onUpdate && !e3 && Dt(this, "onUpdate", true), (v2 === m2 && this._tTime >= this.totalDuration() || !v2 && _2) && (f2 !== this._start && Math.abs(l2) === Math.abs(this._ts) || this._lock || (!t2 && g2 || !(v2 === m2 && 0 < this._ts || !v2 && this._ts < 0) || Ca(this, 1), e3 || t2 < 0 && !_2 || !v2 && !_2 && m2 || (Dt(this, v2 === m2 && 0 <= t2 ? "onComplete" : "onReverseComplete", true), !this._prom || v2 < m2 && 0 < this.timeScale() || this._prom())));
+      }
+      return this;
+    }, e2.add = function add(e3, i3) {
+      var n2 = this;
+      if (t(i3) || (i3 = Ot(this, i3, e3)), !(e3 instanceof qt)) {
+        if ($(e3)) return e3.forEach(function(t2) {
+          return n2.add(t2, i3);
+        }), this;
+        if (r(e3)) return this.addLabel(e3, i3);
+        if (!s(e3)) return this;
+        e3 = te.delayedCall(0, e3);
+      }
+      return this !== e3 ? Na(this, e3, i3) : this;
+    }, e2.getChildren = function getChildren(t2, e3, r2, i3) {
+      void 0 === t2 && (t2 = true), void 0 === e3 && (e3 = true), void 0 === r2 && (r2 = true), void 0 === i3 && (i3 = -X);
+      for (var n2 = [], a2 = this._first; a2; ) a2._start >= i3 && (a2 instanceof te ? e3 && n2.push(a2) : (r2 && n2.push(a2), t2 && n2.push.apply(n2, a2.getChildren(true, e3, r2)))), a2 = a2._next;
+      return n2;
+    }, e2.getById = function getById(t2) {
+      for (var e3 = this.getChildren(1, 1, 1), r2 = e3.length; r2--; ) if (e3[r2].vars.id === t2) return e3[r2];
+    }, e2.remove = function remove(t2) {
+      return r(t2) ? this.removeLabel(t2) : s(t2) ? this.killTweensOf(t2) : (t2.parent === this && Ba(this, t2), t2 === this._recent && (this._recent = this._last), Da(this));
+    }, e2.totalTime = function totalTime(t2, e3) {
+      return arguments.length ? (this._forcing = 1, !this._dp && this._ts && (this._start = la(It.time - (0 < this._ts ? t2 / this._ts : (this.totalDuration() - t2) / -this._ts))), i2.prototype.totalTime.call(this, t2, e3), this._forcing = 0, this) : this._tTime;
+    }, e2.addLabel = function addLabel(t2, e3) {
+      return this.labels[t2] = Ot(this, e3), this;
+    }, e2.removeLabel = function removeLabel(t2) {
+      return delete this.labels[t2], this;
+    }, e2.addPause = function addPause(t2, e3, r2) {
+      var i3 = te.delayedCall(0, e3 || V, r2);
+      return i3.data = "isPause", this._hasPause = 1, Na(this, i3, Ot(this, t2));
+    }, e2.removePause = function removePause(t2) {
+      var e3 = this._first;
+      for (t2 = Ot(this, t2); e3; ) e3._start === t2 && "isPause" === e3.data && Ca(e3), e3 = e3._next;
+    }, e2.killTweensOf = function killTweensOf(t2, e3, r2) {
+      for (var i3 = this.getTweensOf(t2, r2), n2 = i3.length; n2--; ) Wt !== i3[n2] && i3[n2].kill(t2, e3);
+      return this;
+    }, e2.getTweensOf = function getTweensOf(e3, r2) {
+      for (var i3, n2 = [], a2 = Pt(e3), s2 = this._first, o2 = t(r2); s2; ) s2 instanceof te ? na(s2._targets, a2) && (o2 ? (!Wt || s2._initted && s2._ts) && s2.globalTime(0) <= r2 && s2.globalTime(s2.totalDuration()) > r2 : !r2 || s2.isActive()) && n2.push(s2) : (i3 = s2.getTweensOf(a2, r2)).length && n2.push.apply(n2, i3), s2 = s2._next;
+      return n2;
+    }, e2.tweenTo = function tweenTo(t2, e3) {
+      e3 = e3 || {};
+      var r2, i3 = this, n2 = Ot(i3, t2), a2 = e3.startAt, s2 = e3.onStart, o2 = e3.onStartParams, u2 = e3.immediateRender, h2 = te.to(i3, ta({ ease: e3.ease || "none", lazy: false, immediateRender: false, time: n2, overwrite: "auto", duration: e3.duration || Math.abs((n2 - (a2 && "time" in a2 ? a2.time : i3._time)) / i3.timeScale()) || q, onStart: function onStart() {
+        if (i3.pause(), !r2) {
+          var t3 = e3.duration || Math.abs((n2 - (a2 && "time" in a2 ? a2.time : i3._time)) / i3.timeScale());
+          h2._dur !== t3 && Ua(h2, t3, 0, 1).render(h2._time, true, true), r2 = 1;
+        }
+        s2 && s2.apply(h2, o2 || []);
+      } }, e3));
+      return u2 ? h2.render(0) : h2;
+    }, e2.tweenFromTo = function tweenFromTo(t2, e3, r2) {
+      return this.tweenTo(e3, ta({ startAt: { time: Ot(this, t2) } }, r2));
+    }, e2.recent = function recent() {
+      return this._recent;
+    }, e2.nextLabel = function nextLabel(t2) {
+      return void 0 === t2 && (t2 = this._time), ub(this, Ot(this, t2));
+    }, e2.previousLabel = function previousLabel(t2) {
+      return void 0 === t2 && (t2 = this._time), ub(this, Ot(this, t2), 1);
+    }, e2.currentLabel = function currentLabel(t2) {
+      return arguments.length ? this.seek(t2, true) : this.previousLabel(this._time + q);
+    }, e2.shiftChildren = function shiftChildren(t2, e3, r2) {
+      void 0 === r2 && (r2 = 0);
+      var i3, n2 = this._first, a2 = this.labels;
+      for (t2 = la(t2); n2; ) n2._start >= r2 && (n2._start += t2, n2._end += t2), n2 = n2._next;
+      if (e3) for (i3 in a2) a2[i3] >= r2 && (a2[i3] += t2);
+      return Da(this);
+    }, e2.invalidate = function invalidate(t2) {
+      var e3 = this._first;
+      for (this._lock = 0; e3; ) e3.invalidate(t2), e3 = e3._next;
+      return i2.prototype.invalidate.call(this, t2);
+    }, e2.clear = function clear(t2) {
+      void 0 === t2 && (t2 = true);
+      for (var e3, r2 = this._first; r2; ) e3 = r2._next, this.remove(r2), r2 = e3;
+      return this._dp && (this._time = this._tTime = this._pTime = 0), t2 && (this.labels = {}), Da(this);
+    }, e2.totalDuration = function totalDuration(t2) {
+      var e3, r2, i3, n2 = 0, a2 = this, s2 = a2._last, o2 = X;
+      if (arguments.length) return a2.timeScale((a2._repeat < 0 ? a2.duration() : a2.totalDuration()) / (a2.reversed() ? -t2 : t2));
+      if (a2._dirty) {
+        for (i3 = a2.parent; s2; ) e3 = s2._prev, s2._dirty && s2.totalDuration(), o2 < (r2 = s2._start) && a2._sort && s2._ts && !a2._lock ? (a2._lock = 1, Na(a2, s2, r2 - s2._delay, 1)._lock = 0) : o2 = r2, r2 < 0 && s2._ts && (n2 -= r2, (!i3 && !a2._dp || i3 && i3.smoothChildTiming) && (a2._start += la(r2 / a2._ts), a2._time -= r2, a2._tTime -= r2), a2.shiftChildren(-r2, false, -Infinity), o2 = 0), s2._end > n2 && s2._ts && (n2 = s2._end), s2 = e3;
+        Ua(a2, a2 === L && a2._time > n2 ? a2._time : n2, 1, 1), a2._dirty = 0;
+      }
+      return a2._tDur;
+    }, Timeline.updateRoot = function updateRoot(t2) {
+      if (L._ts && (qa(L, Ja(t2, L)), f = It.frame), It.frame >= vt) {
+        vt += N.autoSleep || 120;
+        var e3 = L._first;
+        if ((!e3 || !e3._ts) && N.autoSleep && It._listeners.length < 2) {
+          for (; e3 && !e3._ts; ) e3 = e3._next;
+          e3 || It.sleep();
+        }
+      }
+    }, Timeline;
+  })(qt);
+  ta(Zt.prototype, { _lock: 0, _hasPause: 0, _forcing: 0 });
+  function dc(t2, e2, i2, n2, a2, o2) {
+    var u2, h2, l2, f2;
+    if (mt[t2] && false !== (u2 = new mt[t2]()).init(a2, u2.rawVars ? e2[t2] : (function _processVars(t3, e3, i3, n3, a3) {
+      if (s(t3) && (t3 = Gt(t3, a3, e3, i3, n3)), !v(t3) || t3.style && t3.nodeType || $(t3) || K(t3)) return r(t3) ? Gt(t3, a3, e3, i3, n3) : t3;
+      var o3, u3 = {};
+      for (o3 in t3) u3[o3] = Gt(t3[o3], a3, e3, i3, n3);
+      return u3;
+    })(e2[t2], n2, a2, o2, i2), i2, n2, o2) && (i2._pt = h2 = new we(i2._pt, a2, t2, 0, 1, u2.render, u2, 0, u2.priority), i2 !== d)) for (l2 = i2._ptLookup[i2._targets.indexOf(a2)], f2 = u2._props.length; f2--; ) l2[u2._props[f2]] = h2;
+    return u2;
+  }
+  function jc(t2, r2, e2, i2) {
+    var n2, a2, s2 = r2.ease || i2 || "power1.inOut";
+    if ($(r2)) a2 = e2[t2] || (e2[t2] = []), r2.forEach(function(t3, e3) {
+      return a2.push({ t: e3 / (r2.length - 1) * 100, v: t3, e: s2 });
+    });
+    else for (n2 in r2) a2 = e2[n2] || (e2[n2] = []), "ease" === n2 || a2.push({ t: parseFloat(t2), v: r2[n2], e: s2 });
+  }
+  var Wt, Ht, Jt = function _addPropTween(t2, e2, i2, n2, a2, o2, u2, h2, l2, f2) {
+    s(n2) && (n2 = n2(a2 || 0, t2, o2));
+    var d2, c2 = t2[e2], p2 = "get" !== i2 ? i2 : s(c2) ? l2 ? t2[e2.indexOf("set") || !s(t2["get" + e2.substr(3)]) ? e2 : "get" + e2.substr(3)](l2) : t2[e2]() : c2, _2 = s(c2) ? l2 ? ue : re : ee;
+    if (r(n2) && (~n2.indexOf("random(") && (n2 = rb(n2)), "=" === n2.charAt(1) && (!(d2 = ma(p2, n2) + (_a(p2) || 0)) && 0 !== d2 || (n2 = d2))), !f2 || p2 !== n2 || Ht) return isNaN(p2 * n2) || "" === n2 ? (c2 || e2 in t2 || S(e2, n2), function _addComplexStringPropTween(t3, e3, r2, i3, n3, a3, s2) {
+      var o3, u3, h3, l3, f3, d3, c3, p3, _3 = new we(this._pt, t3, e3, 0, 1, ge, null, n3), m2 = 0, g2 = 0;
+      for (_3.b = r2, _3.e = i3, r2 += "", (c3 = ~(i3 += "").indexOf("random(")) && (i3 = rb(i3)), a3 && (a3(p3 = [r2, i3], t3, e3), r2 = p3[0], i3 = p3[1]), u3 = r2.match(at) || []; o3 = at.exec(i3); ) l3 = o3[0], f3 = i3.substring(m2, o3.index), h3 ? h3 = (h3 + 1) % 5 : "rgba(" === f3.substr(-5) && (h3 = 1), l3 !== u3[g2++] && (d3 = parseFloat(u3[g2 - 1]) || 0, _3._pt = { _next: _3._pt, p: f3 || 1 === g2 ? f3 : ",", s: d3, c: "=" === l3.charAt(1) ? ma(d3, l3) - d3 : parseFloat(l3) - d3, m: h3 && h3 < 4 ? Math.round : 0 }, m2 = at.lastIndex);
+      return _3.c = m2 < i3.length ? i3.substring(m2, i3.length) : "", _3.fp = s2, (st.test(i3) || c3) && (_3.e = 0), this._pt = _3;
+    }.call(this, t2, e2, p2, n2, _2, h2 || N.stringFilter, l2)) : (d2 = new we(this._pt, t2, e2, +p2 || 0, n2 - (p2 || 0), "boolean" == typeof c2 ? _e : ce, 0, _2), l2 && (d2.fp = l2), u2 && d2.modifier(u2, this, t2), this._pt = d2);
+  }, Qt = function _initTween(t2, e2, r2) {
+    var i2, n2, a2, s2, o2, u2, h2, l2, f2, d2, c2, p2, _2, m2 = t2.vars, g2 = m2.ease, v2 = m2.startAt, y2 = m2.immediateRender, T2 = m2.lazy, b2 = m2.onUpdate, x2 = m2.runBackwards, k2 = m2.yoyoEase, O2 = m2.keyframes, M2 = m2.autoRevert, C2 = t2._dur, P2 = t2._startAt, A2 = t2._targets, D2 = t2.parent, S2 = D2 && "nested" === D2.data ? D2.vars.targets : A2, z2 = "auto" === t2._overwrite && !F, E2 = t2.timeline;
+    if (!E2 || O2 && g2 || (g2 = "none"), t2._ease = Vt(g2, j.ease), t2._yEase = k2 ? jt(Vt(true === k2 ? g2 : k2, j.ease)) : 0, k2 && t2._yoyo && !t2._repeat && (k2 = t2._yEase, t2._yEase = t2._ease, t2._ease = k2), t2._from = !E2 && !!m2.runBackwards, !E2 || O2 && !m2.stagger) {
+      if (p2 = (l2 = A2[0] ? ha(A2[0]).harness : 0) && m2[l2.prop], i2 = xa(m2, ct), P2 && (P2._zTime < 0 && P2.progress(1), e2 < 0 && x2 && y2 && !M2 ? P2.render(-1, true) : P2.revert(x2 && C2 ? ft : lt), P2._lazy = 0), v2) {
+        if (Ca(t2._startAt = te.set(A2, ta({ data: "isStart", overwrite: false, parent: D2, immediateRender: true, lazy: !P2 && w(T2), startAt: null, delay: 0, onUpdate: b2 && function() {
+          return Dt(t2, "onUpdate");
+        }, stagger: 0 }, v2))), t2._startAt._dp = 0, t2._startAt._sat = t2, e2 < 0 && (I || !y2 && !M2) && t2._startAt.revert(ft), y2 && C2 && e2 <= 0 && r2 <= 0) return void (e2 && (t2._zTime = e2));
+      } else if (x2 && C2 && !P2) if (e2 && (y2 = false), a2 = ta({ overwrite: false, data: "isFromStart", lazy: y2 && !P2 && w(T2), immediateRender: y2, stagger: 0, parent: D2 }, i2), p2 && (a2[l2.prop] = p2), Ca(t2._startAt = te.set(A2, a2)), t2._startAt._dp = 0, t2._startAt._sat = t2, e2 < 0 && (I ? t2._startAt.revert(ft) : t2._startAt.render(-1, true)), t2._zTime = e2, y2) {
+        if (!e2) return;
+      } else _initTween(t2._startAt, q, q);
+      for (t2._pt = t2._ptCache = 0, T2 = C2 && w(T2) || T2 && !C2, n2 = 0; n2 < A2.length; n2++) {
+        if (h2 = (o2 = A2[n2])._gsap || ga(A2)[n2]._gsap, t2._ptLookup[n2] = d2 = {}, _t[h2.id] && pt.length && oa(), c2 = S2 === A2 ? n2 : S2.indexOf(o2), l2 && false !== (f2 = new l2()).init(o2, p2 || i2, t2, c2, S2) && (t2._pt = s2 = new we(t2._pt, o2, f2.name, 0, 1, f2.render, f2, 0, f2.priority), f2._props.forEach(function(t3) {
+          d2[t3] = s2;
+        }), f2.priority && (u2 = 1)), !l2 || p2) for (a2 in i2) mt[a2] && (f2 = dc(a2, i2, t2, c2, o2, S2)) ? f2.priority && (u2 = 1) : d2[a2] = s2 = Jt.call(t2, o2, a2, "get", i2[a2], c2, S2, 0, m2.stringFilter);
+        t2._op && t2._op[n2] && t2.kill(o2, t2._op[n2]), z2 && t2._pt && (Wt = t2, L.killTweensOf(o2, d2, t2.globalTime(e2)), _2 = !t2.parent, Wt = 0), t2._pt && T2 && (_t[h2.id] = 1);
+      }
+      u2 && be(t2), t2._onInit && t2._onInit(t2);
+    }
+    t2._onUpdate = b2, t2._initted = (!t2._op || t2._pt) && !_2, O2 && e2 <= 0 && E2.render(X, true, true);
+  }, Gt = function _parseFuncOrString(t2, e2, i2, n2, a2) {
+    return s(t2) ? t2.call(e2, i2, n2, a2) : r(t2) && ~t2.indexOf("random(") ? rb(t2) : t2;
+  }, Kt = Tt + "repeat,repeatDelay,yoyo,repeatRefresh,yoyoEase,autoRevert", $t = {};
+  ja(Kt + ",id,stagger,delay,duration,paused,scrollTrigger", function(t2) {
+    return $t[t2] = 1;
+  });
+  var te = (function(R2) {
+    function Tween(e3, r2, i2, n2) {
+      var a2;
+      "number" == typeof r2 && (i2.duration = r2, r2 = i2, i2 = null);
+      var s2, o2, u2, h2, l2, f2, d2, c2, p2 = (a2 = R2.call(this, n2 ? r2 : ya(r2)) || this).vars, _2 = p2.duration, m2 = p2.delay, g2 = p2.immediateRender, b2 = p2.stagger, x2 = p2.overwrite, k2 = p2.keyframes, O2 = p2.defaults, M2 = p2.scrollTrigger, C2 = p2.yoyoEase, P2 = r2.parent || L, A2 = ($(e3) || K(e3) ? t(e3[0]) : "length" in r2) ? [e3] : Pt(e3);
+      if (a2._targets = A2.length ? ga(A2) : T("GSAP target " + e3 + " not found. https://gsap.com", !N.nullTargetWarn) || [], a2._ptLookup = [], a2._overwrite = x2, k2 || b2 || y(_2) || y(m2)) {
+        if (r2 = a2.vars, (s2 = a2.timeline = new Zt({ data: "nested", defaults: O2 || {}, targets: P2 && "nested" === P2.data ? P2.vars.targets : A2 })).kill(), s2.parent = s2._dp = _assertThisInitialized(a2), s2._start = 0, b2 || y(_2) || y(m2)) {
+          if (h2 = A2.length, d2 = b2 && hb(b2), v(b2)) for (l2 in b2) ~Kt.indexOf(l2) && ((c2 = c2 || {})[l2] = b2[l2]);
+          for (o2 = 0; o2 < h2; o2++) (u2 = xa(r2, $t)).stagger = 0, C2 && (u2.yoyoEase = C2), c2 && bt(u2, c2), f2 = A2[o2], u2.duration = +Gt(_2, _assertThisInitialized(a2), o2, f2, A2), u2.delay = (+Gt(m2, _assertThisInitialized(a2), o2, f2, A2) || 0) - a2._delay, !b2 && 1 === h2 && u2.delay && (a2._delay = m2 = u2.delay, a2._start += m2, u2.delay = 0), s2.to(f2, u2, d2 ? d2(o2, f2, A2) : 0), s2._ease = Bt.none;
+          s2.duration() ? _2 = m2 = 0 : a2.timeline = 0;
+        } else if (k2) {
+          ya(ta(s2.vars.defaults, { ease: "none" })), s2._ease = Vt(k2.ease || r2.ease || "none");
+          var D2, S2, z2, E2 = 0;
+          if ($(k2)) k2.forEach(function(t2) {
+            return s2.to(A2, t2, ">");
+          }), s2.duration();
+          else {
+            for (l2 in u2 = {}, k2) "ease" === l2 || "easeEach" === l2 || jc(l2, k2[l2], u2, k2.easeEach);
+            for (l2 in u2) for (D2 = u2[l2].sort(function(t2, e4) {
+              return t2.t - e4.t;
+            }), o2 = E2 = 0; o2 < D2.length; o2++) (z2 = { ease: (S2 = D2[o2]).e, duration: (S2.t - (o2 ? D2[o2 - 1].t : 0)) / 100 * _2 })[l2] = S2.v, s2.to(A2, z2, E2), E2 += z2.duration;
+            s2.duration() < _2 && s2.to({}, { duration: _2 - s2.duration() });
+          }
+        }
+        _2 || a2.duration(_2 = s2.duration());
+      } else a2.timeline = 0;
+      return true !== x2 || F || (Wt = _assertThisInitialized(a2), L.killTweensOf(A2), Wt = 0), Na(P2, _assertThisInitialized(a2), i2), r2.reversed && a2.reverse(), r2.paused && a2.paused(true), (g2 || !_2 && !k2 && a2._start === la(P2._time) && w(g2) && (function _hasNoPausedAncestors(t2) {
+        return !t2 || t2._ts && _hasNoPausedAncestors(t2.parent);
+      })(_assertThisInitialized(a2)) && "nested" !== P2.data) && (a2._tTime = -q, a2.render(Math.max(0, -m2) || 0)), M2 && Oa(_assertThisInitialized(a2), M2), a2;
+    }
+    _inheritsLoose(Tween, R2);
+    var e2 = Tween.prototype;
+    return e2.render = function render(t2, e3, r2) {
+      var i2, n2, a2, s2, o2, u2, h2, l2, f2, d2 = this._time, c2 = this._tDur, p2 = this._dur, _2 = t2 < 0, m2 = c2 - q < t2 && !_2 ? c2 : t2 < q ? 0 : t2;
+      if (p2) {
+        if (m2 !== this._tTime || !t2 || r2 || !this._initted && this._tTime || this._startAt && this._zTime < 0 != _2 || this._lazy) {
+          if (i2 = m2, l2 = this.timeline, this._repeat) {
+            if (s2 = p2 + this._rDelay, this._repeat < -1 && _2) return this.totalTime(100 * s2 + t2, e3, r2);
+            if (i2 = la(m2 % s2), m2 === c2 ? (a2 = this._repeat, i2 = p2) : (a2 = ~~(o2 = la(m2 / s2))) && a2 === o2 ? (i2 = p2, a2--) : p2 < i2 && (i2 = p2), (u2 = this._yoyo && 1 & a2) && (f2 = this._yEase, i2 = p2 - i2), o2 = wt(this._tTime, s2), i2 === d2 && !r2 && this._initted && a2 === o2) return this._tTime = m2, this;
+            a2 !== o2 && (l2 && this._yEase && Tb(l2, u2), this.vars.repeatRefresh && !u2 && !this._lock && i2 !== s2 && this._initted && (this._lock = r2 = 1, this.render(la(s2 * a2), true).invalidate()._lock = 0));
+          }
+          if (!this._initted) {
+            if (Pa(this, _2 ? t2 : i2, r2, e3, m2)) return this._tTime = 0, this;
+            if (!(d2 === this._time || r2 && this.vars.repeatRefresh && a2 !== o2)) return this;
+            if (p2 !== this._dur) return this.render(t2, e3, r2);
+          }
+          if (this._tTime = m2, this._time = i2, !this._act && this._ts && (this._act = 1, this._lazy = 0), this.ratio = h2 = (f2 || this._ease)(i2 / p2), this._from && (this.ratio = h2 = 1 - h2), !d2 && m2 && !e3 && !o2 && (Dt(this, "onStart"), this._tTime !== m2)) return this;
+          for (n2 = this._pt; n2; ) n2.r(h2, n2.d), n2 = n2._next;
+          l2 && l2.render(t2 < 0 ? t2 : l2._dur * l2._ease(i2 / this._dur), e3, r2) || this._startAt && (this._zTime = t2), this._onUpdate && !e3 && (_2 && Fa(this, t2, 0, r2), Dt(this, "onUpdate")), this._repeat && a2 !== o2 && this.vars.onRepeat && !e3 && this.parent && Dt(this, "onRepeat"), m2 !== this._tDur && m2 || this._tTime !== m2 || (_2 && !this._onUpdate && Fa(this, t2, 0, true), !t2 && p2 || !(m2 === this._tDur && 0 < this._ts || !m2 && this._ts < 0) || Ca(this, 1), e3 || _2 && !d2 || !(m2 || d2 || u2) || (Dt(this, m2 === c2 ? "onComplete" : "onReverseComplete", true), !this._prom || m2 < c2 && 0 < this.timeScale() || this._prom()));
+        }
+      } else !(function _renderZeroDurationTween(t3, e4, r3, i3) {
+        var n3, a3, s3, o3 = t3.ratio, u3 = e4 < 0 || !e4 && (!t3._start && (function _parentPlayheadIsBeforeStart(t4) {
+          var e5 = t4.parent;
+          return e5 && e5._ts && e5._initted && !e5._lock && (e5.rawTime() < 0 || _parentPlayheadIsBeforeStart(e5));
+        })(t3) && (t3._initted || !xt(t3)) || (t3._ts < 0 || t3._dp._ts < 0) && !xt(t3)) ? 0 : 1, h3 = t3._rDelay, l3 = 0;
+        if (h3 && t3._repeat && (l3 = Mt(0, t3._tDur, e4), a3 = wt(l3, h3), t3._yoyo && 1 & a3 && (u3 = 1 - u3), a3 !== wt(t3._tTime, h3) && (o3 = 1 - u3, t3.vars.repeatRefresh && t3._initted && t3.invalidate())), u3 !== o3 || I || i3 || t3._zTime === q || !e4 && t3._zTime) {
+          if (!t3._initted && Pa(t3, e4, i3, r3, l3)) return;
+          for (s3 = t3._zTime, t3._zTime = e4 || (r3 ? q : 0), r3 = r3 || e4 && !s3, t3.ratio = u3, t3._from && (u3 = 1 - u3), t3._time = 0, t3._tTime = l3, n3 = t3._pt; n3; ) n3.r(u3, n3.d), n3 = n3._next;
+          e4 < 0 && Fa(t3, e4, 0, true), t3._onUpdate && !r3 && Dt(t3, "onUpdate"), l3 && t3._repeat && !r3 && t3.parent && Dt(t3, "onRepeat"), (e4 >= t3._tDur || e4 < 0) && t3.ratio === u3 && (u3 && Ca(t3, 1), r3 || I || (Dt(t3, u3 ? "onComplete" : "onReverseComplete", true), t3._prom && t3._prom()));
+        } else t3._zTime || (t3._zTime = e4);
+      })(this, t2, e3, r2);
+      return this;
+    }, e2.targets = function targets() {
+      return this._targets;
+    }, e2.invalidate = function invalidate(t2) {
+      return t2 && this.vars.runBackwards || (this._startAt = 0), this._pt = this._op = this._onUpdate = this._lazy = this.ratio = 0, this._ptLookup = [], this.timeline && this.timeline.invalidate(t2), R2.prototype.invalidate.call(this, t2);
+    }, e2.resetTo = function resetTo(t2, e3, r2, i2, n2) {
+      c || It.wake(), this._ts || this.play();
+      var a2, s2 = Math.min(this._dur, (this._dp._time - this._start) * this._ts);
+      return this._initted || Qt(this, s2), a2 = this._ease(s2 / this._dur), (function _updatePropTweens(t3, e4, r3, i3, n3, a3, s3, o2) {
+        var u2, h2, l2, f2, d2 = (t3._pt && t3._ptCache || (t3._ptCache = {}))[e4];
+        if (!d2) for (d2 = t3._ptCache[e4] = [], l2 = t3._ptLookup, f2 = t3._targets.length; f2--; ) {
+          if ((u2 = l2[f2][e4]) && u2.d && u2.d._pt) for (u2 = u2.d._pt; u2 && u2.p !== e4 && u2.fp !== e4; ) u2 = u2._next;
+          if (!u2) return Ht = 1, t3.vars[e4] = "+=0", Qt(t3, s3), Ht = 0, o2 ? T(e4 + " not eligible for reset") : 1;
+          d2.push(u2);
+        }
+        for (f2 = d2.length; f2--; ) (u2 = (h2 = d2[f2])._pt || h2).s = !i3 && 0 !== i3 || n3 ? u2.s + (i3 || 0) + a3 * u2.c : i3, u2.c = r3 - u2.s, h2.e && (h2.e = ka(r3) + _a(h2.e)), h2.b && (h2.b = u2.s + _a(h2.b));
+      })(this, t2, e3, r2, i2, a2, s2, n2) ? this.resetTo(t2, e3, r2, i2, 1) : (La(this, 0), this.parent || Aa(this._dp, this, "_first", "_last", this._dp._sort ? "_start" : 0), this.render(0));
+    }, e2.kill = function kill(t2, e3) {
+      if (void 0 === e3 && (e3 = "all"), !(t2 || e3 && "all" !== e3)) return this._lazy = this._pt = 0, this.parent ? wb(this) : this.scrollTrigger && this.scrollTrigger.kill(!!I), this;
+      if (this.timeline) {
+        var i2 = this.timeline.totalDuration();
+        return this.timeline.killTweensOf(t2, e3, Wt && true !== Wt.vars.overwrite)._first || wb(this), this.parent && i2 !== this.timeline.totalDuration() && Ua(this, this._dur * this.timeline._tDur / i2, 0, 1), this;
+      }
+      var n2, a2, s2, o2, u2, h2, l2, f2 = this._targets, d2 = t2 ? Pt(t2) : f2, c2 = this._ptLookup, p2 = this._pt;
+      if ((!e3 || "all" === e3) && (function _arraysMatch(t3, e4) {
+        for (var r2 = t3.length, i3 = r2 === e4.length; i3 && r2-- && t3[r2] === e4[r2]; ) ;
+        return r2 < 0;
+      })(f2, d2)) return "all" === e3 && (this._pt = 0), wb(this);
+      for (n2 = this._op = this._op || [], "all" !== e3 && (r(e3) && (u2 = {}, ja(e3, function(t3) {
+        return u2[t3] = 1;
+      }), e3 = u2), e3 = (function _addAliasesToVars(t3, e4) {
+        var r2, i3, n3, a3, s3 = t3[0] ? ha(t3[0]).harness : 0, o3 = s3 && s3.aliases;
+        if (!o3) return e4;
+        for (i3 in r2 = bt({}, e4), o3) if (i3 in r2) for (n3 = (a3 = o3[i3].split(",")).length; n3--; ) r2[a3[n3]] = r2[i3];
+        return r2;
+      })(f2, e3)), l2 = f2.length; l2--; ) if (~d2.indexOf(f2[l2])) for (u2 in a2 = c2[l2], "all" === e3 ? (n2[l2] = e3, o2 = a2, s2 = {}) : (s2 = n2[l2] = n2[l2] || {}, o2 = e3), o2) (h2 = a2 && a2[u2]) && ("kill" in h2.d && true !== h2.d.kill(u2) || Ba(this, h2, "_pt"), delete a2[u2]), "all" !== s2 && (s2[u2] = 1);
+      return this._initted && !this._pt && p2 && wb(this), this;
+    }, Tween.to = function to(t2, e3, r2) {
+      return new Tween(t2, e3, r2);
+    }, Tween.from = function from(t2, e3) {
+      return Ya(1, arguments);
+    }, Tween.delayedCall = function delayedCall(t2, e3, r2, i2) {
+      return new Tween(e3, 0, { immediateRender: false, lazy: false, overwrite: false, delay: t2, onComplete: e3, onReverseComplete: e3, onCompleteParams: r2, onReverseCompleteParams: r2, callbackScope: i2 });
+    }, Tween.fromTo = function fromTo(t2, e3, r2) {
+      return Ya(2, arguments);
+    }, Tween.set = function set(t2, e3) {
+      return e3.duration = 0, e3.repeatDelay || (e3.repeat = 0), new Tween(t2, e3);
+    }, Tween.killTweensOf = function killTweensOf(t2, e3, r2) {
+      return L.killTweensOf(t2, e3, r2);
+    }, Tween;
+  })(qt);
+  ta(te.prototype, { _targets: [], _lazy: 0, _startAt: 0, _op: 0, _onInit: 0 }), ja("staggerTo,staggerFrom,staggerFromTo", function(r2) {
+    te[r2] = function() {
+      var t2 = new Zt(), e2 = Ct.call(arguments, 0);
+      return e2.splice("staggerFromTo" === r2 ? 5 : 4, 0, 0), t2[r2].apply(t2, e2);
+    };
+  });
+  function rc(t2, e2, r2) {
+    return t2.setAttribute(e2, r2);
+  }
+  function zc(t2, e2, r2, i2) {
+    i2.mSet(t2, e2, i2.m.call(i2.tween, r2, i2.mt), i2);
+  }
+  var ee = function _setterPlain(t2, e2, r2) {
+    return t2[e2] = r2;
+  }, re = function _setterFunc(t2, e2, r2) {
+    return t2[e2](r2);
+  }, ue = function _setterFuncWithParam(t2, e2, r2, i2) {
+    return t2[e2](i2.fp, r2);
+  }, le = function _getSetter(t2, e2) {
+    return s(t2[e2]) ? re : u(t2[e2]) && t2.setAttribute ? rc : ee;
+  }, ce = function _renderPlain(t2, e2) {
+    return e2.set(e2.t, e2.p, Math.round(1e6 * (e2.s + e2.c * t2)) / 1e6, e2);
+  }, _e = function _renderBoolean(t2, e2) {
+    return e2.set(e2.t, e2.p, !!(e2.s + e2.c * t2), e2);
+  }, ge = function _renderComplexString(t2, e2) {
+    var r2 = e2._pt, i2 = "";
+    if (!t2 && e2.b) i2 = e2.b;
+    else if (1 === t2 && e2.e) i2 = e2.e;
+    else {
+      for (; r2; ) i2 = r2.p + (r2.m ? r2.m(r2.s + r2.c * t2) : Math.round(1e4 * (r2.s + r2.c * t2)) / 1e4) + i2, r2 = r2._next;
+      i2 += e2.c;
+    }
+    e2.set(e2.t, e2.p, i2, e2);
+  }, ve = function _renderPropTweens(t2, e2) {
+    for (var r2 = e2._pt; r2; ) r2.r(t2, r2.d), r2 = r2._next;
+  }, ye = function _addPluginModifier(t2, e2, r2, i2) {
+    for (var n2, a2 = this._pt; a2; ) n2 = a2._next, a2.p === i2 && a2.modifier(t2, e2, r2), a2 = n2;
+  }, Te = function _killPropTweensOf(t2) {
+    for (var e2, r2, i2 = this._pt; i2; ) r2 = i2._next, i2.p === t2 && !i2.op || i2.op === t2 ? Ba(this, i2, "_pt") : i2.dep || (e2 = 1), i2 = r2;
+    return !e2;
+  }, be = function _sortPropTweensByPriority(t2) {
+    for (var e2, r2, i2, n2, a2 = t2._pt; a2; ) {
+      for (e2 = a2._next, r2 = i2; r2 && r2.pr > a2.pr; ) r2 = r2._next;
+      (a2._prev = r2 ? r2._prev : n2) ? a2._prev._next = a2 : i2 = a2, (a2._next = r2) ? r2._prev = a2 : n2 = a2, a2 = e2;
+    }
+    t2._pt = i2;
+  }, we = (PropTween.prototype.modifier = function modifier(t2, e2, r2) {
+    this.mSet = this.mSet || this.set, this.set = zc, this.m = t2, this.mt = r2, this.tween = e2;
+  }, PropTween);
+  function PropTween(t2, e2, r2, i2, n2, a2, s2, o2, u2) {
+    this.t = e2, this.s = i2, this.c = n2, this.p = r2, this.r = a2 || ce, this.d = s2 || this, this.set = o2 || ee, this.pr = u2 || 0, (this._next = t2) && (t2._prev = this);
+  }
+  ja(Tt + "parent,duration,ease,delay,overwrite,runBackwards,startAt,yoyo,immediateRender,repeat,repeatDelay,data,paused,reversed,lazy,callbackScope,stringFilter,id,yoyoEase,stagger,inherit,repeatRefresh,keyframes,autoRevert,scrollTrigger", function(t2) {
+    return ct[t2] = 1;
+  }), ht.TweenMax = ht.TweenLite = te, ht.TimelineLite = ht.TimelineMax = Zt, L = new Zt({ sortChildren: false, defaults: j, autoRemoveChildren: true, id: "root", smoothChildTiming: true }), N.stringFilter = Ib;
+  function Hc(t2) {
+    return (Oe[t2] || Me).map(function(t3) {
+      return t3();
+    });
+  }
+  function Ic() {
+    var t2 = Date.now(), o2 = [];
+    2 < t2 - Ce && (Hc("matchMediaInit"), ke.forEach(function(t3) {
+      var e2, r2, i2, n2, a2 = t3.queries, s2 = t3.conditions;
+      for (r2 in a2) (e2 = h.matchMedia(a2[r2]).matches) && (i2 = 1), e2 !== s2[r2] && (s2[r2] = e2, n2 = 1);
+      n2 && (t3.revert(), i2 && o2.push(t3));
+    }), Hc("matchMediaRevert"), o2.forEach(function(e2) {
+      return e2.onMatch(e2, function(t3) {
+        return e2.add(null, t3);
+      });
+    }), Ce = t2, Hc("matchMedia"));
+  }
+  var xe, ke = [], Oe = {}, Me = [], Ce = 0, Pe = 0, De = ((xe = Context.prototype).add = function add(t2, i2, n2) {
+    function Jw() {
+      var t3, e2 = l, r2 = a2.selector;
+      return e2 && e2 !== a2 && e2.data.push(a2), n2 && (a2.selector = fb(n2)), l = a2, t3 = i2.apply(a2, arguments), s(t3) && a2._r.push(t3), l = e2, a2.selector = r2, a2.isReverted = false, t3;
+    }
+    s(t2) && (n2 = i2, i2 = t2, t2 = s);
+    var a2 = this;
+    return a2.last = Jw, t2 === s ? Jw(a2, function(t3) {
+      return a2.add(null, t3);
+    }) : t2 ? a2[t2] = Jw : Jw;
+  }, xe.ignore = function ignore(t2) {
+    var e2 = l;
+    l = null, t2(this), l = e2;
+  }, xe.getTweens = function getTweens() {
+    var e2 = [];
+    return this.data.forEach(function(t2) {
+      return t2 instanceof Context ? e2.push.apply(e2, t2.getTweens()) : t2 instanceof te && !(t2.parent && "nested" === t2.parent.data) && e2.push(t2);
+    }), e2;
+  }, xe.clear = function clear() {
+    this._r.length = this.data.length = 0;
+  }, xe.kill = function kill(i2, t2) {
+    var n2 = this;
+    if (i2 ? (function() {
+      for (var t3, e3 = n2.getTweens(), r2 = n2.data.length; r2--; ) "isFlip" === (t3 = n2.data[r2]).data && (t3.revert(), t3.getChildren(true, true, false).forEach(function(t4) {
+        return e3.splice(e3.indexOf(t4), 1);
+      }));
+      for (e3.map(function(t4) {
+        return { g: t4._dur || t4._delay || t4._sat && !t4._sat.vars.immediateRender ? t4.globalTime(0) : -1 / 0, t: t4 };
+      }).sort(function(t4, e4) {
+        return e4.g - t4.g || -1 / 0;
+      }).forEach(function(t4) {
+        return t4.t.revert(i2);
+      }), r2 = n2.data.length; r2--; ) (t3 = n2.data[r2]) instanceof Zt ? "nested" !== t3.data && (t3.scrollTrigger && t3.scrollTrigger.revert(), t3.kill()) : t3 instanceof te || !t3.revert || t3.revert(i2);
+      n2._r.forEach(function(t4) {
+        return t4(i2, n2);
+      }), n2.isReverted = true;
+    })() : this.data.forEach(function(t3) {
+      return t3.kill && t3.kill();
+    }), this.clear(), t2) for (var e2 = ke.length; e2--; ) ke[e2].id === this.id && ke.splice(e2, 1);
+  }, xe.revert = function revert(t2) {
+    this.kill(t2 || {});
+  }, Context);
+  function Context(t2, e2) {
+    this.selector = e2 && fb(e2), this.data = [], this._r = [], this.isReverted = false, this.id = Pe++, t2 && this.add(t2);
+  }
+  var Se, Ee = ((Se = MatchMedia.prototype).add = function add(t2, e2, r2) {
+    v(t2) || (t2 = { matches: t2 });
+    var i2, n2, a2, s2 = new De(0, r2 || this.scope), o2 = s2.conditions = {};
+    for (n2 in l && !s2.selector && (s2.selector = l.selector), this.contexts.push(s2), e2 = s2.add("onMatch", e2), s2.queries = t2) "all" === n2 ? a2 = 1 : (i2 = h.matchMedia(t2[n2])) && (ke.indexOf(s2) < 0 && ke.push(s2), (o2[n2] = i2.matches) && (a2 = 1), i2.addListener ? i2.addListener(Ic) : i2.addEventListener("change", Ic));
+    return a2 && e2(s2, function(t3) {
+      return s2.add(null, t3);
+    }), this;
+  }, Se.revert = function revert(t2) {
+    this.kill(t2 || {});
+  }, Se.kill = function kill(e2) {
+    this.contexts.forEach(function(t2) {
+      return t2.kill(e2, true);
+    });
+  }, MatchMedia);
+  function MatchMedia(t2) {
+    this.contexts = [], this.scope = t2, l && l.data.push(this);
+  }
+  var Re = { registerPlugin: function registerPlugin() {
+    for (var t2 = arguments.length, e2 = new Array(t2), r2 = 0; r2 < t2; r2++) e2[r2] = arguments[r2];
+    e2.forEach(function(t3) {
+      return zb(t3);
+    });
+  }, timeline: function timeline(t2) {
+    return new Zt(t2);
+  }, getTweensOf: function getTweensOf(t2, e2) {
+    return L.getTweensOf(t2, e2);
+  }, getProperty: function getProperty(i2, t2, e2, n2) {
+    r(i2) && (i2 = Pt(i2)[0]);
+    var a2 = ha(i2 || {}).get, s2 = e2 ? sa : ra;
+    return "native" === e2 && (e2 = ""), i2 ? t2 ? s2((mt[t2] && mt[t2].get || a2)(i2, t2, e2, n2)) : function(t3, e3, r2) {
+      return s2((mt[t3] && mt[t3].get || a2)(i2, t3, e3, r2));
+    } : i2;
+  }, quickSetter: function quickSetter(r2, e2, i2) {
+    if (1 < (r2 = Pt(r2)).length) {
+      var n2 = r2.map(function(t2) {
+        return Fe.quickSetter(t2, e2, i2);
+      }), a2 = n2.length;
+      return function(t2) {
+        for (var e3 = a2; e3--; ) n2[e3](t2);
+      };
+    }
+    r2 = r2[0] || {};
+    var s2 = mt[e2], o2 = ha(r2), u2 = o2.harness && (o2.harness.aliases || {})[e2] || e2, h2 = s2 ? function(t2) {
+      var e3 = new s2();
+      d._pt = 0, e3.init(r2, i2 ? t2 + i2 : t2, d, 0, [r2]), e3.render(1, e3), d._pt && ve(1, d);
+    } : o2.set(r2, u2);
+    return s2 ? h2 : function(t2) {
+      return h2(r2, u2, i2 ? t2 + i2 : t2, o2, 1);
+    };
+  }, quickTo: function quickTo(t2, i2, e2) {
+    function by(t3, e3, r3) {
+      return n2.resetTo(i2, t3, e3, r3);
+    }
+    var r2, n2 = Fe.to(t2, ta(((r2 = {})[i2] = "+=0.1", r2.paused = true, r2.stagger = 0, r2), e2 || {}));
+    return by.tween = n2, by;
+  }, isTweening: function isTweening(t2) {
+    return 0 < L.getTweensOf(t2, true).length;
+  }, defaults: function defaults(t2) {
+    return t2 && t2.ease && (t2.ease = Vt(t2.ease, j.ease)), wa(j, t2 || {});
+  }, config: function config(t2) {
+    return wa(N, t2 || {});
+  }, registerEffect: function registerEffect(t2) {
+    var i2 = t2.name, n2 = t2.effect, e2 = t2.plugins, a2 = t2.defaults, r2 = t2.extendTimeline;
+    (e2 || "").split(",").forEach(function(t3) {
+      return t3 && !mt[t3] && !ht[t3] && T(i2 + " effect requires " + t3 + " plugin.");
+    }), gt[i2] = function(t3, e3, r3) {
+      return n2(Pt(t3), ta(e3 || {}, a2), r3);
+    }, r2 && (Zt.prototype[i2] = function(t3, e3, r3) {
+      return this.add(gt[i2](t3, v(e3) ? e3 : (r3 = e3) && {}, this), r3);
+    });
+  }, registerEase: function registerEase(t2, e2) {
+    Bt[t2] = Vt(e2);
+  }, parseEase: function parseEase(t2, e2) {
+    return arguments.length ? Vt(t2, e2) : Bt;
+  }, getById: function getById(t2) {
+    return L.getById(t2);
+  }, exportRoot: function exportRoot(t2, e2) {
+    void 0 === t2 && (t2 = {});
+    var r2, i2, n2 = new Zt(t2);
+    for (n2.smoothChildTiming = w(t2.smoothChildTiming), L.remove(n2), n2._dp = 0, n2._time = n2._tTime = L._time, r2 = L._first; r2; ) i2 = r2._next, !e2 && !r2._dur && r2 instanceof te && r2.vars.onComplete === r2._targets[0] || Na(n2, r2, r2._start - r2._delay), r2 = i2;
+    return Na(L, n2, 0), n2;
+  }, context: function context(t2, e2) {
+    return t2 ? new De(t2, e2) : l;
+  }, matchMedia: function matchMedia(t2) {
+    return new Ee(t2);
+  }, matchMediaRefresh: function matchMediaRefresh() {
+    return ke.forEach(function(t2) {
+      var e2, r2, i2 = t2.conditions;
+      for (r2 in i2) i2[r2] && (i2[r2] = false, e2 = 1);
+      e2 && t2.revert();
+    }) || Ic();
+  }, addEventListener: function addEventListener(t2, e2) {
+    var r2 = Oe[t2] || (Oe[t2] = []);
+    ~r2.indexOf(e2) || r2.push(e2);
+  }, removeEventListener: function removeEventListener(t2, e2) {
+    var r2 = Oe[t2], i2 = r2 && r2.indexOf(e2);
+    0 <= i2 && r2.splice(i2, 1);
+  }, utils: { wrap: function wrap(e2, t2, r2) {
+    var i2 = t2 - e2;
+    return $(e2) ? ob(e2, wrap(0, e2.length), t2) : Za(r2, function(t3) {
+      return (i2 + (t3 - e2) % i2) % i2 + e2;
+    });
+  }, wrapYoyo: function wrapYoyo(e2, t2, r2) {
+    var i2 = t2 - e2, n2 = 2 * i2;
+    return $(e2) ? ob(e2, wrapYoyo(0, e2.length - 1), t2) : Za(r2, function(t3) {
+      return e2 + (i2 < (t3 = (n2 + (t3 - e2) % n2) % n2 || 0) ? n2 - t3 : t3);
+    });
+  }, distribute: hb, random: kb, snap: jb, normalize: function normalize(t2, e2, r2) {
+    return At(t2, e2, 0, 1, r2);
+  }, getUnit: _a, clamp: function clamp(e2, r2, t2) {
+    return Za(t2, function(t3) {
+      return Mt(e2, r2, t3);
+    });
+  }, splitColor: Db, toArray: Pt, selector: fb, mapRange: At, pipe: function pipe() {
+    for (var t2 = arguments.length, e2 = new Array(t2), r2 = 0; r2 < t2; r2++) e2[r2] = arguments[r2];
+    return function(t3) {
+      return e2.reduce(function(t4, e3) {
+        return e3(t4);
+      }, t3);
+    };
+  }, unitize: function unitize(e2, r2) {
+    return function(t2) {
+      return e2(parseFloat(t2)) + (r2 || _a(t2));
+    };
+  }, interpolate: function interpolate(e2, i2, t2, n2) {
+    var a2 = isNaN(e2 + i2) ? 0 : function(t3) {
+      return (1 - t3) * e2 + t3 * i2;
+    };
+    if (!a2) {
+      var s2, o2, u2, h2, l2, f2 = r(e2), d2 = {};
+      if (true === t2 && (n2 = 1) && (t2 = null), f2) e2 = { p: e2 }, i2 = { p: i2 };
+      else if ($(e2) && !$(i2)) {
+        for (u2 = [], h2 = e2.length, l2 = h2 - 2, o2 = 1; o2 < h2; o2++) u2.push(interpolate(e2[o2 - 1], e2[o2]));
+        h2--, a2 = function func(t3) {
+          t3 *= h2;
+          var e3 = Math.min(l2, ~~t3);
+          return u2[e3](t3 - e3);
+        }, t2 = i2;
+      } else n2 || (e2 = bt($(e2) ? [] : {}, e2));
+      if (!u2) {
+        for (s2 in i2) Jt.call(d2, e2, s2, "get", i2[s2]);
+        a2 = function func(t3) {
+          return ve(t3, d2) || (f2 ? e2.p : e2);
+        };
+      }
+    }
+    return Za(t2, a2);
+  }, shuffle: gb }, install: R, effects: gt, ticker: It, updateRoot: Zt.updateRoot, plugins: mt, globalTimeline: L, core: { PropTween: we, globals: U, Tween: te, Timeline: Zt, Animation: qt, getCache: ha, _removeLinkedListItem: Ba, reverting: function reverting() {
+    return I;
+  }, context: function context(t2) {
+    return t2 && l && (l.data.push(t2), t2._ctx = l), l;
+  }, suppressOverwrites: function suppressOverwrites(t2) {
+    return F = t2;
+  } } };
+  ja("to,from,fromTo,delayedCall,set,killTweensOf", function(t2) {
+    return Re[t2] = te[t2];
+  }), It.add(Zt.updateRoot), d = Re.to({}, { duration: 0 });
+  function Mc(t2, e2) {
+    for (var r2 = t2._pt; r2 && r2.p !== e2 && r2.op !== e2 && r2.fp !== e2; ) r2 = r2._next;
+    return r2;
+  }
+  function Oc(t2, a2) {
+    return { name: t2, headless: 1, rawVars: 1, init: function init(t3, n2, e2) {
+      e2._onInit = function(t4) {
+        var e3, i2;
+        if (r(n2) && (e3 = {}, ja(n2, function(t5) {
+          return e3[t5] = 1;
+        }), n2 = e3), a2) {
+          for (i2 in e3 = {}, n2) e3[i2] = a2(n2[i2]);
+          n2 = e3;
+        }
+        !(function _addModifiers(t5, e4) {
+          var r2, i3, n3, a3 = t5._targets;
+          for (r2 in e4) for (i3 = a3.length; i3--; ) (n3 = (n3 = t5._ptLookup[i3][r2]) && n3.d) && (n3._pt && (n3 = Mc(n3, r2)), n3 && n3.modifier && n3.modifier(e4[r2], t5, a3[i3], r2));
+        })(t4, n2);
+      };
+    } };
+  }
+  var Fe = Re.registerPlugin({ name: "attr", init: function init(t2, e2, r2, i2, n2) {
+    var a2, s2, o2;
+    for (a2 in this.tween = r2, e2) o2 = t2.getAttribute(a2) || "", (s2 = this.add(t2, "setAttribute", (o2 || 0) + "", e2[a2], i2, n2, 0, 0, a2)).op = a2, s2.b = o2, this._props.push(a2);
+  }, render: function render(t2, e2) {
+    for (var r2 = e2._pt; r2; ) I ? r2.set(r2.t, r2.p, r2.b, r2) : r2.r(t2, r2.d), r2 = r2._next;
+  } }, { name: "endArray", headless: 1, init: function init(t2, e2) {
+    for (var r2 = e2.length; r2--; ) this.add(t2, r2, t2[r2] || 0, e2[r2], 0, 0, 0, 0, 0, 1);
+  } }, Oc("roundProps", ib), Oc("modifiers"), Oc("snap", jb)) || Re;
+  te.version = Zt.version = Fe.version = "3.14.2", o = 1, x() && Lt();
+  function yd(t2, e2) {
+    return e2.set(e2.t, e2.p, Math.round(1e4 * (e2.s + e2.c * t2)) / 1e4 + e2.u, e2);
+  }
+  function zd(t2, e2) {
+    return e2.set(e2.t, e2.p, 1 === t2 ? e2.e : Math.round(1e4 * (e2.s + e2.c * t2)) / 1e4 + e2.u, e2);
+  }
+  function Ad(t2, e2) {
+    return e2.set(e2.t, e2.p, t2 ? Math.round(1e4 * (e2.s + e2.c * t2)) / 1e4 + e2.u : e2.b, e2);
+  }
+  function Bd(t2, e2) {
+    return e2.set(e2.t, e2.p, 1 === t2 ? e2.e : t2 ? Math.round(1e4 * (e2.s + e2.c * t2)) / 1e4 + e2.u : e2.b, e2);
+  }
+  function Cd(t2, e2) {
+    var r2 = e2.s + e2.c * t2;
+    e2.set(e2.t, e2.p, ~~(r2 + (r2 < 0 ? -0.5 : 0.5)) + e2.u, e2);
+  }
+  function Dd(t2, e2) {
+    return e2.set(e2.t, e2.p, t2 ? e2.e : e2.b, e2);
+  }
+  function Ed(t2, e2) {
+    return e2.set(e2.t, e2.p, 1 !== t2 ? e2.b : e2.e, e2);
+  }
+  function Fd(t2, e2, r2) {
+    return t2.style[e2] = r2;
+  }
+  function Gd(t2, e2, r2) {
+    return t2.style.setProperty(e2, r2);
+  }
+  function Hd(t2, e2, r2) {
+    return t2._gsap[e2] = r2;
+  }
+  function Id(t2, e2, r2) {
+    return t2._gsap.scaleX = t2._gsap.scaleY = r2;
+  }
+  function Jd(t2, e2, r2, i2, n2) {
+    var a2 = t2._gsap;
+    a2.scaleX = a2.scaleY = r2, a2.renderTransform(n2, a2);
+  }
+  function Kd(t2, e2, r2, i2, n2) {
+    var a2 = t2._gsap;
+    a2[e2] = r2, a2.renderTransform(n2, a2);
+  }
+  function Nd(t2, e2) {
+    var r2 = this, i2 = this.target, n2 = i2.style, a2 = i2._gsap;
+    if (t2 in hr && n2) {
+      if (this.tfm = this.tfm || {}, "transform" === t2) return mr.transform.split(",").forEach(function(t3) {
+        return Nd.call(r2, t3, e2);
+      });
+      if (~(t2 = mr[t2] || t2).indexOf(",") ? t2.split(",").forEach(function(t3) {
+        return r2.tfm[t3] = xr(i2, t3);
+      }) : this.tfm[t2] = a2.x ? a2[t2] : xr(i2, t2), t2 === vr && (this.tfm.zOrigin = a2.zOrigin), 0 <= this.props.indexOf(gr)) return;
+      a2.svg && (this.svgo = i2.getAttribute("data-svg-origin"), this.props.push(vr, e2, "")), t2 = gr;
+    }
+    (n2 || e2) && this.props.push(t2, e2, n2[t2]);
+  }
+  function Od(t2) {
+    t2.translate && (t2.removeProperty("translate"), t2.removeProperty("scale"), t2.removeProperty("rotate"));
+  }
+  function Pd() {
+    var t2, e2, r2 = this.props, i2 = this.target, n2 = i2.style, a2 = i2._gsap;
+    for (t2 = 0; t2 < r2.length; t2 += 3) r2[t2 + 1] ? 2 === r2[t2 + 1] ? i2[r2[t2]](r2[t2 + 2]) : i2[r2[t2]] = r2[t2 + 2] : r2[t2 + 2] ? n2[r2[t2]] = r2[t2 + 2] : n2.removeProperty("--" === r2[t2].substr(0, 2) ? r2[t2] : r2[t2].replace(cr, "-$1").toLowerCase());
+    if (this.tfm) {
+      for (e2 in this.tfm) a2[e2] = this.tfm[e2];
+      a2.svg && (a2.renderTransform(), i2.setAttribute("data-svg-origin", this.svgo || "")), (t2 = Ue()) && t2.isStart || n2[gr] || (Od(n2), a2.zOrigin && n2[vr] && (n2[vr] += " " + a2.zOrigin + "px", a2.zOrigin = 0, a2.renderTransform()), a2.uncache = 1);
+    }
+  }
+  function Qd(t2, e2) {
+    var r2 = { target: t2, props: [], revert: Pd, save: Nd };
+    return t2._gsap || Fe.core.getCache(t2), e2 && t2.style && t2.nodeType && e2.split(",").forEach(function(t3) {
+      return r2.save(t3);
+    }), r2;
+  }
+  function Sd(t2, e2) {
+    var r2 = Le.createElementNS ? Le.createElementNS((e2 || "http://www.w3.org/1999/xhtml").replace(/^https/, "http"), t2) : Le.createElement(t2);
+    return r2 && r2.style ? r2 : Le.createElement(t2);
+  }
+  function Td(t2, e2, r2) {
+    var i2 = getComputedStyle(t2);
+    return i2[e2] || i2.getPropertyValue(e2.replace(cr, "-$1").toLowerCase()) || i2.getPropertyValue(e2) || !r2 && Td(t2, Tr(e2) || e2, 1) || "";
+  }
+  function Wd() {
+    /* @__PURE__ */ (function _windowExists() {
+      return "undefined" != typeof window;
+    })() && window.document && (Ie = window, Le = Ie.document, Ye = Le.documentElement, je = Sd("div") || { style: {} }, Sd("div"), gr = Tr(gr), vr = gr + "Origin", je.style.cssText = "border-width:0;line-height:0;position:absolute;padding:0", Xe = !!Tr("perspective"), Ue = Fe.core.reverting, Ne = 1);
+  }
+  function Xd(t2) {
+    var e2, r2 = t2.ownerSVGElement, i2 = Sd("svg", r2 && r2.getAttribute("xmlns") || "http://www.w3.org/2000/svg"), n2 = t2.cloneNode(true);
+    n2.style.display = "block", i2.appendChild(n2), Ye.appendChild(i2);
+    try {
+      e2 = n2.getBBox();
+    } catch (t3) {
+    }
+    return i2.removeChild(n2), Ye.removeChild(i2), e2;
+  }
+  function Yd(t2, e2) {
+    for (var r2 = e2.length; r2--; ) if (t2.hasAttribute(e2[r2])) return t2.getAttribute(e2[r2]);
+  }
+  function Zd(e2) {
+    var r2, i2;
+    try {
+      r2 = e2.getBBox();
+    } catch (t2) {
+      r2 = Xd(e2), i2 = 1;
+    }
+    return r2 && (r2.width || r2.height) || i2 || (r2 = Xd(e2)), !r2 || r2.width || r2.x || r2.y ? r2 : { x: +Yd(e2, ["x", "cx", "x1"]) || 0, y: +Yd(e2, ["y", "cy", "y1"]) || 0, width: 0, height: 0 };
+  }
+  function $d(t2) {
+    return !(!t2.getCTM || t2.parentNode && !t2.ownerSVGElement || !Zd(t2));
+  }
+  function _d(t2, e2) {
+    if (e2) {
+      var r2, i2 = t2.style;
+      e2 in hr && e2 !== vr && (e2 = gr), i2.removeProperty ? ("ms" !== (r2 = e2.substr(0, 2)) && "webkit" !== e2.substr(0, 6) || (e2 = "-" + e2), i2.removeProperty("--" === r2 ? e2 : e2.replace(cr, "-$1").toLowerCase())) : i2.removeAttribute(e2);
+    }
+  }
+  function ae(t2, e2, r2, i2, n2, a2) {
+    var s2 = new we(t2._pt, e2, r2, 0, 1, a2 ? Ed : Dd);
+    return (t2._pt = s2).b = i2, s2.e = n2, t2._props.push(r2), s2;
+  }
+  function de(t2, e2, r2, i2) {
+    var n2, a2, s2, o2, u2 = parseFloat(r2) || 0, h2 = (r2 + "").trim().substr((u2 + "").length) || "px", l2 = je.style, f2 = pr.test(e2), d2 = "svg" === t2.tagName.toLowerCase(), c2 = (d2 ? "client" : "offset") + (f2 ? "Width" : "Height"), p2 = "px" === i2, _2 = "%" === i2;
+    if (i2 === h2 || !u2 || br[i2] || br[h2]) return u2;
+    if ("px" === h2 || p2 || (u2 = de(t2, e2, r2, "px")), o2 = t2.getCTM && $d(t2), (_2 || "%" === h2) && (hr[e2] || ~e2.indexOf("adius"))) return n2 = o2 ? t2.getBBox()[f2 ? "width" : "height"] : t2[c2], ka(_2 ? u2 / n2 * 100 : u2 / 100 * n2);
+    if (l2[f2 ? "width" : "height"] = 100 + (p2 ? h2 : i2), a2 = "rem" !== i2 && ~e2.indexOf("adius") || "em" === i2 && t2.appendChild && !d2 ? t2 : t2.parentNode, o2 && (a2 = (t2.ownerSVGElement || {}).parentNode), a2 && a2 !== Le && a2.appendChild || (a2 = Le.body), (s2 = a2._gsap) && _2 && s2.width && f2 && s2.time === It.time && !s2.uncache) return ka(u2 / s2.width * 100);
+    if (!_2 || "height" !== e2 && "width" !== e2) !_2 && "%" !== h2 || wr[Td(a2, "display")] || (l2.position = Td(t2, "position")), a2 === t2 && (l2.position = "static"), a2.appendChild(je), n2 = je[c2], a2.removeChild(je), l2.position = "absolute";
+    else {
+      var m2 = t2.style[e2];
+      t2.style[e2] = 100 + i2, n2 = t2[c2], m2 ? t2.style[e2] = m2 : _d(t2, e2);
+    }
+    return f2 && _2 && ((s2 = ha(a2)).time = It.time, s2.width = a2[c2]), ka(p2 ? n2 * u2 / 100 : n2 && u2 ? 100 / n2 * u2 : 0);
+  }
+  function fe(t2, e2, r2, i2) {
+    if (!r2 || "none" === r2) {
+      var n2 = Tr(e2, t2, 1), a2 = n2 && Td(t2, n2, 1);
+      a2 && a2 !== r2 ? (e2 = n2, r2 = a2) : "borderColor" === e2 && (r2 = Td(t2, "borderTopColor"));
+    }
+    var s2, o2, u2, h2, l2, f2, d2, c2, p2, _2, m2, g2 = new we(this._pt, t2.style, e2, 0, 1, ge), v2 = 0, y2 = 0;
+    if (g2.b = r2, g2.e = i2, r2 += "", "var(--" === (i2 += "").substring(0, 6) && (i2 = Td(t2, i2.substring(4, i2.indexOf(")")))), "auto" === i2 && (f2 = t2.style[e2], t2.style[e2] = i2, i2 = Td(t2, e2) || i2, f2 ? t2.style[e2] = f2 : _d(t2, e2)), Ib(s2 = [r2, i2]), i2 = s2[1], u2 = (r2 = s2[0]).match(nt) || [], (i2.match(nt) || []).length) {
+      for (; o2 = nt.exec(i2); ) d2 = o2[0], p2 = i2.substring(v2, o2.index), l2 ? l2 = (l2 + 1) % 5 : "rgba(" !== p2.substr(-5) && "hsla(" !== p2.substr(-5) || (l2 = 1), d2 !== (f2 = u2[y2++] || "") && (h2 = parseFloat(f2) || 0, m2 = f2.substr((h2 + "").length), "=" === d2.charAt(1) && (d2 = ma(h2, d2) + m2), c2 = parseFloat(d2), _2 = d2.substr((c2 + "").length), v2 = nt.lastIndex - _2.length, _2 || (_2 = _2 || N.units[e2] || m2, v2 === i2.length && (i2 += _2, g2.e += _2)), m2 !== _2 && (h2 = de(t2, e2, f2, _2) || 0), g2._pt = { _next: g2._pt, p: p2 || 1 === y2 ? p2 : ",", s: h2, c: c2 - h2, m: l2 && l2 < 4 || "zIndex" === e2 ? Math.round : 0 });
+      g2.c = v2 < i2.length ? i2.substring(v2, i2.length) : "";
+    } else g2.r = "display" === e2 && "none" === i2 ? Ed : Dd;
+    return st.test(i2) && (g2.e = 0), this._pt = g2;
+  }
+  function he(t2) {
+    var e2 = t2.split(" "), r2 = e2[0], i2 = e2[1] || "50%";
+    return "top" !== r2 && "bottom" !== r2 && "left" !== i2 && "right" !== i2 || (t2 = r2, r2 = i2, i2 = t2), e2[0] = kr[r2] || r2, e2[1] = kr[i2] || i2, e2.join(" ");
+  }
+  function ie(t2, e2) {
+    if (e2.tween && e2.tween._time === e2.tween._dur) {
+      var r2, i2, n2, a2 = e2.t, s2 = a2.style, o2 = e2.u, u2 = a2._gsap;
+      if ("all" === o2 || true === o2) s2.cssText = "", i2 = 1;
+      else for (n2 = (o2 = o2.split(",")).length; -1 < --n2; ) r2 = o2[n2], hr[r2] && (i2 = 1, r2 = "transformOrigin" === r2 ? vr : gr), _d(a2, r2);
+      i2 && (_d(a2, gr), u2 && (u2.svg && a2.removeAttribute("transform"), s2.scale = s2.rotate = s2.translate = "none", Pr(a2, 1), u2.uncache = 1, Od(s2)));
+    }
+  }
+  function me(t2) {
+    return "matrix(1, 0, 0, 1, 0, 0)" === t2 || "none" === t2 || !t2;
+  }
+  function ne(t2) {
+    var e2 = Td(t2, gr);
+    return me(e2) ? Mr : e2.substr(7).match(it).map(ka);
+  }
+  function oe(t2, e2) {
+    var r2, i2, n2, a2, s2 = t2._gsap || ha(t2), o2 = t2.style, u2 = ne(t2);
+    return s2.svg && t2.getAttribute("transform") ? "1,0,0,1,0,0" === (u2 = [(n2 = t2.transform.baseVal.consolidate().matrix).a, n2.b, n2.c, n2.d, n2.e, n2.f]).join(",") ? Mr : u2 : (u2 !== Mr || t2.offsetParent || t2 === Ye || s2.svg || (n2 = o2.display, o2.display = "block", (r2 = t2.parentNode) && (t2.offsetParent || t2.getBoundingClientRect().width) || (a2 = 1, i2 = t2.nextElementSibling, Ye.appendChild(t2)), u2 = ne(t2), n2 ? o2.display = n2 : _d(t2, "display"), a2 && (i2 ? r2.insertBefore(t2, i2) : r2 ? r2.appendChild(t2) : Ye.removeChild(t2))), e2 && 6 < u2.length ? [u2[0], u2[1], u2[4], u2[5], u2[12], u2[13]] : u2);
+  }
+  function pe(t2, e2, r2, i2, n2, a2) {
+    var s2, o2, u2, h2 = t2._gsap, l2 = n2 || oe(t2, true), f2 = h2.xOrigin || 0, d2 = h2.yOrigin || 0, c2 = h2.xOffset || 0, p2 = h2.yOffset || 0, _2 = l2[0], m2 = l2[1], g2 = l2[2], v2 = l2[3], y2 = l2[4], T2 = l2[5], b2 = e2.split(" "), w2 = parseFloat(b2[0]) || 0, x2 = parseFloat(b2[1]) || 0;
+    r2 ? l2 !== Mr && (o2 = _2 * v2 - m2 * g2) && (u2 = w2 * (-m2 / o2) + x2 * (_2 / o2) - (_2 * T2 - m2 * y2) / o2, w2 = w2 * (v2 / o2) + x2 * (-g2 / o2) + (g2 * T2 - v2 * y2) / o2, x2 = u2) : (w2 = (s2 = Zd(t2)).x + (~b2[0].indexOf("%") ? w2 / 100 * s2.width : w2), x2 = s2.y + (~(b2[1] || b2[0]).indexOf("%") ? x2 / 100 * s2.height : x2)), i2 || false !== i2 && h2.smooth ? (y2 = w2 - f2, T2 = x2 - d2, h2.xOffset = c2 + (y2 * _2 + T2 * g2) - y2, h2.yOffset = p2 + (y2 * m2 + T2 * v2) - T2) : h2.xOffset = h2.yOffset = 0, h2.xOrigin = w2, h2.yOrigin = x2, h2.smooth = !!i2, h2.origin = e2, h2.originIsAbsolute = !!r2, t2.style[vr] = "0px 0px", a2 && (ae(a2, h2, "xOrigin", f2, w2), ae(a2, h2, "yOrigin", d2, x2), ae(a2, h2, "xOffset", c2, h2.xOffset), ae(a2, h2, "yOffset", p2, h2.yOffset)), t2.setAttribute("data-svg-origin", w2 + " " + x2);
+  }
+  function se(t2, e2, r2) {
+    var i2 = _a(e2);
+    return ka(parseFloat(e2) + parseFloat(de(t2, "x", r2 + "px", i2))) + i2;
+  }
+  function ze(t2, e2, i2, n2, a2) {
+    var s2, o2, u2 = 360, h2 = r(a2), l2 = parseFloat(a2) * (h2 && ~a2.indexOf("rad") ? lr : 1) - n2, f2 = n2 + l2 + "deg";
+    return h2 && ("short" === (s2 = a2.split("_")[1]) && (l2 %= u2) !== l2 % 180 && (l2 += l2 < 0 ? u2 : -u2), "cw" === s2 && l2 < 0 ? l2 = (l2 + 36e9) % u2 - ~~(l2 / u2) * u2 : "ccw" === s2 && 0 < l2 && (l2 = (l2 - 36e9) % u2 - ~~(l2 / u2) * u2)), t2._pt = o2 = new we(t2._pt, e2, i2, n2, l2, zd), o2.e = f2, o2.u = "deg", t2._props.push(i2), o2;
+  }
+  function Ae(t2, e2) {
+    for (var r2 in e2) t2[r2] = e2[r2];
+    return t2;
+  }
+  function Be(t2, e2, r2) {
+    var i2, n2, a2, s2, o2, u2, h2, l2 = Ae({}, r2._gsap), f2 = r2.style;
+    for (n2 in l2.svg ? (a2 = r2.getAttribute("transform"), r2.setAttribute("transform", ""), f2[gr] = e2, i2 = Pr(r2, 1), _d(r2, gr), r2.setAttribute("transform", a2)) : (a2 = getComputedStyle(r2)[gr], f2[gr] = e2, i2 = Pr(r2, 1), f2[gr] = a2), hr) (a2 = l2[n2]) !== (s2 = i2[n2]) && "perspective,force3D,transformOrigin,svgOrigin".indexOf(n2) < 0 && (o2 = _a(a2) !== (h2 = _a(s2)) ? de(r2, n2, a2, h2) : parseFloat(a2), u2 = parseFloat(s2), t2._pt = new we(t2._pt, i2, n2, o2, u2 - o2, yd), t2._pt.u = h2 || 0, t2._props.push(n2));
+    Ae(i2, l2);
+  }
+  var Ie, Le, Ye, Ne, je, Ve, Ue, Xe, qe = Bt.Power0, Ze = Bt.Power1, We = Bt.Power2, He = Bt.Power3, Je = Bt.Power4, Qe = Bt.Linear, Ge = Bt.Quad, Ke = Bt.Cubic, $e = Bt.Quart, tr = Bt.Quint, er = Bt.Strong, rr = Bt.Elastic, ir = Bt.Back, nr = Bt.SteppedEase, ar = Bt.Bounce, sr = Bt.Sine, or = Bt.Expo, ur = Bt.Circ, hr = {}, lr = 180 / Math.PI, fr = Math.PI / 180, dr = Math.atan2, cr = /([A-Z])/g, pr = /(left|right|width|margin|padding|x)/i, _r = /[\s,\(]\S/, mr = { autoAlpha: "opacity,visibility", scale: "scaleX,scaleY", alpha: "opacity" }, gr = "transform", vr = gr + "Origin", yr = "O,Moz,ms,Ms,Webkit".split(","), Tr = function _checkPropPrefix(t2, e2, r2) {
+    var i2 = (e2 || je).style, n2 = 5;
+    if (t2 in i2 && !r2) return t2;
+    for (t2 = t2.charAt(0).toUpperCase() + t2.substr(1); n2-- && !(yr[n2] + t2 in i2); ) ;
+    return n2 < 0 ? null : (3 === n2 ? "ms" : 0 <= n2 ? yr[n2] : "") + t2;
+  }, br = { deg: 1, rad: 1, turn: 1 }, wr = { grid: 1, flex: 1 }, xr = function _get(t2, e2, r2, i2) {
+    var n2;
+    return Ne || Wd(), e2 in mr && "transform" !== e2 && ~(e2 = mr[e2]).indexOf(",") && (e2 = e2.split(",")[0]), hr[e2] && "transform" !== e2 ? (n2 = Pr(t2, i2), n2 = "transformOrigin" !== e2 ? n2[e2] : n2.svg ? n2.origin : Ar(Td(t2, vr)) + " " + n2.zOrigin + "px") : (n2 = t2.style[e2]) && "auto" !== n2 && !i2 && !~(n2 + "").indexOf("calc(") || (n2 = Or[e2] && Or[e2](t2, e2, r2) || Td(t2, e2) || ia(t2, e2) || ("opacity" === e2 ? 1 : 0)), r2 && !~(n2 + "").trim().indexOf(" ") ? de(t2, e2, n2, r2) + r2 : n2;
+  }, kr = { top: "0%", bottom: "100%", left: "0%", right: "100%", center: "50%" }, Or = { clearProps: function clearProps(t2, e2, r2, i2, n2) {
+    if ("isFromStart" !== n2.data) {
+      var a2 = t2._pt = new we(t2._pt, e2, r2, 0, 0, ie);
+      return a2.u = i2, a2.pr = -10, a2.tween = n2, t2._props.push(r2), 1;
+    }
+  } }, Mr = [1, 0, 0, 1, 0, 0], Cr = {}, Pr = function _parseTransform(t2, e2) {
+    var r2 = t2._gsap || new Xt(t2);
+    if ("x" in r2 && !e2 && !r2.uncache) return r2;
+    var i2, n2, a2, s2, o2, u2, h2, l2, f2, d2, c2, p2, _2, m2, g2, v2, y2, T2, b2, w2, x2, k2, O2, M2, C2, P2, A2, D2, S2, z2, E2, R2, F2 = t2.style, I2 = r2.scaleX < 0, L2 = "deg", B2 = getComputedStyle(t2), Y2 = Td(t2, vr) || "0";
+    return i2 = n2 = a2 = u2 = h2 = l2 = f2 = d2 = c2 = 0, s2 = o2 = 1, r2.svg = !(!t2.getCTM || !$d(t2)), B2.translate && ("none" === B2.translate && "none" === B2.scale && "none" === B2.rotate || (F2[gr] = ("none" !== B2.translate ? "translate3d(" + (B2.translate + " 0 0").split(" ").slice(0, 3).join(", ") + ") " : "") + ("none" !== B2.rotate ? "rotate(" + B2.rotate + ") " : "") + ("none" !== B2.scale ? "scale(" + B2.scale.split(" ").join(",") + ") " : "") + ("none" !== B2[gr] ? B2[gr] : "")), F2.scale = F2.rotate = F2.translate = "none"), m2 = oe(t2, r2.svg), r2.svg && (M2 = r2.uncache ? (C2 = t2.getBBox(), Y2 = r2.xOrigin - C2.x + "px " + (r2.yOrigin - C2.y) + "px", "") : !e2 && t2.getAttribute("data-svg-origin"), pe(t2, M2 || Y2, !!M2 || r2.originIsAbsolute, false !== r2.smooth, m2)), p2 = r2.xOrigin || 0, _2 = r2.yOrigin || 0, m2 !== Mr && (T2 = m2[0], b2 = m2[1], w2 = m2[2], x2 = m2[3], i2 = k2 = m2[4], n2 = O2 = m2[5], 6 === m2.length ? (s2 = Math.sqrt(T2 * T2 + b2 * b2), o2 = Math.sqrt(x2 * x2 + w2 * w2), u2 = T2 || b2 ? dr(b2, T2) * lr : 0, (f2 = w2 || x2 ? dr(w2, x2) * lr + u2 : 0) && (o2 *= Math.abs(Math.cos(f2 * fr))), r2.svg && (i2 -= p2 - (p2 * T2 + _2 * w2), n2 -= _2 - (p2 * b2 + _2 * x2))) : (R2 = m2[6], z2 = m2[7], A2 = m2[8], D2 = m2[9], S2 = m2[10], E2 = m2[11], i2 = m2[12], n2 = m2[13], a2 = m2[14], h2 = (g2 = dr(R2, S2)) * lr, g2 && (M2 = k2 * (v2 = Math.cos(-g2)) + A2 * (y2 = Math.sin(-g2)), C2 = O2 * v2 + D2 * y2, P2 = R2 * v2 + S2 * y2, A2 = k2 * -y2 + A2 * v2, D2 = O2 * -y2 + D2 * v2, S2 = R2 * -y2 + S2 * v2, E2 = z2 * -y2 + E2 * v2, k2 = M2, O2 = C2, R2 = P2), l2 = (g2 = dr(-w2, S2)) * lr, g2 && (v2 = Math.cos(-g2), E2 = x2 * (y2 = Math.sin(-g2)) + E2 * v2, T2 = M2 = T2 * v2 - A2 * y2, b2 = C2 = b2 * v2 - D2 * y2, w2 = P2 = w2 * v2 - S2 * y2), u2 = (g2 = dr(b2, T2)) * lr, g2 && (M2 = T2 * (v2 = Math.cos(g2)) + b2 * (y2 = Math.sin(g2)), C2 = k2 * v2 + O2 * y2, b2 = b2 * v2 - T2 * y2, O2 = O2 * v2 - k2 * y2, T2 = M2, k2 = C2), h2 && 359.9 < Math.abs(h2) + Math.abs(u2) && (h2 = u2 = 0, l2 = 180 - l2), s2 = ka(Math.sqrt(T2 * T2 + b2 * b2 + w2 * w2)), o2 = ka(Math.sqrt(O2 * O2 + R2 * R2)), g2 = dr(k2, O2), f2 = 2e-4 < Math.abs(g2) ? g2 * lr : 0, c2 = E2 ? 1 / (E2 < 0 ? -E2 : E2) : 0), r2.svg && (M2 = t2.getAttribute("transform"), r2.forceCSS = t2.setAttribute("transform", "") || !me(Td(t2, gr)), M2 && t2.setAttribute("transform", M2))), 90 < Math.abs(f2) && Math.abs(f2) < 270 && (I2 ? (s2 *= -1, f2 += u2 <= 0 ? 180 : -180, u2 += u2 <= 0 ? 180 : -180) : (o2 *= -1, f2 += f2 <= 0 ? 180 : -180)), e2 = e2 || r2.uncache, r2.x = i2 - ((r2.xPercent = i2 && (!e2 && r2.xPercent || (Math.round(t2.offsetWidth / 2) === Math.round(-i2) ? -50 : 0))) ? t2.offsetWidth * r2.xPercent / 100 : 0) + "px", r2.y = n2 - ((r2.yPercent = n2 && (!e2 && r2.yPercent || (Math.round(t2.offsetHeight / 2) === Math.round(-n2) ? -50 : 0))) ? t2.offsetHeight * r2.yPercent / 100 : 0) + "px", r2.z = a2 + "px", r2.scaleX = ka(s2), r2.scaleY = ka(o2), r2.rotation = ka(u2) + L2, r2.rotationX = ka(h2) + L2, r2.rotationY = ka(l2) + L2, r2.skewX = f2 + L2, r2.skewY = d2 + L2, r2.transformPerspective = c2 + "px", (r2.zOrigin = parseFloat(Y2.split(" ")[2]) || !e2 && r2.zOrigin || 0) && (F2[vr] = Ar(Y2)), r2.xOffset = r2.yOffset = 0, r2.force3D = N.force3D, r2.renderTransform = r2.svg ? Fr : Xe ? Rr : Dr, r2.uncache = 0, r2;
+  }, Ar = function _firstTwoOnly(t2) {
+    return (t2 = t2.split(" "))[0] + " " + t2[1];
+  }, Dr = function _renderNon3DTransforms(t2, e2) {
+    e2.z = "0px", e2.rotationY = e2.rotationX = "0deg", e2.force3D = 0, Rr(t2, e2);
+  }, Sr = "0deg", zr = "0px", Er = ") ", Rr = function _renderCSSTransforms(t2, e2) {
+    var r2 = e2 || this, i2 = r2.xPercent, n2 = r2.yPercent, a2 = r2.x, s2 = r2.y, o2 = r2.z, u2 = r2.rotation, h2 = r2.rotationY, l2 = r2.rotationX, f2 = r2.skewX, d2 = r2.skewY, c2 = r2.scaleX, p2 = r2.scaleY, _2 = r2.transformPerspective, m2 = r2.force3D, g2 = r2.target, v2 = r2.zOrigin, y2 = "", T2 = "auto" === m2 && t2 && 1 !== t2 || true === m2;
+    if (v2 && (l2 !== Sr || h2 !== Sr)) {
+      var b2, w2 = parseFloat(h2) * fr, x2 = Math.sin(w2), k2 = Math.cos(w2);
+      w2 = parseFloat(l2) * fr, b2 = Math.cos(w2), a2 = se(g2, a2, x2 * b2 * -v2), s2 = se(g2, s2, -Math.sin(w2) * -v2), o2 = se(g2, o2, k2 * b2 * -v2 + v2);
+    }
+    _2 !== zr && (y2 += "perspective(" + _2 + Er), (i2 || n2) && (y2 += "translate(" + i2 + "%, " + n2 + "%) "), !T2 && a2 === zr && s2 === zr && o2 === zr || (y2 += o2 !== zr || T2 ? "translate3d(" + a2 + ", " + s2 + ", " + o2 + ") " : "translate(" + a2 + ", " + s2 + Er), u2 !== Sr && (y2 += "rotate(" + u2 + Er), h2 !== Sr && (y2 += "rotateY(" + h2 + Er), l2 !== Sr && (y2 += "rotateX(" + l2 + Er), f2 === Sr && d2 === Sr || (y2 += "skew(" + f2 + ", " + d2 + Er), 1 === c2 && 1 === p2 || (y2 += "scale(" + c2 + ", " + p2 + Er), g2.style[gr] = y2 || "translate(0, 0)";
+  }, Fr = function _renderSVGTransforms(t2, e2) {
+    var r2, i2, n2, a2, s2, o2 = e2 || this, u2 = o2.xPercent, h2 = o2.yPercent, l2 = o2.x, f2 = o2.y, d2 = o2.rotation, c2 = o2.skewX, p2 = o2.skewY, _2 = o2.scaleX, m2 = o2.scaleY, g2 = o2.target, v2 = o2.xOrigin, y2 = o2.yOrigin, T2 = o2.xOffset, b2 = o2.yOffset, w2 = o2.forceCSS, x2 = parseFloat(l2), k2 = parseFloat(f2);
+    d2 = parseFloat(d2), c2 = parseFloat(c2), (p2 = parseFloat(p2)) && (c2 += p2 = parseFloat(p2), d2 += p2), d2 || c2 ? (d2 *= fr, c2 *= fr, r2 = Math.cos(d2) * _2, i2 = Math.sin(d2) * _2, n2 = Math.sin(d2 - c2) * -m2, a2 = Math.cos(d2 - c2) * m2, c2 && (p2 *= fr, s2 = Math.tan(c2 - p2), n2 *= s2 = Math.sqrt(1 + s2 * s2), a2 *= s2, p2 && (s2 = Math.tan(p2), r2 *= s2 = Math.sqrt(1 + s2 * s2), i2 *= s2)), r2 = ka(r2), i2 = ka(i2), n2 = ka(n2), a2 = ka(a2)) : (r2 = _2, a2 = m2, i2 = n2 = 0), (x2 && !~(l2 + "").indexOf("px") || k2 && !~(f2 + "").indexOf("px")) && (x2 = de(g2, "x", l2, "px"), k2 = de(g2, "y", f2, "px")), (v2 || y2 || T2 || b2) && (x2 = ka(x2 + v2 - (v2 * r2 + y2 * n2) + T2), k2 = ka(k2 + y2 - (v2 * i2 + y2 * a2) + b2)), (u2 || h2) && (s2 = g2.getBBox(), x2 = ka(x2 + u2 / 100 * s2.width), k2 = ka(k2 + h2 / 100 * s2.height)), s2 = "matrix(" + r2 + "," + i2 + "," + n2 + "," + a2 + "," + x2 + "," + k2 + ")", g2.setAttribute("transform", s2), w2 && (g2.style[gr] = s2);
+  };
+  ja("padding,margin,Width,Radius", function(e2, r2) {
+    var t2 = "Right", i2 = "Bottom", n2 = "Left", o2 = (r2 < 3 ? ["Top", t2, i2, n2] : ["Top" + n2, "Top" + t2, i2 + t2, i2 + n2]).map(function(t3) {
+      return r2 < 2 ? e2 + t3 : "border" + t3 + e2;
+    });
+    Or[1 < r2 ? "border" + e2 : e2] = function(e3, t3, r3, i3, n3) {
+      var a2, s2;
+      if (arguments.length < 4) return a2 = o2.map(function(t4) {
+        return xr(e3, t4, r3);
+      }), 5 === (s2 = a2.join(" ")).split(a2[0]).length ? a2[0] : s2;
+      a2 = (i3 + "").split(" "), s2 = {}, o2.forEach(function(t4, e4) {
+        return s2[t4] = a2[e4] = a2[e4] || a2[(e4 - 1) / 2 | 0];
+      }), e3.init(t3, s2, n3);
+    };
+  });
+  var Ir, Lr, Br, Yr = { name: "css", register: Wd, targetTest: function targetTest(t2) {
+    return t2.style && t2.nodeType;
+  }, init: function init(t2, e2, i2, n2, a2) {
+    var s2, o2, u2, h2, l2, f2, d2, c2, p2, _2, m2, g2, v2, y2, T2, b2, w2, x2 = this._props, k2 = t2.style, O2 = i2.vars.startAt;
+    for (d2 in Ne || Wd(), this.styles = this.styles || Qd(t2), b2 = this.styles.props, this.tween = i2, e2) if ("autoRound" !== d2 && (o2 = e2[d2], !mt[d2] || !dc(d2, e2, i2, n2, t2, a2))) {
+      if (l2 = typeof o2, f2 = Or[d2], "function" === l2 && (l2 = typeof (o2 = o2.call(i2, n2, t2, a2))), "string" === l2 && ~o2.indexOf("random(") && (o2 = rb(o2)), f2) f2(this, t2, d2, o2, i2) && (T2 = 1);
+      else if ("--" === d2.substr(0, 2)) s2 = (getComputedStyle(t2).getPropertyValue(d2) + "").trim(), o2 += "", Rt.lastIndex = 0, Rt.test(s2) || (c2 = _a(s2), (p2 = _a(o2)) ? c2 !== p2 && (s2 = de(t2, d2, s2, p2) + p2) : c2 && (o2 += c2)), this.add(k2, "setProperty", s2, o2, n2, a2, 0, 0, d2), x2.push(d2), b2.push(d2, 0, k2[d2]);
+      else if ("undefined" !== l2) {
+        if (O2 && d2 in O2 ? (s2 = "function" == typeof O2[d2] ? O2[d2].call(i2, n2, t2, a2) : O2[d2], r(s2) && ~s2.indexOf("random(") && (s2 = rb(s2)), _a(s2 + "") || "auto" === s2 || (s2 += N.units[d2] || _a(xr(t2, d2)) || ""), "=" === (s2 + "").charAt(1) && (s2 = xr(t2, d2))) : s2 = xr(t2, d2), h2 = parseFloat(s2), (_2 = "string" === l2 && "=" === o2.charAt(1) && o2.substr(0, 2)) && (o2 = o2.substr(2)), u2 = parseFloat(o2), d2 in mr && ("autoAlpha" === d2 && (1 === h2 && "hidden" === xr(t2, "visibility") && u2 && (h2 = 0), b2.push("visibility", 0, k2.visibility), ae(this, k2, "visibility", h2 ? "inherit" : "hidden", u2 ? "inherit" : "hidden", !u2)), "scale" !== d2 && "transform" !== d2 && ~(d2 = mr[d2]).indexOf(",") && (d2 = d2.split(",")[0])), m2 = d2 in hr) {
+          if (this.styles.save(d2), w2 = o2, "string" === l2 && "var(--" === o2.substring(0, 6)) {
+            if ("calc(" === (o2 = Td(t2, o2.substring(4, o2.indexOf(")")))).substring(0, 5)) {
+              var M2 = t2.style.perspective;
+              t2.style.perspective = o2, o2 = Td(t2, "perspective"), M2 ? t2.style.perspective = M2 : _d(t2, "perspective");
+            }
+            u2 = parseFloat(o2);
+          }
+          if (g2 || ((v2 = t2._gsap).renderTransform && !e2.parseTransform || Pr(t2, e2.parseTransform), y2 = false !== e2.smoothOrigin && v2.smooth, (g2 = this._pt = new we(this._pt, k2, gr, 0, 1, v2.renderTransform, v2, 0, -1)).dep = 1), "scale" === d2) this._pt = new we(this._pt, v2, "scaleY", v2.scaleY, (_2 ? ma(v2.scaleY, _2 + u2) : u2) - v2.scaleY || 0, yd), this._pt.u = 0, x2.push("scaleY", d2), d2 += "X";
+          else {
+            if ("transformOrigin" === d2) {
+              b2.push(vr, 0, k2[vr]), o2 = he(o2), v2.svg ? pe(t2, o2, 0, y2, 0, this) : ((p2 = parseFloat(o2.split(" ")[2]) || 0) !== v2.zOrigin && ae(this, v2, "zOrigin", v2.zOrigin, p2), ae(this, k2, d2, Ar(s2), Ar(o2)));
+              continue;
+            }
+            if ("svgOrigin" === d2) {
+              pe(t2, o2, 1, y2, 0, this);
+              continue;
+            }
+            if (d2 in Cr) {
+              ze(this, v2, d2, h2, _2 ? ma(h2, _2 + o2) : o2);
+              continue;
+            }
+            if ("smoothOrigin" === d2) {
+              ae(this, v2, "smooth", v2.smooth, o2);
+              continue;
+            }
+            if ("force3D" === d2) {
+              v2[d2] = o2;
+              continue;
+            }
+            if ("transform" === d2) {
+              Be(this, o2, t2);
+              continue;
+            }
+          }
+        } else d2 in k2 || (d2 = Tr(d2) || d2);
+        if (m2 || (u2 || 0 === u2) && (h2 || 0 === h2) && !_r.test(o2) && d2 in k2) u2 = u2 || 0, (c2 = (s2 + "").substr((h2 + "").length)) !== (p2 = _a(o2) || (d2 in N.units ? N.units[d2] : c2)) && (h2 = de(t2, d2, s2, p2)), this._pt = new we(this._pt, m2 ? v2 : k2, d2, h2, (_2 ? ma(h2, _2 + u2) : u2) - h2, m2 || "px" !== p2 && "zIndex" !== d2 || false === e2.autoRound ? yd : Cd), this._pt.u = p2 || 0, m2 && w2 !== o2 ? (this._pt.b = s2, this._pt.e = w2, this._pt.r = Bd) : c2 !== p2 && "%" !== p2 && (this._pt.b = s2, this._pt.r = Ad);
+        else if (d2 in k2) fe.call(this, t2, d2, s2, _2 ? _2 + o2 : o2);
+        else if (d2 in t2) this.add(t2, d2, s2 || t2[d2], _2 ? _2 + o2 : o2, n2, a2);
+        else if ("parseTransform" !== d2) {
+          S(d2, o2);
+          continue;
+        }
+        m2 || (d2 in k2 ? b2.push(d2, 0, k2[d2]) : "function" == typeof t2[d2] ? b2.push(d2, 2, t2[d2]()) : b2.push(d2, 1, s2 || t2[d2])), x2.push(d2);
+      }
+    }
+    T2 && be(this);
+  }, render: function render(t2, e2) {
+    if (e2.tween._time || !Ue()) for (var r2 = e2._pt; r2; ) r2.r(t2, r2.d), r2 = r2._next;
+    else e2.styles.revert();
+  }, get: xr, aliases: mr, getSetter: function getSetter(t2, e2, r2) {
+    var i2 = mr[e2];
+    return i2 && i2.indexOf(",") < 0 && (e2 = i2), e2 in hr && e2 !== vr && (t2._gsap.x || xr(t2, "x")) ? r2 && Ve === r2 ? "scale" === e2 ? Id : Hd : (Ve = r2 || {}) && ("scale" === e2 ? Jd : Kd) : t2.style && !u(t2.style[e2]) ? Fd : ~e2.indexOf("-") ? Gd : le(t2, e2);
+  }, core: { _removeProperty: _d, _getMatrix: oe } };
+  Fe.utils.checkPrefix = Tr, Fe.core.getStyleSaver = Qd, Br = ja((Ir = "x,y,z,scale,scaleX,scaleY,xPercent,yPercent") + "," + (Lr = "rotation,rotationX,rotationY,skewX,skewY") + ",transform,transformOrigin,svgOrigin,force3D,smoothOrigin,transformPerspective", function(t2) {
+    hr[t2] = 1;
+  }), ja(Lr, function(t2) {
+    N.units[t2] = "deg", Cr[t2] = 1;
+  }), mr[Br[13]] = Ir + "," + Lr, ja("0:translateX,1:translateY,2:translateZ,8:rotate,8:rotationZ,8:rotateZ,9:rotateX,10:rotateY", function(t2) {
+    var e2 = t2.split(":");
+    mr[e2[1]] = Br[e2[0]];
+  }), ja("x,y,z,top,right,bottom,left,width,height,fontSize,padding,margin,perspective", function(t2) {
+    N.units[t2] = "px";
+  }), Fe.registerPlugin(Yr);
+  var Nr = Fe.registerPlugin(Yr) || Fe, jr = Nr.core.Tween;
+  e.Back = ir, e.Bounce = ar, e.CSSPlugin = Yr, e.Circ = ur, e.Cubic = Ke, e.Elastic = rr, e.Expo = or, e.Linear = Qe, e.Power0 = qe, e.Power1 = Ze, e.Power2 = We, e.Power3 = He, e.Power4 = Je, e.Quad = Ge, e.Quart = $e, e.Quint = tr, e.Sine = sr, e.SteppedEase = nr, e.Strong = er, e.TimelineLite = Zt, e.TimelineMax = Zt, e.TweenLite = te, e.TweenMax = jr, e.default = Nr, e.gsap = Nr;
+  if (typeof window === "undefined" || window !== e) {
+    Object.defineProperty(e, "__esModule", { value: true });
+  } else {
+    delete e.default;
+  }
+});</script><script data-hf-inlined-src="assets/music/audio-data.js">window.AUDIO_DATA = { "duration": 117.36, "fps": 30, "bands": 8, "totalFrames": 600, "frames": [{ "time": 0, "rms": 0.3364, "bands": [0.0915, 0.3058, 0.3845, 0.1455, 0.1581, 0.0719, 0.0398, 61e-4] }, { "time": 0.0333, "rms": 0.3764, "bands": [0.1646, 0.4203, 0.3608, 0.173, 0.122, 0.0109, 69e-4, 65e-4] }, { "time": 0.0667, "rms": 0.3633, "bands": [0.1631, 0.4106, 0.3615, 0.1172, 0.0374, 52e-4, 45e-4, 42e-4] }, { "time": 0.1, "rms": 0.3714, "bands": [0.1475, 0.3967, 0.3465, 0.0752, 0.0199, 0.03, 0.0287, 39e-4] }, { "time": 0.1333, "rms": 0.3305, "bands": [0.0986, 0.3032, 0.4609, 0.1773, 0.0641, 0.0753, 0.0724, 53e-4] }, { "time": 0.1667, "rms": 0.2755, "bands": [0.0343, 0.1366, 0.6111, 0.2348, 0.0282, 0.0156, 0.0139, 4e-3] }, { "time": 0.2, "rms": 0.2593, "bands": [0.0102, 0.0863, 0.5897, 0.1659, 0.0103, 33e-4, 35e-4, 45e-4] }, { "time": 0.2333, "rms": 0.1758, "bands": [35e-4, 0.088, 0.3697, 0.0653, 0.0433, 0.0613, 0.064, 42e-4] }, { "time": 0.2667, "rms": 0.2387, "bands": [57e-4, 0.0867, 0.1436, 0.3822, 0.1398, 0.1267, 0.1193, 53e-4] }, { "time": 0.3, "rms": 0.2028, "bands": [33e-4, 0.0498, 0.1026, 0.4791, 0.0292, 0.0386, 9e-3, 52e-4] }, { "time": 0.3333, "rms": 0.1628, "bands": [17e-4, 0.0415, 0.0905, 0.4028, 87e-4, 4e-3, 3e-3, 47e-4] }, { "time": 0.3667, "rms": 0.0903, "bands": [17e-4, 0.0431, 0.0501, 0.1554, 0.0185, 0.0353, 0.0377, 41e-4] }, { "time": 0.4, "rms": 0.2719, "bands": [36e-4, 0.0751, 0.0979, 0.377, 0.1955, 0.1477, 0.1584, 0.0148] }, { "time": 0.4333, "rms": 0.223, "bands": [16e-4, 0.0577, 0.0593, 0.5312, 0.1313, 0.0542, 0.0444, 72e-4] }, { "time": 0.4667, "rms": 0.1152, "bands": [11e-4, 0.0511, 0.0445, 0.2769, 0.0135, 93e-4, 32e-4, 47e-4] }, { "time": 0.5, "rms": 0.0733, "bands": [23e-4, 0.0515, 0.0527, 0.126, 0.0474, 0.1075, 0.0371, 0.0782] }, { "time": 0.5333, "rms": 0.369, "bands": [54e-4, 0.0381, 0.0792, 0.33, 0.2682, 0.434, 0.1819, 0.3104] }, { "time": 0.5667, "rms": 0.2859, "bands": [28e-4, 0.0295, 0.0392, 0.5381, 0.3522, 0.3048, 0.1235, 0.3122] }, { "time": 0.6, "rms": 0.2485, "bands": [37e-4, 0.0321, 0.0454, 0.4777, 0.2828, 0.3087, 0.0812, 0.2185] }, { "time": 0.6333, "rms": 0.2009, "bands": [21e-4, 0.0279, 0.0541, 0.4333, 0.2231, 0.1681, 0.0356, 0.0928] }, { "time": 0.6667, "rms": 0.1469, "bands": [13e-4, 0.0217, 0.0475, 0.3222, 0.1304, 0.1174, 0.0187, 0.0301] }, { "time": 0.7, "rms": 0.0731, "bands": [9e-4, 0.0178, 0.0397, 0.1333, 0.0271, 0.0605, 0.0109, 0.0138] }, { "time": 0.7333, "rms": 0.036, "bands": [8e-4, 0.0152, 0.0367, 0.048, 0.0189, 0.0353, 71e-4, 77e-4] }, { "time": 0.7667, "rms": 0.0307, "bands": [6e-4, 0.0117, 0.0294, 0.0364, 0.0252, 0.0383, 91e-4, 75e-4] }, { "time": 0.8, "rms": 0.1717, "bands": [44e-4, 0.063, 0.0998, 0.0774, 0.1117, 0.1189, 0.0547, 0.0107] }, { "time": 0.8333, "rms": 0.2032, "bands": [35e-4, 0.1869, 0.234, 0.1104, 0.2127, 0.1441, 0.0486, 92e-4] }, { "time": 0.8667, "rms": 0.1254, "bands": [22e-4, 0.1812, 0.1662, 0.0729, 0.0594, 0.0231, 57e-4, 58e-4] }, { "time": 0.9, "rms": 0.1142, "bands": [13e-4, 0.1736, 0.1503, 0.0354, 0.0109, 0.023, 83e-4, 41e-4] }, { "time": 0.9333, "rms": 0.2053, "bands": [47e-4, 0.1642, 0.1534, 0.0695, 0.1826, 0.2141, 0.3648, 0.013] }, { "time": 0.9667, "rms": 0.3061, "bands": [66e-4, 0.1091, 0.0887, 0.256, 0.5456, 0.4347, 0.9304, 0.0184] }, { "time": 1, "rms": 0.2321, "bands": [26e-4, 0.0757, 0.0637, 0.2867, 0.4819, 0.3288, 0.5293, 0.0108] }, { "time": 1.0333, "rms": 0.2079, "bands": [18e-4, 0.0699, 0.0722, 0.3007, 0.4199, 0.3196, 0.4059, 95e-4] }, { "time": 1.0667, "rms": 0.1752, "bands": [7e-4, 0.0635, 0.0665, 0.3113, 0.2805, 0.1659, 0.2173, 65e-4] }, { "time": 1.1, "rms": 0.0983, "bands": [16e-4, 0.0591, 0.0578, 0.2123, 0.0863, 0.0616, 0.0463, 35e-4] }, { "time": 1.1333, "rms": 0.0596, "bands": [6e-4, 0.0535, 0.0506, 0.1173, 0.0758, 0.0353, 0.0286, 31e-4] }, { "time": 1.1667, "rms": 0.0481, "bands": [7e-4, 0.0484, 0.0444, 0.0772, 0.0667, 0.0342, 0.0259, 35e-4] }, { "time": 1.2, "rms": 0.0468, "bands": [26e-4, 0.0366, 0.0383, 0.0999, 0.136, 0.1087, 0.0921, 0.0102] }, { "time": 1.2333, "rms": 0.3509, "bands": [31e-4, 0.0253, 0.0629, 0.4835, 0.5095, 0.2651, 0.1693, 0.0126] }, { "time": 1.2667, "rms": 0.2442, "bands": [13e-4, 0.0379, 0.0366, 0.5316, 0.4211, 0.1145, 0.0327, 59e-4] }, { "time": 1.3, "rms": 0.2071, "bands": [5e-4, 0.0421, 0.0363, 0.4808, 0.2876, 0.0548, 0.0205, 42e-4] }, { "time": 1.3333, "rms": 0.1784, "bands": [8e-4, 0.0427, 0.0384, 0.437, 0.1995, 0.0409, 0.0481, 44e-4] }, { "time": 1.3667, "rms": 0.1275, "bands": [24e-4, 0.0406, 0.038, 0.2818, 0.1217, 0.1119, 0.1345, 59e-4] }, { "time": 1.4, "rms": 0.0781, "bands": [39e-4, 0.0366, 0.0343, 0.1284, 0.1028, 0.084, 0.1024, 89e-4] }, { "time": 1.4333, "rms": 0.0645, "bands": [11e-4, 0.0342, 0.0341, 0.0888, 0.084, 0.0625, 0.0674, 51e-4] }, { "time": 1.4667, "rms": 0.0747, "bands": [47e-4, 0.0388, 0.045, 0.113, 0.0851, 0.0649, 0.1291, 4e-3] }, { "time": 1.5, "rms": 0.311, "bands": [66e-4, 0.0505, 0.4145, 0.241, 0.0566, 0.2229, 0.1325, 92e-4] }, { "time": 1.5333, "rms": 0.2637, "bands": [46e-4, 0.0231, 0.5737, 0.2766, 0.0532, 0.1064, 0.034, 82e-4] }, { "time": 1.5667, "rms": 0.2456, "bands": [13e-4, 0.0182, 0.5732, 0.2377, 0.0604, 0.0638, 0.0127, 0.012] }, { "time": 1.6, "rms": 0.2627, "bands": [41e-4, 0.0236, 0.5686, 0.2122, 0.1105, 0.1885, 0.0961, 0.1687] }, { "time": 1.6333, "rms": 0.3643, "bands": [41e-4, 0.0266, 0.5792, 0.2091, 0.2118, 0.3427, 0.1562, 0.3498] }, { "time": 1.6667, "rms": 0.2984, "bands": [21e-4, 0.0129, 0.5606, 0.1513, 0.1758, 0.2434, 0.0958, 0.2293] }, { "time": 1.7, "rms": 0.2324, "bands": [4e-3, 0.0173, 0.5385, 0.1192, 0.0721, 0.1148, 0.0598, 0.1465] }, { "time": 1.7333, "rms": 0.2358, "bands": [3e-3, 0.0166, 0.5498, 0.117, 0.0425, 0.0881, 0.0278, 0.0605] }, { "time": 1.7667, "rms": 0.229, "bands": [1e-3, 0.0158, 0.5402, 0.1194, 0.04, 0.0569, 0.0123, 0.0241] }, { "time": 1.8, "rms": 0.2131, "bands": [7e-4, 0.0131, 0.5134, 0.1101, 0.0308, 0.0365, 0.0106, 94e-4] }, { "time": 1.8333, "rms": 0.1933, "bands": [5e-4, 0.0102, 0.396, 0.1295, 0.026, 0.0442, 0.0112, 71e-4] }, { "time": 1.8667, "rms": 0.0471, "bands": [6e-4, 0.0108, 0.1271, 0.0759, 0.0125, 0.038, 0.019, 66e-4] }, { "time": 1.9, "rms": 0.2136, "bands": [5e-3, 0.0271, 0.1568, 0.195, 0.1221, 0.2289, 0.1201, 0.0121] }, { "time": 1.9333, "rms": 0.2617, "bands": [25e-4, 96e-4, 0.1305, 0.4311, 0.1767, 0.1705, 0.0728, 68e-4] }, { "time": 1.9667, "rms": 0.2237, "bands": [2e-4, 12e-4, 0.0835, 0.4686, 0.1206, 0.0482, 0.0182, 45e-4] }, { "time": 2, "rms": 0.1987, "bands": [2e-4, 13e-4, 0.0927, 0.4575, 0.083, 0.0319, 0.0114, 39e-4] }, { "time": 2.0333, "rms": 0.1747, "bands": [6e-4, 17e-4, 0.0774, 0.4045, 0.043, 0.051, 0.0496, 33e-4] }, { "time": 2.0667, "rms": 0.1299, "bands": [9e-4, 21e-4, 0.1882, 0.2303, 0.0456, 0.0787, 0.0627, 43e-4] }, { "time": 2.1, "rms": 0.068, "bands": [5e-4, 45e-4, 0.1203, 0.034, 0.0347, 0.0603, 0.0168, 36e-4] }, { "time": 2.1333, "rms": 0.0982, "bands": [3e-4, 43e-4, 0.1839, 0.0326, 0.0211, 0.0481, 0.0329, 39e-4] }, { "time": 2.1667, "rms": 0.2876, "bands": [17e-4, 0.0453, 0.2945, 0.2305, 0.0718, 0.1021, 0.1128, 67e-4] }, { "time": 2.2, "rms": 0.2343, "bands": [18e-4, 0.0524, 0.4744, 0.2937, 0.0377, 0.05, 0.0317, 34e-4] }, { "time": 2.2333, "rms": 0.1959, "bands": [9e-4, 0.0295, 0.4019, 0.2063, 81e-4, 89e-4, 46e-4, 34e-4] }, { "time": 2.2667, "rms": 0.1797, "bands": [8e-4, 0.0254, 0.3708, 0.1203, 85e-4, 0.015, 79e-4, 26e-4] }, { "time": 2.3, "rms": 0.2298, "bands": [51e-4, 0.0597, 0.4277, 0.1367, 0.0374, 0.073, 0.0366, 34e-4] }, { "time": 2.3333, "rms": 0.2849, "bands": [79e-4, 0.0382, 0.6129, 0.261, 0.0342, 0.0389, 0.0154, 36e-4] }, { "time": 2.3667, "rms": 0.2283, "bands": [12e-4, 0.0198, 0.5103, 0.1994, 0.0197, 71e-4, 41e-4, 44e-4] }, { "time": 2.4, "rms": 0.2003, "bands": [7e-4, 0.0237, 0.4508, 0.1337, 0.0141, 0.0124, 0.0309, 55e-4] }, { "time": 2.4333, "rms": 0.2464, "bands": [56e-4, 0.0419, 0.3824, 0.1811, 0.0783, 0.188, 0.0758, 37e-4] }, { "time": 2.4667, "rms": 0.2452, "bands": [36e-4, 0.0247, 0.4538, 0.3505, 0.136, 0.1846, 0.0662, 66e-4] }, { "time": 2.5, "rms": 0.2193, "bands": [9e-4, 0.0145, 0.4482, 0.2888, 0.0676, 0.0379, 89e-4, 86e-4] }, { "time": 2.5333, "rms": 0.1317, "bands": [6e-4, 0.0145, 0.2571, 0.1334, 0.0232, 0.0175, 0.0268, 51e-4] }, { "time": 2.5667, "rms": 0.2068, "bands": [22e-4, 0.0242, 0.106, 0.2534, 0.0778, 0.132, 0.1236, 65e-4] }, { "time": 2.6, "rms": 0.2538, "bands": [23e-4, 0.0119, 0.0706, 0.5095, 0.0582, 0.0792, 0.0591, 62e-4] }, { "time": 2.6333, "rms": 0.1823, "bands": [12e-4, 51e-4, 0.09, 0.4381, 94e-4, 96e-4, 3e-3, 41e-4] }, { "time": 2.6667, "rms": 0.1386, "bands": [6e-4, 51e-4, 0.0839, 0.3115, 0.0128, 0.0242, 0.0119, 0.043] }, { "time": 2.7, "rms": 0.2551, "bands": [36e-4, 0.0295, 0.1291, 0.1396, 0.1104, 0.2692, 0.1776, 0.327] }, { "time": 2.7333, "rms": 0.353, "bands": [4e-3, 0.0205, 0.1294, 0.5191, 0.2913, 0.3572, 0.2281, 0.346] }, { "time": 2.7667, "rms": 0.2869, "bands": [15e-4, 47e-4, 0.0478, 0.6168, 0.4014, 0.2192, 0.0993, 0.2929] }, { "time": 2.8, "rms": 0.2334, "bands": [7e-4, 26e-4, 0.0485, 0.5477, 0.2902, 0.0969, 0.0522, 0.1192] }, { "time": 2.8333, "rms": 0.1578, "bands": [9e-4, 33e-4, 0.0481, 0.3468, 0.129, 0.073, 0.0292, 0.0459] }, { "time": 2.8667, "rms": 0.0759, "bands": [5e-4, 27e-4, 0.1102, 0.0928, 0.0464, 0.0653, 0.0115, 0.0167] }, { "time": 2.9, "rms": 0.0709, "bands": [4e-4, 8e-4, 0.1389, 0.063, 0.0502, 0.0394, 84e-4, 0.0105] }, { "time": 2.9333, "rms": 0.0587, "bands": [3e-4, 19e-4, 0.0899, 0.0591, 0.0425, 0.0262, 84e-4, 75e-4] }, { "time": 2.9667, "rms": 0.0424, "bands": [42e-4, 0.027, 0.0777, 0.0628, 0.0667, 0.0379, 0.0364, 59e-4] }, { "time": 3, "rms": 0.369, "bands": [91e-4, 0.2446, 0.4878, 0.1464, 0.1552, 0.0982, 0.0731, 6e-3] }, { "time": 3.0333, "rms": 0.3778, "bands": [43e-4, 0.3874, 0.6374, 0.1528, 0.1037, 0.0267, 0.0143, 39e-4] }, { "time": 3.0667, "rms": 0.3343, "bands": [39e-4, 0.379, 0.5492, 0.1096, 0.0367, 0.0112, 64e-4, 34e-4] }, { "time": 3.1, "rms": 0.2573, "bands": [29e-4, 0.3127, 0.3939, 0.0661, 0.034, 0.0909, 0.0726, 53e-4] }, { "time": 3.1333, "rms": 0.3048, "bands": [19e-4, 0.1641, 0.1336, 0.2983, 0.2561, 0.4395, 0.3409, 0.0126] }, { "time": 3.1667, "rms": 0.2217, "bands": [29e-4, 0.0178, 0.049, 0.4338, 0.3228, 0.3182, 0.1709, 77e-4] }, { "time": 3.2, "rms": 0.2058, "bands": [3e-4, 76e-4, 0.046, 0.4017, 0.2609, 0.1988, 0.0624, 58e-4] }, { "time": 3.2333, "rms": 0.185, "bands": [2e-4, 0.0125, 0.0537, 0.4089, 0.1727, 0.1606, 0.0486, 35e-4] }, { "time": 3.2667, "rms": 0.1231, "bands": [6e-4, 0.0131, 0.051, 0.2563, 0.083, 0.0689, 0.0243, 25e-4] }, { "time": 3.3, "rms": 0.0538, "bands": [3e-4, 0.0107, 0.0408, 0.1053, 0.048, 0.0154, 71e-4, 24e-4] }, { "time": 3.3333, "rms": 0.0344, "bands": [3e-4, 0.0154, 0.0386, 0.0387, 0.0253, 0.0206, 45e-4, 2e-3] }, { "time": 3.3667, "rms": 0.0362, "bands": [8e-4, 0.0131, 0.0427, 0.0261, 0.055, 0.0285, 0.0262, 26e-4] }, { "time": 3.4, "rms": 0.2395, "bands": [17e-4, 0.0313, 0.2475, 0.1844, 0.1514, 0.1134, 0.1111, 49e-4] }, { "time": 3.4333, "rms": 0.2826, "bands": [11e-4, 0.0135, 0.5668, 0.3274, 0.0599, 0.0737, 0.0433, 35e-4] }, { "time": 3.4667, "rms": 0.2486, "bands": [5e-4, 0.0127, 0.5829, 0.1787, 0.0159, 0.0134, 66e-4, 18e-4] }, { "time": 3.5, "rms": 0.2075, "bands": [6e-4, 0.0192, 0.5075, 0.0867, 0.0206, 0.0131, 0.0136, 12e-4] }, { "time": 3.5333, "rms": 0.1659, "bands": [4e-4, 0.0213, 0.3741, 0.0834, 0.0818, 0.0405, 0.0505, 16e-4] }, { "time": 3.5667, "rms": 0.1079, "bands": [7e-4, 0.0213, 0.212, 0.114, 0.1075, 0.0649, 0.0417, 23e-4] }, { "time": 3.6, "rms": 0.0727, "bands": [4e-4, 0.0171, 0.0991, 0.1138, 0.097, 0.0541, 0.0154, 15e-4] }, { "time": 3.6333, "rms": 0.0631, "bands": [5e-4, 0.0171, 0.0344, 0.1264, 0.065, 0.0303, 0.0185, 17e-4] }, { "time": 3.6667, "rms": 0.258, "bands": [49e-4, 0.0442, 0.2962, 0.1532, 0.0634, 0.1401, 0.0736, 51e-4] }, { "time": 3.7, "rms": 0.2958, "bands": [22e-4, 0.0267, 0.6773, 0.2085, 0.0647, 0.0608, 0.0316, 27e-4] }, { "time": 3.7333, "rms": 0.2456, "bands": [9e-4, 17e-4, 0.5929, 0.1652, 0.0442, 7e-3, 23e-4, 21e-4] }, { "time": 3.7667, "rms": 0.1857, "bands": [18e-4, 34e-4, 0.445, 0.1269, 0.0277, 0.0516, 0.0365, 0.0817] }, { "time": 3.8, "rms": 0.3293, "bands": [48e-4, 0.0289, 0.21, 0.213, 0.1443, 0.2407, 0.1313, 0.3933] }, { "time": 3.8333, "rms": 0.2842, "bands": [28e-4, 0.0145, 0.3648, 0.3709, 0.1274, 0.2472, 0.1262, 0.3153] }, { "time": 3.8667, "rms": 0.2399, "bands": [2e-3, 4e-3, 0.3929, 0.3013, 0.0853, 0.172, 0.0837, 0.1705] }, { "time": 3.9, "rms": 0.219, "bands": [31e-4, 33e-4, 0.419, 0.261, 0.1302, 0.1004, 0.0453, 0.1163] }, { "time": 3.9333, "rms": 0.2145, "bands": [12e-4, 16e-4, 0.4247, 0.2686, 0.1517, 0.1295, 0.028, 0.0388] }, { "time": 3.9667, "rms": 0.2188, "bands": [17e-4, 16e-4, 0.4478, 0.2664, 0.1264, 0.0985, 0.0214, 0.018] }, { "time": 4, "rms": 0.2283, "bands": [15e-4, 23e-4, 0.4683, 0.2528, 0.1071, 0.0829, 0.0136, 84e-4] }, { "time": 4.0333, "rms": 0.1644, "bands": [11e-4, 32e-4, 0.2782, 0.1841, 0.0691, 0.0908, 0.0249, 58e-4] }, { "time": 4.0667, "rms": 0.0568, "bands": [39e-4, 0.0104, 0.1151, 0.1435, 0.0764, 0.1609, 0.0568, 9e-3] }, { "time": 4.1, "rms": 0.3419, "bands": [56e-4, 0.0141, 0.1199, 0.4405, 0.1439, 0.3801, 0.0936, 0.014] }, { "time": 4.1333, "rms": 0.2557, "bands": [2e-3, 25e-4, 0.0637, 0.476, 0.1218, 0.1575, 0.0293, 56e-4] }, { "time": 4.1667, "rms": 0.2168, "bands": [12e-4, 9e-4, 0.0703, 0.4434, 0.1059, 0.0436, 0.024, 4e-3] }, { "time": 4.2, "rms": 0.1769, "bands": [9e-4, 6e-4, 0.0771, 0.352, 0.0738, 0.0289, 0.0171, 33e-4] }, { "time": 4.2333, "rms": 0.141, "bands": [12e-4, 14e-4, 0.1014, 0.2834, 0.0329, 0.0826, 0.0477, 27e-4] }, { "time": 4.2667, "rms": 0.1282, "bands": [1e-3, 11e-4, 0.2218, 0.1573, 0.052, 0.0853, 0.0199, 26e-4] }, { "time": 4.3, "rms": 0.1068, "bands": [4e-4, 17e-4, 0.1951, 0.0545, 0.0367, 0.0579, 0.023, 35e-4] }, { "time": 4.3333, "rms": 0.0986, "bands": [99e-4, 0.0545, 0.1504, 0.0848, 0.0638, 0.0342, 0.0416, 41e-4] }, { "time": 4.3667, "rms": 0.3575, "bands": [0.1033, 0.3287, 0.3951, 0.1613, 0.2083, 0.0522, 0.0509, 82e-4] }, { "time": 4.4, "rms": 0.3944, "bands": [0.1744, 0.425, 0.3735, 0.1419, 0.1307, 0.0133, 67e-4, 0.0121] }, { "time": 4.4333, "rms": 0.3878, "bands": [0.1597, 0.4193, 0.3672, 0.1179, 0.0391, 63e-4, 41e-4, 58e-4] }, { "time": 4.4667, "rms": 0.3364, "bands": [0.1495, 0.4017, 0.3589, 0.0676, 0.0277, 0.0593, 0.0258, 83e-4] }, { "time": 4.5, "rms": 0.349, "bands": [0.0913, 0.2914, 0.5103, 0.174, 0.0574, 0.119, 0.063, 54e-4] }, { "time": 4.5333, "rms": 0.2821, "bands": [0.0236, 0.121, 0.6251, 0.227, 0.0315, 0.0242, 0.0182, 65e-4] }, { "time": 4.5667, "rms": 0.2543, "bands": [69e-4, 0.0772, 0.5862, 0.1512, 0.0143, 61e-4, 68e-4, 61e-4] }, { "time": 4.6, "rms": 0.1664, "bands": [68e-4, 0.0809, 0.3473, 0.0871, 0.0697, 0.0709, 0.0522, 64e-4] }, { "time": 4.6333, "rms": 0.2357, "bands": [48e-4, 0.0786, 0.1416, 0.3989, 0.1518, 0.1132, 0.0711, 66e-4] }, { "time": 4.6667, "rms": 0.205, "bands": [27e-4, 0.0494, 0.1051, 0.4775, 0.0182, 0.0207, 71e-4, 52e-4] }, { "time": 4.7, "rms": 0.1561, "bands": [14e-4, 0.0409, 0.0842, 0.3707, 81e-4, 6e-3, 57e-4, 46e-4] }, { "time": 4.7333, "rms": 0.0796, "bands": [14e-4, 0.0447, 0.0555, 0.1312, 0.0268, 0.0539, 0.0598, 49e-4] }, { "time": 4.7667, "rms": 0.258, "bands": [26e-4, 0.0707, 0.0915, 0.384, 0.1398, 0.1204, 0.1543, 0.0126] }, { "time": 4.8, "rms": 0.1919, "bands": [8e-4, 0.0526, 0.0542, 0.4566, 0.0882, 0.0214, 0.0264, 53e-4] }, { "time": 4.8333, "rms": 0.1014, "bands": [6e-4, 0.0499, 0.0435, 0.2494, 95e-4, 55e-4, 32e-4, 53e-4] }, { "time": 4.8667, "rms": 0.0722, "bands": [14e-4, 0.0441, 0.0484, 0.1384, 0.0837, 0.1254, 0.0669, 0.141] }, { "time": 4.9, "rms": 0.3957, "bands": [36e-4, 0.0304, 0.0878, 0.366, 0.3187, 0.3768, 0.1737, 0.4003] }, { "time": 4.9333, "rms": 0.3083, "bands": [11e-4, 0.0326, 0.0364, 0.607, 0.3993, 0.2618, 0.0982, 0.3061] }, { "time": 4.9667, "rms": 0.2794, "bands": [6e-4, 0.0271, 0.0401, 0.6103, 0.3259, 0.2146, 0.061, 0.2195] }, { "time": 5, "rms": 0.2918, "bands": [9e-4, 0.0258, 0.0629, 0.5922, 0.3031, 0.3504, 0.032, 0.1099] }, { "time": 5.0333, "rms": 0.1615, "bands": [5e-4, 0.0227, 0.0524, 0.3446, 0.1557, 0.1621, 0.0227, 0.0358] }, { "time": 5.0667, "rms": 0.0729, "bands": [1e-3, 0.0179, 0.0453, 0.1188, 0.0365, 0.0458, 0.0132, 0.0125] }, { "time": 5.1, "rms": 0.0387, "bands": [9e-4, 0.0161, 0.0447, 0.0499, 0.0149, 0.038, 73e-4, 86e-4] }, { "time": 5.1333, "rms": 0.0273, "bands": [6e-4, 0.0122, 0.0284, 0.0287, 0.0221, 0.0323, 85e-4, 8e-3] }, { "time": 5.1667, "rms": 0.1753, "bands": [22e-4, 0.0757, 0.1134, 0.0711, 0.1502, 0.0977, 0.06, 0.0129] }, { "time": 5.2, "rms": 0.197, "bands": [23e-4, 0.188, 0.2335, 0.1281, 0.1924, 0.0928, 0.0413, 83e-4] }, { "time": 5.2333, "rms": 0.1275, "bands": [1e-3, 0.1772, 0.1601, 0.0637, 0.0491, 0.0223, 7e-3, 47e-4] }, { "time": 5.2667, "rms": 0.109, "bands": [7e-4, 0.1718, 0.1524, 0.0307, 0.012, 0.028, 67e-4, 4e-3] }, { "time": 5.3, "rms": 0.2534, "bands": [37e-4, 0.1587, 0.154, 0.0964, 0.239, 0.2065, 0.5068, 0.0196] }, { "time": 5.3333, "rms": 0.2909, "bands": [41e-4, 0.1067, 0.0863, 0.2664, 0.5756, 0.5137, 0.6505, 0.0203] }, { "time": 5.3667, "rms": 0.2281, "bands": [29e-4, 0.0769, 0.0633, 0.2679, 0.5103, 0.3838, 0.3776, 0.016] }, { "time": 5.4, "rms": 0.2036, "bands": [12e-4, 0.0689, 0.0718, 0.2775, 0.4261, 0.2992, 0.4406, 88e-4] }, { "time": 5.4333, "rms": 0.1641, "bands": [7e-4, 0.0596, 0.0617, 0.3104, 0.2448, 0.1562, 0.2412, 61e-4] }, { "time": 5.4667, "rms": 0.0953, "bands": [4e-4, 0.0563, 0.056, 0.2054, 0.069, 0.0591, 0.0682, 34e-4] }, { "time": 5.5, "rms": 0.0574, "bands": [8e-4, 0.0515, 0.0478, 0.1126, 0.0722, 0.041, 0.0373, 36e-4] }, { "time": 5.5333, "rms": 0.0482, "bands": [6e-4, 0.0449, 0.0429, 0.0735, 0.0788, 0.0245, 0.0269, 39e-4] }, { "time": 5.5667, "rms": 0.1165, "bands": [54e-4, 0.0293, 0.044, 0.1355, 0.1611, 0.1664, 0.1033, 84e-4] }, { "time": 5.6, "rms": 0.3346, "bands": [59e-4, 0.0202, 0.0584, 0.4578, 0.4949, 0.2195, 0.208, 92e-4] }, { "time": 5.6333, "rms": 0.2298, "bands": [7e-4, 0.0378, 0.0351, 0.4945, 0.4094, 0.0897, 0.0299, 53e-4] }, { "time": 5.6667, "rms": 0.1897, "bands": [8e-4, 0.0401, 0.0365, 0.4445, 0.2896, 0.0457, 0.0149, 47e-4] }, { "time": 5.7, "rms": 0.1626, "bands": [11e-4, 0.0409, 0.0361, 0.3822, 0.1951, 0.0699, 0.0426, 37e-4] }, { "time": 5.7333, "rms": 0.1091, "bands": [33e-4, 0.0396, 0.0369, 0.2192, 0.1237, 0.1046, 0.111, 45e-4] }, { "time": 5.7667, "rms": 0.0664, "bands": [3e-3, 0.036, 0.0343, 0.0858, 0.0964, 0.0842, 0.0912, 51e-4] }, { "time": 5.8, "rms": 0.0611, "bands": [15e-4, 0.0318, 0.031, 0.0917, 0.0793, 0.0622, 0.068, 41e-4] }, { "time": 5.8333, "rms": 0.0852, "bands": [11e-4, 0.0388, 0.069, 0.1382, 0.1123, 0.0925, 0.1316, 39e-4] }, { "time": 5.8667, "rms": 0.3252, "bands": [54e-4, 0.0518, 0.4484, 0.2705, 0.0818, 0.1836, 0.168, 58e-4] }, { "time": 5.9, "rms": 0.2616, "bands": [31e-4, 0.0217, 0.5823, 0.2591, 0.052, 0.1108, 0.037, 6e-3] }, { "time": 5.9333, "rms": 0.2501, "bands": [11e-4, 0.0183, 0.5907, 0.2213, 0.0622, 0.0625, 0.018, 0.0188] }, { "time": 5.9667, "rms": 0.2896, "bands": [48e-4, 0.0282, 0.5745, 0.2049, 0.1071, 0.1401, 0.0966, 0.2457] }, { "time": 6, "rms": 0.3482, "bands": [66e-4, 0.024, 0.5594, 0.2302, 0.1853, 0.3218, 0.1456, 0.4677] }, { "time": 6.0333, "rms": 0.2794, "bands": [43e-4, 0.0103, 0.5424, 0.1699, 0.126, 0.2312, 0.15, 0.2427] }, { "time": 6.0667, "rms": 0.2281, "bands": [18e-4, 0.0133, 0.5218, 0.1231, 0.0672, 0.1095, 0.0557, 0.1027] }, { "time": 6.1, "rms": 0.2223, "bands": [6e-4, 0.0155, 0.5166, 0.1297, 0.0596, 0.078, 0.0171, 0.0399] }, { "time": 6.1333, "rms": 0.215, "bands": [15e-4, 0.0161, 0.5102, 0.1258, 0.0367, 0.0599, 0.0144, 0.0148] }, { "time": 6.1667, "rms": 0.2103, "bands": [18e-4, 0.0128, 0.4957, 0.1194, 0.0428, 0.0371, 96e-4, 92e-4] }, { "time": 6.2, "rms": 0.1809, "bands": [8e-4, 0.0106, 0.3646, 0.1323, 0.0301, 0.0312, 0.0114, 62e-4] }, { "time": 6.2333, "rms": 0.0449, "bands": [6e-4, 0.0124, 0.109, 0.0586, 0.0177, 0.05, 0.0206, 5e-3] }, { "time": 6.2667, "rms": 0.2423, "bands": [42e-4, 0.0298, 0.1647, 0.2702, 0.1131, 0.2285, 0.061, 84e-4] }, { "time": 6.3, "rms": 0.2589, "bands": [33e-4, 94e-4, 0.1354, 0.4433, 0.1553, 0.1556, 0.0385, 75e-4] }, { "time": 6.3333, "rms": 0.2218, "bands": [14e-4, 17e-4, 0.1024, 0.4558, 0.0969, 0.0564, 0.0113, 38e-4] }, { "time": 6.3667, "rms": 0.1942, "bands": [7e-4, 15e-4, 0.0969, 0.4385, 0.0737, 0.0407, 0.0195, 31e-4] }, { "time": 6.4, "rms": 0.1723, "bands": [7e-4, 2e-3, 0.0754, 0.382, 0.0408, 0.0656, 0.0319, 27e-4] }, { "time": 6.4333, "rms": 0.1075, "bands": [6e-4, 24e-4, 0.1491, 0.1637, 0.0511, 0.0889, 0.0321, 36e-4] }, { "time": 6.4667, "rms": 0.0607, "bands": [2e-4, 48e-4, 0.129, 0.0404, 0.0315, 0.0425, 0.0158, 28e-4] }, { "time": 6.5, "rms": 0.0958, "bands": [5e-4, 75e-4, 0.1695, 0.0402, 0.0262, 0.0422, 0.0336, 45e-4] }, { "time": 6.5333, "rms": 0.2965, "bands": [41e-4, 0.0595, 0.327, 0.2419, 0.0455, 0.1165, 0.046, 46e-4] }, { "time": 6.5667, "rms": 0.2308, "bands": [29e-4, 0.0515, 0.4363, 0.2973, 0.0249, 0.0372, 0.0119, 23e-4] }, { "time": 6.6, "rms": 0.1801, "bands": [8e-4, 0.0284, 0.3781, 0.2022, 0.0114, 0.0116, 43e-4, 33e-4] }, { "time": 6.6333, "rms": 0.175, "bands": [1e-3, 0.0235, 0.3546, 0.1081, 86e-4, 0.0114, 0.0116, 24e-4] }, { "time": 6.6667, "rms": 0.2593, "bands": [73e-4, 0.0605, 0.4791, 0.1535, 0.0345, 0.0501, 0.0507, 29e-4] }, { "time": 6.7, "rms": 0.2764, "bands": [89e-4, 0.0315, 0.6188, 0.2621, 0.0317, 0.029, 0.018, 32e-4] }, { "time": 6.7333, "rms": 0.2275, "bands": [7e-4, 0.0222, 0.5151, 0.1999, 0.022, 65e-4, 44e-4, 43e-4] }, { "time": 6.7667, "rms": 0.2101, "bands": [8e-4, 0.0275, 0.4771, 0.1359, 0.0127, 0.0139, 0.0176, 41e-4] }, { "time": 6.8, "rms": 0.2646, "bands": [47e-4, 0.0481, 0.3867, 0.2138, 0.0945, 0.1743, 0.0718, 37e-4] }, { "time": 6.8333, "rms": 0.2399, "bands": [27e-4, 0.0259, 0.4688, 0.3422, 0.1263, 0.1468, 0.0418, 84e-4] }, { "time": 6.8667, "rms": 0.2124, "bands": [6e-4, 0.0165, 0.4543, 0.2753, 0.0644, 0.0294, 69e-4, 66e-4] }, { "time": 6.9, "rms": 0.133, "bands": [1e-3, 0.0167, 0.2407, 0.1076, 0.0122, 0.0186, 0.0243, 37e-4] }, { "time": 6.9333, "rms": 0.2268, "bands": [5e-3, 0.0237, 0.1389, 0.2787, 0.12, 0.1246, 0.1428, 74e-4] }, { "time": 6.9667, "rms": 0.2474, "bands": [54e-4, 97e-4, 0.0732, 0.5296, 0.0955, 0.1062, 0.0627, 65e-4] }, { "time": 7, "rms": 0.183, "bands": [13e-4, 62e-4, 0.0734, 0.4338, 96e-4, 0.0115, 42e-4, 49e-4] }, { "time": 7.0333, "rms": 0.1231, "bands": [14e-4, 83e-4, 0.0788, 0.2807, 0.0185, 0.0343, 0.0197, 0.0375] }, { "time": 7.0667, "rms": 0.2574, "bands": [15e-4, 0.0343, 0.1602, 0.1723, 0.1156, 0.2194, 0.1524, 0.2915] }, { "time": 7.1, "rms": 0.3552, "bands": [2e-3, 0.0196, 0.1335, 0.5694, 0.2978, 0.2367, 0.2039, 0.3154] }, { "time": 7.1333, "rms": 0.2929, "bands": [11e-4, 63e-4, 0.0538, 0.6345, 0.3482, 0.2162, 0.0856, 0.3225] }, { "time": 7.1667, "rms": 0.232, "bands": [5e-4, 26e-4, 0.0523, 0.5538, 0.3003, 0.0985, 0.0466, 0.1142] }, { "time": 7.2, "rms": 0.1523, "bands": [11e-4, 38e-4, 0.0535, 0.3232, 0.134, 0.0583, 0.0228, 0.0407] }, { "time": 7.2333, "rms": 0.0684, "bands": [8e-4, 37e-4, 0.1111, 0.0779, 0.0342, 0.0556, 0.0108, 0.0141] }, { "time": 7.2667, "rms": 0.0665, "bands": [2e-4, 14e-4, 0.1231, 0.0671, 0.047, 0.038, 7e-3, 0.012] }, { "time": 7.3, "rms": 0.0559, "bands": [1e-4, 17e-4, 0.0797, 0.0606, 0.0426, 0.0281, 0.0109, 95e-4] }, { "time": 7.3333, "rms": 0.0455, "bands": [64e-4, 0.0414, 0.0993, 0.0773, 0.0613, 0.0449, 0.0346, 73e-4] }, { "time": 7.3667, "rms": 0.4056, "bands": [0.0107, 0.272, 0.5048, 0.1472, 0.0995, 0.0954, 0.0523, 75e-4] }, { "time": 7.4, "rms": 0.3564, "bands": [23e-4, 0.4009, 0.6184, 0.1425, 0.0903, 0.0252, 89e-4, 52e-4] }, { "time": 7.4333, "rms": 0.3198, "bands": [26e-4, 0.3886, 0.5427, 0.111, 0.0335, 0.0175, 56e-4, 34e-4] }, { "time": 7.4667, "rms": 0.2723, "bands": [52e-4, 0.3374, 0.3927, 0.0603, 0.0488, 0.0677, 0.1497, 56e-4] }, { "time": 7.5, "rms": 0.3248, "bands": [0.0111, 0.175, 0.1398, 0.3399, 0.2848, 0.3544, 0.6076, 0.0123] }, { "time": 7.5333, "rms": 0.2256, "bands": [39e-4, 0.0188, 0.0497, 0.4459, 0.3303, 0.2837, 0.1574, 77e-4] }, { "time": 7.5667, "rms": 0.199, "bands": [8e-4, 0.0131, 0.0497, 0.3977, 0.2554, 0.1877, 0.0584, 72e-4] }, { "time": 7.6, "rms": 0.1814, "bands": [5e-4, 0.0164, 0.0479, 0.3964, 0.1531, 0.1241, 0.0573, 38e-4] }, { "time": 7.6333, "rms": 0.1067, "bands": [7e-4, 0.0121, 0.0422, 0.2389, 0.0757, 0.0568, 0.0236, 25e-4] }, { "time": 7.6667, "rms": 0.0486, "bands": [5e-4, 0.0117, 0.037, 0.0963, 0.043, 0.0156, 57e-4, 24e-4] }, { "time": 7.7, "rms": 0.0325, "bands": [4e-4, 0.0145, 0.0326, 0.0373, 0.0252, 0.0201, 47e-4, 21e-4] }, { "time": 7.7333, "rms": 0.0374, "bands": [7e-4, 0.0103, 0.0386, 0.0311, 0.0684, 0.0356, 0.0242, 28e-4] }, { "time": 7.7667, "rms": 0.2568, "bands": [17e-4, 0.0342, 0.2682, 0.2238, 0.1316, 0.175, 0.1117, 9e-3] }, { "time": 7.8, "rms": 0.2632, "bands": [14e-4, 0.0122, 0.5427, 0.311, 0.0519, 0.0785, 0.0221, 3e-3] }, { "time": 7.8333, "rms": 0.2343, "bands": [4e-4, 0.0122, 0.5569, 0.1615, 0.022, 0.0151, 65e-4, 18e-4] }, { "time": 7.8667, "rms": 0.204, "bands": [3e-4, 0.0197, 0.486, 0.0777, 0.0284, 0.0167, 0.0131, 15e-4] }, { "time": 7.9, "rms": 0.1482, "bands": [6e-4, 0.0222, 0.3402, 0.0931, 0.0891, 0.0418, 0.0477, 16e-4] }, { "time": 7.9333, "rms": 0.1038, "bands": [11e-4, 0.0222, 0.1842, 0.121, 0.1154, 0.0707, 0.0287, 19e-4] }, { "time": 7.9667, "rms": 0.0737, "bands": [7e-4, 0.0157, 0.0768, 0.1286, 0.0989, 0.0577, 0.0163, 22e-4] }, { "time": 8, "rms": 0.0654, "bands": [13e-4, 0.0187, 0.0291, 0.139, 0.0622, 0.0448, 0.0371, 19e-4] }, { "time": 8.0333, "rms": 0.27, "bands": [59e-4, 0.0492, 0.374, 0.1569, 0.0762, 0.133, 0.0799, 46e-4] }, { "time": 8.0667, "rms": 0.3181, "bands": [42e-4, 0.0238, 0.7331, 0.212, 0.0809, 0.0441, 0.0199, 2e-3] }, { "time": 8.1, "rms": 0.2572, "bands": [9e-4, 24e-4, 0.636, 0.1623, 0.0499, 0.0113, 34e-4, 84e-4] }, { "time": 8.1333, "rms": 0.2011, "bands": [12e-4, 55e-4, 0.4683, 0.1251, 0.0362, 0.0745, 0.0433, 0.1031] }, { "time": 8.1667, "rms": 0.3303, "bands": [24e-4, 0.03, 0.2152, 0.2317, 0.1435, 0.264, 0.1908, 0.3801] }, { "time": 8.2, "rms": 0.2841, "bands": [58e-4, 0.0146, 0.3708, 0.3605, 0.134, 0.1895, 0.1479, 0.3318] }, { "time": 8.2333, "rms": 0.2333, "bands": [6e-3, 58e-4, 0.4066, 0.2695, 0.1366, 0.1961, 0.0768, 0.1657] }, { "time": 8.2667, "rms": 0.2205, "bands": [25e-4, 17e-4, 0.4308, 0.2467, 0.1541, 0.1676, 0.0385, 0.085] }, { "time": 8.3, "rms": 0.218, "bands": [16e-4, 24e-4, 0.4377, 0.2644, 0.1492, 0.1656, 0.0218, 0.038] }, { "time": 8.3333, "rms": 0.2256, "bands": [11e-4, 23e-4, 0.4533, 0.2592, 0.1429, 0.0944, 0.0182, 0.0177] }, { "time": 8.3667, "rms": 0.2196, "bands": [8e-4, 13e-4, 0.4571, 0.2251, 0.1152, 0.0638, 0.0101, 8e-3] }, { "time": 8.4, "rms": 0.1584, "bands": [14e-4, 36e-4, 0.2667, 0.2083, 0.0465, 0.0548, 0.021, 61e-4] }, { "time": 8.4333, "rms": 0.0826, "bands": [31e-4, 0.0105, 0.107, 0.1615, 0.0616, 0.1621, 0.1491, 0.0118] }, { "time": 8.4667, "rms": 0.3401, "bands": [41e-4, 0.0101, 0.117, 0.4617, 0.1478, 0.3124, 0.1676, 0.0134] }, { "time": 8.5, "rms": 0.2593, "bands": [17e-4, 28e-4, 0.0596, 0.4967, 0.1184, 0.1263, 0.0366, 45e-4] }, { "time": 8.5333, "rms": 0.2104, "bands": [9e-4, 12e-4, 0.0499, 0.4363, 0.1003, 0.0478, 0.0199, 48e-4] }, { "time": 8.5667, "rms": 0.1754, "bands": [5e-4, 7e-4, 0.067, 0.3554, 0.067, 0.0312, 0.0173, 36e-4] }, { "time": 8.6, "rms": 0.1461, "bands": [3e-4, 7e-4, 0.1242, 0.3088, 0.0322, 0.052, 0.0586, 37e-4] }, { "time": 8.6333, "rms": 0.1285, "bands": [5e-4, 15e-4, 0.206, 0.1459, 0.0461, 0.1119, 0.0221, 45e-4] }, { "time": 8.6667, "rms": 0.1029, "bands": [4e-4, 3e-3, 0.1951, 0.064, 0.0237, 0.0689, 0.0395, 37e-4] }, { "time": 8.7, "rms": 0.3344, "bands": [0.0603, 0.206, 0.3616, 0.1523, 0.0989, 0.1048, 0.065, 0.0481] }, { "time": 8.7333, "rms": 0.736, "bands": [0.54, 0.4162, 0.6165, 0.1746, 0.2472, 0.2743, 0.1176, 0.1225] }, { "time": 8.7667, "rms": 0.6362, "bands": [0.6941, 0.2816, 0.2589, 0.1625, 0.2778, 0.3039, 0.0736, 0.1116] }, { "time": 8.8, "rms": 0.442, "bands": [0.4807, 0.286, 0.2062, 0.1472, 0.2818, 0.3519, 0.0542, 0.0698] }, { "time": 8.8333, "rms": 0.304, "bands": [0.1453, 0.2957, 0.2746, 0.1301, 0.2774, 0.2797, 0.0428, 0.0246] }, { "time": 8.8667, "rms": 0.356, "bands": [0.0876, 0.2676, 0.4995, 0.2175, 0.2406, 0.2554, 0.0507, 0.0128] }, { "time": 8.9, "rms": 0.3705, "bands": [0.1149, 0.3154, 0.6275, 0.2333, 0.2064, 0.2224, 0.0367, 98e-4] }, { "time": 8.9333, "rms": 0.369, "bands": [0.1353, 0.357, 0.603, 0.1831, 0.1972, 0.1856, 0.029, 0.0107] }, { "time": 8.9667, "rms": 0.2999, "bands": [0.1455, 0.3666, 0.3669, 0.1246, 0.2013, 0.1947, 0.0402, 85e-4] }, { "time": 9, "rms": 0.3075, "bands": [0.1353, 0.3626, 0.1483, 0.3039, 0.1924, 0.1917, 0.0514, 0.011] }, { "time": 9.0333, "rms": 0.2798, "bands": [0.1412, 0.3553, 0.1161, 0.3052, 0.1753, 0.1739, 0.0275, 0.0127] }, { "time": 9.0667, "rms": 0.2517, "bands": [0.1417, 0.3626, 0.1038, 0.2149, 0.1752, 0.1835, 0.0197, 49e-4] }, { "time": 9.1, "rms": 0.2741, "bands": [0.1412, 0.3822, 0.1173, 0.1325, 0.2031, 0.2049, 0.0605, 45e-4] }, { "time": 9.1333, "rms": 0.3381, "bands": [0.1485, 0.3823, 0.1422, 0.3428, 0.2408, 0.1659, 0.133, 78e-4] }, { "time": 9.1667, "rms": 0.2882, "bands": [0.1507, 0.3839, 0.124, 0.348, 0.1672, 0.0975, 0.0524, 3e-3] }, { "time": 9.2, "rms": 0.2697, "bands": [0.1456, 0.3901, 0.1072, 0.2486, 0.1152, 0.0871, 0.0321, 4e-3] }, { "time": 9.2333, "rms": 0.269, "bands": [0.1501, 0.3737, 0.1334, 0.1597, 0.0912, 0.1504, 0.0902, 0.2046] }, { "time": 9.2667, "rms": 0.6593, "bands": [0.4383, 0.5137, 0.4047, 0.3376, 0.1754, 0.2588, 0.2479, 0.4799] }, { "time": 9.3, "rms": 0.6407, "bands": [0.7085, 0.1928, 0.1725, 0.4592, 0.3052, 0.179, 0.1378, 0.2988] }, { "time": 9.3333, "rms": 0.465, "bands": [0.5765, 0.1719, 0.1679, 0.4132, 0.2456, 0.1589, 0.0802, 0.2458] }, { "time": 9.3667, "rms": 0.3269, "bands": [0.2621, 0.2467, 0.1652, 0.3957, 0.1907, 0.2078, 0.0358, 0.1062] }, { "time": 9.4, "rms": 0.2591, "bands": [0.1296, 0.3173, 0.159, 0.2526, 0.1065, 0.0927, 0.0214, 0.0426] }, { "time": 9.4333, "rms": 0.2158, "bands": [0.1168, 0.329, 0.1418, 0.0932, 0.0915, 0.0696, 0.0138, 0.0318] }, { "time": 9.4667, "rms": 0.2255, "bands": [0.1246, 0.3328, 0.1392, 0.0723, 0.0976, 0.0531, 0.0119, 0.015] }, { "time": 9.5, "rms": 0.2313, "bands": [0.1325, 0.3442, 0.131, 0.0559, 0.0951, 0.062, 0.0224, 0.0125] }, { "time": 9.5333, "rms": 0.2873, "bands": [0.1309, 0.3529, 0.1845, 0.0981, 0.2275, 0.1494, 0.0758, 0.0123] }, { "time": 9.5667, "rms": 0.2678, "bands": [0.1408, 0.3501, 0.2424, 0.0926, 0.2448, 0.0938, 0.039, 0.0386] }, { "time": 9.6, "rms": 0.227, "bands": [0.1228, 0.3316, 0.1709, 0.0479, 0.0875, 0.0682, 0.0221, 0.05] }, { "time": 9.6333, "rms": 0.214, "bands": [0.123, 0.3276, 0.1358, 0.0393, 0.0668, 0.0538, 0.0134, 0.0305] }, { "time": 9.6667, "rms": 0.3231, "bands": [0.1373, 0.3393, 0.1163, 0.1119, 0.1892, 0.2721, 0.5549, 0.0193] }, { "time": 9.7, "rms": 0.3229, "bands": [0.1235, 0.3352, 0.1111, 0.2405, 0.4865, 0.3384, 0.7, 0.0249] }, { "time": 9.7333, "rms": 0.2963, "bands": [0.1177, 0.3239, 0.1073, 0.2501, 0.4732, 0.3509, 0.5733, 0.0128] }, { "time": 9.7667, "rms": 0.2893, "bands": [0.1243, 0.3276, 0.1054, 0.2572, 0.4176, 0.2951, 0.3528, 93e-4] }, { "time": 9.8, "rms": 0.52, "bands": [0.1309, 0.4966, 0.3322, 0.2233, 0.2268, 0.1551, 0.179, 0.0641] }, { "time": 9.8333, "rms": 0.7279, "bands": [0.6885, 0.5529, 0.2031, 0.1, 0.0557, 0.0337, 0.066, 0.1372] }, { "time": 9.8667, "rms": 0.517, "bands": [0.6657, 0.1422, 0.1404, 0.0722, 0.0645, 0.0326, 0.0233, 0.0671] }, { "time": 9.9, "rms": 0.3579, "bands": [0.3944, 0.1577, 0.1199, 0.0588, 0.0638, 0.0269, 0.0163, 0.0328] }, { "time": 9.9333, "rms": 0.2535, "bands": [0.0764, 0.2769, 0.1238, 0.1787, 0.1903, 0.1647, 0.0768, 0.0152] }, { "time": 9.9667, "rms": 0.3747, "bands": [0.1138, 0.3058, 0.1569, 0.5556, 0.5862, 0.2481, 0.082, 78e-4] }, { "time": 10, "rms": 0.3851, "bands": [0.1651, 0.3849, 0.1581, 0.5695, 0.5386, 0.1775, 0.0308, 9e-3] }, { "time": 10.0333, "rms": 0.3475, "bands": [0.1523, 0.3925, 0.1408, 0.4842, 0.3801, 0.0709, 0.0272, 64e-4] }, { "time": 10.0667, "rms": 0.2918, "bands": [0.134, 0.3569, 0.1386, 0.3731, 0.2647, 0.0707, 0.0391, 0.0147] }, { "time": 10.1, "rms": 0.2462, "bands": [0.129, 0.3459, 0.1303, 0.238, 0.1713, 0.0736, 0.052, 0.0312] }, { "time": 10.1333, "rms": 0.2493, "bands": [0.1285, 0.3483, 0.1374, 0.1479, 0.1331, 0.0684, 0.0507, 0.0188] }, { "time": 10.1667, "rms": 0.2418, "bands": [0.1368, 0.3517, 0.1443, 0.1164, 0.1306, 0.0678, 0.0558, 38e-4] }, { "time": 10.2, "rms": 0.2515, "bands": [0.1403, 0.3563, 0.1498, 0.1355, 0.121, 0.0655, 0.1504, 38e-4] }, { "time": 10.2333, "rms": 0.3726, "bands": [0.13, 0.3419, 0.3936, 0.2706, 0.0782, 0.1574, 0.1486, 64e-4] }, { "time": 10.2667, "rms": 0.3111, "bands": [0.118, 0.3298, 0.5049, 0.2529, 0.0967, 0.0675, 0.0224, 26e-4] }, { "time": 10.3, "rms": 0.3109, "bands": [0.1248, 0.3279, 0.5266, 0.211, 0.1163, 0.0468, 0.0152, 0.0183] }, { "time": 10.3333, "rms": 0.4065, "bands": [0.1629, 0.2505, 0.4997, 0.2171, 0.16, 0.1683, 0.1213, 0.215] }, { "time": 10.3667, "rms": 0.6156, "bands": [0.4402, 0.2742, 0.3461, 0.2158, 0.1665, 0.195, 0.1727, 0.5194] }, { "time": 10.4, "rms": 0.615, "bands": [0.6868, 0.2419, 0.4239, 0.1298, 0.1179, 0.1441, 0.106, 0.3088] }, { "time": 10.4333, "rms": 0.4714, "bands": [0.5076, 0.2137, 0.4609, 0.1089, 0.0694, 0.0941, 0.049, 0.1718] }, { "time": 10.4667, "rms": 0.2875, "bands": [0.1742, 0.1891, 0.4954, 0.1165, 0.0759, 0.0801, 0.0347, 0.0814] }, { "time": 10.5, "rms": 0.274, "bands": [0.0961, 0.2566, 0.5003, 0.1211, 0.0731, 0.0454, 0.016, 0.0269] }, { "time": 10.5333, "rms": 0.2745, "bands": [0.1149, 0.2927, 0.4679, 0.1141, 0.0536, 0.0351, 0.0117, 0.0151] }, { "time": 10.5667, "rms": 0.2349, "bands": [0.1183, 0.3044, 0.2846, 0.1333, 0.0383, 0.0367, 0.0167, 94e-4] }, { "time": 10.6, "rms": 0.1918, "bands": [0.1097, 0.2583, 0.0868, 0.0582, 0.0312, 0.0488, 0.0432, 0.0282] }, { "time": 10.6333, "rms": 0.3426, "bands": [0.0181, 0.2019, 0.19, 0.3171, 0.1372, 0.2133, 0.225, 0.0745] }, { "time": 10.6667, "rms": 0.3708, "bands": [0.0547, 0.2777, 0.3109, 0.5157, 0.1806, 0.2978, 0.1708, 0.0382] }, { "time": 10.7, "rms": 0.3786, "bands": [0.0786, 0.3318, 0.3113, 0.4842, 0.1511, 0.358, 0.1065, 0.0178] }, { "time": 10.7333, "rms": 0.3866, "bands": [0.0925, 0.3551, 0.3075, 0.4197, 0.1192, 0.3672, 0.0586, 99e-4] }, { "time": 10.7667, "rms": 0.3312, "bands": [0.1152, 0.345, 0.3236, 0.3204, 0.0923, 0.3805, 0.1393, 87e-4] }, { "time": 10.8, "rms": 0.332, "bands": [0.1091, 0.3485, 0.3053, 0.2171, 0.1034, 0.4009, 0.1436, 67e-4] }, { "time": 10.8333, "rms": 0.3298, "bands": [0.1006, 0.3454, 0.2975, 0.211, 0.1058, 0.3484, 0.0994, 32e-4] }, { "time": 10.8667, "rms": 0.3102, "bands": [0.1059, 0.245, 0.3956, 0.211, 0.0949, 0.3046, 0.1451, 0.0113] }, { "time": 10.9, "rms": 0.6511, "bands": [0.4337, 0.3819, 0.4637, 0.1656, 0.1136, 0.2397, 0.1, 0.1329] }, { "time": 10.9333, "rms": 0.6894, "bands": [0.7804, 0.2617, 0.4006, 0.221, 0.0715, 0.1848, 0.076, 0.157] }, { "time": 10.9667, "rms": 0.5253, "bands": [0.6141, 0.1777, 0.316, 0.1887, 0.062, 0.1586, 0.0591, 0.0948] }, { "time": 11, "rms": 0.3051, "bands": [0.3142, 0.1864, 0.3022, 0.1427, 0.0644, 0.2041, 0.0602, 0.0311] }, { "time": 11.0333, "rms": 0.2962, "bands": [0.0525, 0.243, 0.4514, 0.165, 0.0595, 0.1507, 0.0485, 0.0207] }, { "time": 11.0667, "rms": 0.3618, "bands": [0.0246, 0.2954, 0.633, 0.2249, 0.0611, 0.1252, 0.057, 0.0162] }, { "time": 11.1, "rms": 0.3154, "bands": [0.0119, 0.3234, 0.5461, 0.2145, 0.0714, 0.1553, 0.0396, 0.011] }, { "time": 11.1333, "rms": 0.3126, "bands": [0.0107, 0.3582, 0.4743, 0.1572, 0.0714, 0.1518, 0.0437, 69e-4] }, { "time": 11.1667, "rms": 0.3209, "bands": [33e-4, 0.3622, 0.2846, 0.2103, 0.0879, 0.1764, 0.052, 0.018] }, { "time": 11.2, "rms": 0.2994, "bands": [34e-4, 0.3332, 0.4002, 0.319, 0.1294, 0.15, 0.0352, 0.0193] }, { "time": 11.2333, "rms": 0.3068, "bands": [18e-4, 0.354, 0.4116, 0.2454, 0.0903, 0.1352, 0.0346, 82e-4] }, { "time": 11.2667, "rms": 0.2553, "bands": [42e-4, 0.3442, 0.2106, 0.1228, 0.0756, 0.1459, 0.0354, 45e-4] }, { "time": 11.3, "rms": 0.3159, "bands": [71e-4, 0.3217, 0.1343, 0.3466, 0.1039, 0.2097, 0.1001, 59e-4] }, { "time": 11.3333, "rms": 0.3017, "bands": [71e-4, 0.3283, 0.1286, 0.4983, 0.0691, 0.1711, 0.0551, 29e-4] }, { "time": 11.3667, "rms": 0.2862, "bands": [31e-4, 0.3375, 0.1358, 0.4449, 0.0624, 0.1481, 0.0217, 17e-4] }, { "time": 11.4, "rms": 0.2592, "bands": [51e-4, 0.33, 0.1543, 0.3413, 0.0518, 0.1555, 0.0271, 0.0519] }, { "time": 11.4333, "rms": 0.4564, "bands": [0.1018, 0.2365, 0.3227, 0.2276, 0.1466, 0.2618, 0.1684, 0.353] }, { "time": 11.4667, "rms": 0.6522, "bands": [0.5476, 0.3491, 0.2498, 0.4797, 0.2714, 0.2067, 0.1719, 0.4479] }, { "time": 11.5, "rms": 0.5586, "bands": [0.596, 0.2265, 0.0853, 0.553, 0.312, 0.1631, 0.1109, 0.244] }, { "time": 11.5333, "rms": 0.423, "bands": [0.4017, 0.2407, 0.0807, 0.4767, 0.266, 0.0824, 0.0642, 0.1124] }, { "time": 11.5667, "rms": 0.2129, "bands": [0.0859, 0.2715, 0.1018, 0.255, 0.107, 0.0864, 0.0277, 0.0663] }, { "time": 11.6, "rms": 0.1989, "bands": [0.0198, 0.2864, 0.1107, 0.0932, 0.097, 0.1208, 0.0243, 0.0303] }, { "time": 11.6333, "rms": 0.2092, "bands": [43e-4, 0.2938, 0.1222, 0.1043, 0.1014, 0.0809, 0.0293, 0.0145] }, { "time": 11.6667, "rms": 0.202, "bands": [28e-4, 0.2891, 0.118, 0.1055, 0.0924, 0.0738, 0.0231, 84e-4] }, { "time": 11.7, "rms": 0.1753, "bands": [59e-4, 0.2477, 0.1581, 0.083, 0.0875, 0.0707, 0.0452, 0.0155] }, { "time": 11.7333, "rms": 0.4588, "bands": [46e-4, 0.4074, 0.4416, 0.1246, 0.217, 0.2361, 0.0717, 0.053] }, { "time": 11.7667, "rms": 0.4142, "bands": [6e-3, 0.5074, 0.5173, 0.0986, 0.2535, 0.1847, 0.0412, 0.0279] }, { "time": 11.8, "rms": 0.3917, "bands": [49e-4, 0.5217, 0.4459, 0.1148, 0.2198, 0.2196, 0.0379, 0.0139] }, { "time": 11.8333, "rms": 0.3375, "bands": [34e-4, 0.4682, 0.2727, 0.1513, 0.2006, 0.1874, 0.1311, 0.01] }, { "time": 11.8667, "rms": 0.3787, "bands": [46e-4, 0.428, 0.1811, 0.3475, 0.2732, 0.2166, 0.2563, 0.0109] }, { "time": 11.9, "rms": 0.3498, "bands": [43e-4, 0.3801, 0.2369, 0.4246, 0.2991, 0.2304, 0.0693, 45e-4] }, { "time": 11.9333, "rms": 0.3225, "bands": [52e-4, 0.3669, 0.2844, 0.4368, 0.2455, 0.1737, 0.0499, 45e-4] }, { "time": 11.9667, "rms": 0.329, "bands": [0.0325, 0.379, 0.3489, 0.373, 0.1699, 0.1469, 0.0586, 0.0479] }, { "time": 12, "rms": 0.6719, "bands": [0.4864, 0.4919, 0.5044, 0.213, 0.0803, 0.1153, 0.0699, 0.188] }, { "time": 12.0333, "rms": 0.6527, "bands": [0.756, 0.1799, 0.2311, 0.1829, 0.092, 0.0905, 0.044, 0.1423] }, { "time": 12.0667, "rms": 0.4767, "bands": [0.5553, 0.2378, 0.1999, 0.2066, 0.0921, 0.1339, 0.0286, 0.0766] }, { "time": 12.1, "rms": 0.2615, "bands": [0.2098, 0.2783, 0.2048, 0.2366, 0.0825, 0.1687, 0.0385, 0.04] }, { "time": 12.1333, "rms": 0.3431, "bands": [0.028, 0.3508, 0.2336, 0.3866, 0.0729, 0.171, 0.1073, 0.0192] }, { "time": 12.1667, "rms": 0.3501, "bands": [4e-3, 0.3593, 0.4522, 0.4108, 0.0832, 0.0915, 0.0307, 0.0108] }, { "time": 12.2, "rms": 0.329, "bands": [43e-4, 0.3779, 0.4889, 0.296, 0.069, 0.1112, 0.0157, 89e-4] }, { "time": 12.2333, "rms": 0.2968, "bands": [13e-4, 0.3907, 0.336, 0.2147, 0.0696, 0.1152, 0.0217, 67e-4] }, { "time": 12.2667, "rms": 0.2735, "bands": [54e-4, 0.4004, 0.1495, 0.1835, 0.0674, 0.0965, 0.0263, 0.0253] }, { "time": 12.3, "rms": 0.2605, "bands": [28e-4, 0.4024, 0.1633, 0.1771, 0.0661, 0.0922, 0.0249, 0.0232] }, { "time": 12.3333, "rms": 0.2707, "bands": [23e-4, 0.3992, 0.1807, 0.1768, 0.0603, 0.1243, 0.0232, 61e-4] }, { "time": 12.3667, "rms": 0.2703, "bands": [4e-3, 0.3919, 0.1857, 0.1715, 0.054, 0.1189, 0.035, 24e-4] }, { "time": 12.4, "rms": 0.3254, "bands": [7e-3, 0.3697, 0.3546, 0.1717, 0.1105, 0.1001, 0.0951, 46e-4] }, { "time": 12.4333, "rms": 0.3655, "bands": [29e-4, 0.3686, 0.5682, 0.1665, 0.1332, 0.0618, 0.0337, 21e-4] }, { "time": 12.4667, "rms": 0.2799, "bands": [64e-4, 0.3701, 0.4225, 0.1671, 0.1068, 0.0537, 0.0286, 5e-3] }, { "time": 12.5, "rms": 0.2921, "bands": [52e-4, 0.3529, 0.3491, 0.1457, 0.0798, 0.1023, 0.0563, 0.1533] }, { "time": 12.5333, "rms": 0.5633, "bands": [0.2588, 0.4358, 0.3721, 0.1412, 0.1177, 0.2189, 0.2008, 0.5592] }, { "time": 12.5667, "rms": 0.66, "bands": [0.6839, 0.2956, 0.2924, 0.2189, 0.108, 0.1648, 0.1467, 0.4458] }, { "time": 12.6, "rms": 0.5452, "bands": [0.608, 0.1744, 0.3454, 0.2224, 0.1184, 0.1274, 0.1271, 0.2374] }, { "time": 12.6333, "rms": 0.3512, "bands": [0.3186, 0.2592, 0.3706, 0.2431, 0.1193, 0.1145, 0.0538, 0.1424] }, { "time": 12.6667, "rms": 0.2863, "bands": [0.0488, 0.2802, 0.4103, 0.267, 0.1209, 0.0853, 0.0324, 0.0598] }, { "time": 12.7, "rms": 0.3058, "bands": [38e-4, 0.3141, 0.4434, 0.2611, 0.143, 0.0828, 0.03, 0.0315] }, { "time": 12.7333, "rms": 0.3011, "bands": [42e-4, 0.3279, 0.4137, 0.221, 0.1311, 0.0867, 0.0243, 0.0124] }, { "time": 12.7667, "rms": 0.2364, "bands": [29e-4, 0.3372, 0.1925, 0.1122, 0.0699, 0.0781, 0.0562, 0.0114] }, { "time": 12.8, "rms": 0.2757, "bands": [84e-4, 0.3447, 0.1396, 0.1939, 0.1016, 0.1517, 0.0886, 0.0175] }, { "time": 12.8333, "rms": 0.3266, "bands": [53e-4, 0.3347, 0.1282, 0.3963, 0.1228, 0.2335, 0.1405, 0.0485] }, { "time": 12.8667, "rms": 0.324, "bands": [4e-3, 0.3522, 0.1546, 0.415, 0.1064, 0.0935, 0.0426, 0.0427] }, { "time": 12.9, "rms": 0.3029, "bands": [34e-4, 0.3676, 0.1719, 0.3585, 0.0876, 0.0527, 0.0239, 0.0267] }, { "time": 12.9333, "rms": 0.2776, "bands": [14e-4, 0.3603, 0.1852, 0.2756, 0.048, 0.0514, 0.0204, 0.0154] }, { "time": 12.9667, "rms": 0.2733, "bands": [35e-4, 0.3769, 0.188, 0.2662, 0.0485, 0.0658, 0.0521, 73e-4] }, { "time": 13, "rms": 0.2749, "bands": [29e-4, 0.3712, 0.1932, 0.1362, 0.0753, 0.0795, 0.0461, 63e-4] }, { "time": 13.0333, "rms": 0.2562, "bands": [3e-3, 0.3601, 0.2275, 0.0815, 0.0531, 0.0563, 0.0419, 57e-4] }, { "time": 13.0667, "rms": 0.4228, "bands": [0.0836, 0.2837, 0.4057, 0.1855, 0.114, 0.1175, 0.0666, 0.1108] }, { "time": 13.1, "rms": 0.6863, "bands": [0.5531, 0.3821, 0.5902, 0.2267, 0.2547, 0.226, 0.0792, 0.1407] }, { "time": 13.1333, "rms": 0.6215, "bands": [0.6357, 0.316, 0.2897, 0.1736, 0.3038, 0.2242, 0.0491, 0.0863] }, { "time": 13.1667, "rms": 0.4387, "bands": [0.44, 0.3217, 0.2419, 0.1513, 0.3201, 0.259, 0.0412, 0.0472] }, { "time": 13.2, "rms": 0.319, "bands": [0.124, 0.3353, 0.3119, 0.1194, 0.3016, 0.2404, 0.0721, 0.0207] }, { "time": 13.2333, "rms": 0.3557, "bands": [0.0905, 0.2964, 0.4901, 0.2101, 0.2801, 0.246, 0.0565, 0.0108] }, { "time": 13.2667, "rms": 0.3552, "bands": [0.1149, 0.2962, 0.5873, 0.2084, 0.2408, 0.2425, 0.0312, 0.0111] }, { "time": 13.3, "rms": 0.3488, "bands": [0.131, 0.3414, 0.5763, 0.1442, 0.2244, 0.1812, 0.0236, 86e-4] }, { "time": 13.3333, "rms": 0.3087, "bands": [0.1313, 0.3526, 0.3853, 0.1225, 0.2336, 0.2472, 0.0343, 0.0112] }, { "time": 13.3667, "rms": 0.3163, "bands": [0.1399, 0.3539, 0.1637, 0.3033, 0.2397, 0.21, 0.0484, 0.0169] }, { "time": 13.4, "rms": 0.2602, "bands": [0.1426, 0.3564, 0.1094, 0.2874, 0.1896, 0.151, 0.034, 9e-3] }, { "time": 13.4333, "rms": 0.271, "bands": [0.147, 0.3769, 0.1021, 0.1834, 0.1844, 0.1247, 0.0408, 56e-4] }, { "time": 13.4667, "rms": 0.2662, "bands": [0.1478, 0.398, 0.0982, 0.1165, 0.224, 0.1892, 0.0583, 47e-4] }, { "time": 13.5, "rms": 0.3298, "bands": [0.1562, 0.3956, 0.1261, 0.3227, 0.2561, 0.1844, 0.1202, 66e-4] }, { "time": 13.5333, "rms": 0.2927, "bands": [0.1518, 0.3959, 0.1092, 0.3195, 0.1788, 0.1267, 0.0291, 23e-4] }, { "time": 13.5667, "rms": 0.2654, "bands": [0.1502, 0.3981, 0.09, 0.2156, 0.1151, 0.1299, 0.0182, 92e-4] }, { "time": 13.6, "rms": 0.2777, "bands": [0.1582, 0.3697, 0.1843, 0.1469, 0.0881, 0.1742, 0.0987, 0.2669] }, { "time": 13.6333, "rms": 0.6676, "bands": [0.4827, 0.5418, 0.326, 0.3479, 0.2209, 0.3289, 0.215, 0.3904] }, { "time": 13.6667, "rms": 0.6493, "bands": [0.7255, 0.1896, 0.1865, 0.4483, 0.2861, 0.2463, 0.1761, 0.3885] }, { "time": 13.7, "rms": 0.4791, "bands": [0.5683, 0.1904, 0.1664, 0.4199, 0.2403, 0.1628, 0.1196, 0.2179] }, { "time": 13.7333, "rms": 0.3086, "bands": [0.2202, 0.2597, 0.1622, 0.3796, 0.1887, 0.2103, 0.038, 0.1018] }, { "time": 13.7667, "rms": 0.2272, "bands": [0.1305, 0.3236, 0.1536, 0.2071, 0.0861, 0.1183, 0.0284, 0.0738] }, { "time": 13.8, "rms": 0.2237, "bands": [0.1219, 0.3364, 0.1372, 0.0807, 0.0732, 0.0946, 0.0207, 0.0554] }, { "time": 13.8333, "rms": 0.2302, "bands": [0.1341, 0.3517, 0.131, 0.0697, 0.0669, 0.0735, 0.0124, 0.0253] }, { "time": 13.8667, "rms": 0.225, "bands": [0.1373, 0.36, 0.1218, 0.0562, 0.0729, 0.0551, 0.0133, 0.018] }, { "time": 13.9, "rms": 0.2738, "bands": [0.1292, 0.355, 0.1765, 0.0775, 0.1831, 0.1376, 0.0523, 0.017] }, { "time": 13.9333, "rms": 0.2569, "bands": [0.142, 0.3512, 0.2343, 0.0679, 0.1735, 0.0849, 0.0314, 0.0673] }, { "time": 13.9667, "rms": 0.2319, "bands": [0.1309, 0.3498, 0.1805, 0.0484, 0.0804, 0.045, 0.0194, 0.0591] }, { "time": 14, "rms": 0.2332, "bands": [0.1274, 0.339, 0.1573, 0.041, 0.0576, 0.0564, 0.0257, 0.0305] }, { "time": 14.0333, "rms": 0.3279, "bands": [0.1307, 0.3347, 0.1341, 0.1311, 0.2579, 0.2137, 0.8231, 0.0232] }, { "time": 14.0667, "rms": 0.328, "bands": [0.1331, 0.3447, 0.1272, 0.2601, 0.4949, 0.3152, 0.9833, 0.0247] }, { "time": 14.1, "rms": 0.3059, "bands": [0.1228, 0.3313, 0.1219, 0.2669, 0.4619, 0.2777, 0.5922, 0.0112] }, { "time": 14.1333, "rms": 0.281, "bands": [0.1225, 0.3304, 0.1191, 0.2746, 0.388, 0.2492, 0.3556, 83e-4] }, { "time": 14.1667, "rms": 0.5856, "bands": [0.1821, 0.5305, 0.3703, 0.2062, 0.2045, 0.1627, 0.1689, 0.0981] }, { "time": 14.2, "rms": 0.6894, "bands": [0.7054, 0.5041, 0.1869, 0.0935, 0.0452, 0.0522, 0.0507, 0.1419] }, { "time": 14.2333, "rms": 0.5184, "bands": [0.6605, 0.1395, 0.1389, 0.061, 0.0524, 0.0376, 0.029, 0.0789] }, { "time": 14.2667, "rms": 0.3376, "bands": [0.3658, 0.1515, 0.1082, 0.0502, 0.0653, 0.0476, 0.0204, 0.0392] }, { "time": 14.3, "rms": 0.2704, "bands": [0.0608, 0.2437, 0.0977, 0.1986, 0.1866, 0.3142, 0.1192, 0.0234] }, { "time": 14.3333, "rms": 0.3073, "bands": [0.1037, 0.2475, 0.1101, 0.4722, 0.4586, 0.2894, 0.1414, 0.0183] }, { "time": 14.3667, "rms": 0.29, "bands": [0.1111, 0.2826, 0.1059, 0.4622, 0.3692, 0.0684, 0.0254, 0.0103] }, { "time": 14.4, "rms": 0.2641, "bands": [0.1211, 0.3084, 0.1203, 0.3887, 0.2623, 0.0594, 0.0261, 0.0126] }, { "time": 14.4333, "rms": 0.2387, "bands": [0.123, 0.316, 0.1182, 0.2916, 0.1909, 0.048, 0.0501, 0.0326] }, { "time": 14.4667, "rms": 0.2337, "bands": [0.122, 0.3251, 0.1217, 0.1687, 0.126, 0.0738, 0.074, 0.0477] }, { "time": 14.5, "rms": 0.2187, "bands": [0.1154, 0.3152, 0.1242, 0.1072, 0.1024, 0.0661, 0.0571, 0.0219] }, { "time": 14.5333, "rms": 0.2175, "bands": [0.1195, 0.3085, 0.1247, 0.0998, 0.1082, 0.0529, 0.0428, 62e-4] }, { "time": 14.5667, "rms": 0.2345, "bands": [0.1229, 0.3128, 0.1559, 0.1263, 0.1082, 0.0978, 0.0711, 53e-4] }, { "time": 14.6, "rms": 0.3541, "bands": [0.1152, 0.3093, 0.4275, 0.2767, 0.0702, 0.1168, 0.0574, 57e-4] }, { "time": 14.6333, "rms": 0.3091, "bands": [0.1198, 0.3141, 0.5271, 0.2411, 0.09, 0.0925, 0.0246, 31e-4] }, { "time": 14.6667, "rms": 0.3201, "bands": [0.1185, 0.3101, 0.5373, 0.1985, 0.1067, 0.0725, 0.0157, 0.0328] }, { "time": 14.7, "rms": 0.4343, "bands": [0.1547, 0.2639, 0.5273, 0.2329, 0.1469, 0.2072, 0.1195, 0.2905] }, { "time": 14.7333, "rms": 0.6227, "bands": [0.5014, 0.2968, 0.3926, 0.2189, 0.1467, 0.2272, 0.1741, 0.3223] }, { "time": 14.7667, "rms": 0.6273, "bands": [0.6716, 0.2612, 0.4352, 0.1298, 0.111, 0.1508, 0.0966, 0.2744] }, { "time": 14.8, "rms": 0.4568, "bands": [0.4806, 0.1834, 0.4629, 0.1133, 0.071, 0.1118, 0.0571, 0.1559] }, { "time": 14.8333, "rms": 0.2726, "bands": [0.1431, 0.1805, 0.4966, 0.1297, 0.0577, 0.1095, 0.0342, 0.0458] }, { "time": 14.8667, "rms": 0.2807, "bands": [0.1024, 0.2679, 0.499, 0.1359, 0.0611, 0.0442, 0.0196, 0.0303] }, { "time": 14.9, "rms": 0.2895, "bands": [0.1176, 0.3177, 0.4692, 0.1424, 0.0668, 0.0394, 0.0205, 0.0137] }, { "time": 14.9333, "rms": 0.2776, "bands": [0.1401, 0.3541, 0.2715, 0.1328, 0.053, 0.0467, 0.0272, 0.0104] }, { "time": 14.9667, "rms": 0.2529, "bands": [0.1322, 0.3245, 0.1817, 0.1336, 0.0573, 0.0845, 0.0252, 0.0126] }, { "time": 15, "rms": 0.3272, "bands": [0.0238, 0.2114, 0.253, 0.2484, 0.1069, 0.2116, 0.1534, 0.0175] }, { "time": 15.0333, "rms": 0.3522, "bands": [0.0734, 0.2889, 0.306, 0.3959, 0.1801, 0.2557, 0.1504, 0.0174] }, { "time": 15.0667, "rms": 0.3814, "bands": [0.0967, 0.3247, 0.3081, 0.4184, 0.1675, 0.2225, 0.0853, 0.0213] }, { "time": 15.1, "rms": 0.3804, "bands": [0.1058, 0.3509, 0.3035, 0.3661, 0.1503, 0.1902, 0.0787, 0.012] }, { "time": 15.1333, "rms": 0.3287, "bands": [0.1176, 0.3574, 0.3218, 0.2435, 0.171, 0.1996, 0.1014, 0.0136] }, { "time": 15.1667, "rms": 0.3632, "bands": [0.1255, 0.4004, 0.3744, 0.2583, 0.1632, 0.2737, 0.0964, 95e-4] }, { "time": 15.2, "rms": 0.436, "bands": [0.1293, 0.453, 0.3897, 0.2827, 0.1834, 0.2341, 0.1041, 0.0107] }, { "time": 15.2333, "rms": 0.3848, "bands": [0.1417, 0.2823, 0.4449, 0.2666, 0.1599, 0.2195, 0.0596, 0.0357] }, { "time": 15.2667, "rms": 0.6681, "bands": [0.455, 0.3743, 0.51, 0.2223, 0.1042, 0.2444, 0.151, 0.378] }, { "time": 15.3, "rms": 0.7004, "bands": [0.7668, 0.2172, 0.4305, 0.246, 0.0862, 0.2402, 0.1453, 0.3265] }, { "time": 15.3333, "rms": 0.4647, "bands": [0.5889, 0.244, 0.341, 0.1697, 0.0812, 0.224, 0.0871, 0.1991] }, { "time": 15.3667, "rms": 0.3284, "bands": [0.2638, 0.2564, 0.3247, 0.1674, 0.0898, 0.2207, 0.0924, 0.0535] }, { "time": 15.4, "rms": 0.3367, "bands": [0.0471, 0.2969, 0.499, 0.1703, 0.0837, 0.2404, 0.1061, 0.0494] }, { "time": 15.4333, "rms": 0.3648, "bands": [0.0212, 0.3486, 0.6402, 0.2234, 0.0762, 0.2373, 0.0788, 0.0518] }, { "time": 15.4667, "rms": 0.3631, "bands": [46e-4, 0.375, 0.5451, 0.2092, 0.065, 0.2247, 0.0879, 0.0451] }, { "time": 15.5, "rms": 0.3157, "bands": [42e-4, 0.3855, 0.4945, 0.1595, 0.0704, 0.1765, 0.0637, 0.044] }, { "time": 15.5333, "rms": 0.3551, "bands": [32e-4, 0.408, 0.2775, 0.2147, 0.092, 0.1347, 0.0577, 0.0886] }, { "time": 15.5667, "rms": 0.3208, "bands": [24e-4, 0.3763, 0.3977, 0.3074, 0.1243, 0.096, 0.0384, 0.1441] }, { "time": 15.6, "rms": 0.3041, "bands": [25e-4, 0.3726, 0.381, 0.2087, 0.1099, 0.0954, 0.0327, 0.0552] }, { "time": 15.6333, "rms": 0.2611, "bands": [15e-4, 0.365, 0.1708, 0.1198, 0.0765, 0.1059, 0.0489, 0.0488] }, { "time": 15.6667, "rms": 0.3105, "bands": [17e-4, 0.3363, 0.137, 0.3755, 0.0967, 0.1326, 0.1427, 0.0408] }, { "time": 15.7, "rms": 0.3159, "bands": [38e-4, 0.3351, 0.1066, 0.5133, 0.0653, 0.0996, 0.0487, 0.054] }, { "time": 15.7333, "rms": 0.272, "bands": [19e-4, 0.3382, 0.1115, 0.4276, 0.0595, 0.0783, 0.0235, 0.0583] }, { "time": 15.7667, "rms": 0.2616, "bands": [25e-4, 0.3379, 0.1449, 0.3082, 0.0573, 0.0909, 0.0392, 0.1024] }, { "time": 15.8, "rms": 0.5206, "bands": [0.1691, 0.3007, 0.3601, 0.201, 0.1927, 0.2137, 0.1976, 0.3992] }, { "time": 15.8333, "rms": 0.696, "bands": [0.7128, 0.5831, 0.2131, 0.491, 0.2669, 0.173, 0.1954, 0.6114] }, { "time": 15.8667, "rms": 0.539, "bands": [0.5695, 0.32, 0.0992, 0.5263, 0.3227, 0.1496, 0.0987, 0.6141] }, { "time": 15.9, "rms": 0.4401, "bands": [0.4135, 0.2423, 0.1081, 0.4704, 0.2794, 0.1438, 0.0685, 0.3224] }, { "time": 15.9333, "rms": 0.2431, "bands": [0.1543, 0.3049, 0.0982, 0.2435, 0.0805, 0.1624, 0.0624, 0.1652] }, { "time": 15.9667, "rms": 0.232, "bands": [0.0329, 0.3361, 0.105, 0.1231, 0.0671, 0.1143, 0.0826, 0.1767] }, { "time": 16, "rms": 0.2385, "bands": [52e-4, 0.3526, 0.114, 0.1389, 0.0906, 0.1135, 0.0397, 0.107] }, { "time": 16.0333, "rms": 0.2463, "bands": [41e-4, 0.3636, 0.1011, 0.1414, 0.0942, 0.126, 0.0489, 0.1123] }, { "time": 16.0667, "rms": 0.2556, "bands": [71e-4, 0.3106, 0.1822, 0.1299, 0.0795, 0.1149, 0.0984, 0.1845] }, { "time": 16.1, "rms": 0.5126, "bands": [0.0117, 0.4594, 0.6444, 0.3729, 0.2191, 0.199, 0.1743, 0.2708] }, { "time": 16.1333, "rms": 0.4999, "bands": [43e-4, 0.5748, 0.7487, 0.3742, 0.2188, 0.1715, 0.1022, 0.1749] }, { "time": 16.1667, "rms": 0.466, "bands": [29e-4, 0.5699, 0.6682, 0.3226, 0.1705, 0.2039, 0.1094, 0.1952] }, { "time": 16.2, "rms": 0.4137, "bands": [29e-4, 0.5198, 0.535, 0.2502, 0.1651, 0.1989, 0.2094, 0.1618] }, { "time": 16.2333, "rms": 0.4004, "bands": [57e-4, 0.4521, 0.4172, 0.2982, 0.3138, 0.2127, 0.3302, 0.1035] }, { "time": 16.2667, "rms": 0.3617, "bands": [34e-4, 0.3839, 0.4252, 0.3684, 0.3016, 0.1717, 0.0703, 0.1591] }, { "time": 16.3, "rms": 0.3543, "bands": [26e-4, 0.3647, 0.4152, 0.3904, 0.2333, 0.21, 0.0439, 0.1482] }, { "time": 16.3333, "rms": 0.3621, "bands": [0.0399, 0.4413, 0.3808, 0.3735, 0.1183, 0.2101, 0.088, 0.1948] }, { "time": 16.3667, "rms": 0.7332, "bands": [0.5109, 0.4806, 0.3556, 0.2098, 0.1154, 0.1491, 0.1523, 0.4733] }, { "time": 16.4, "rms": 0.613, "bands": [0.7051, 0.1694, 0.2264, 0.2169, 0.1204, 0.1381, 0.1441, 0.347] }, { "time": 16.4333, "rms": 0.4598, "bands": [0.5016, 0.2417, 0.2419, 0.2278, 0.097, 0.1441, 0.1208, 0.3145] }, { "time": 16.4667, "rms": 0.2355, "bands": [0.1655, 0.2641, 0.2539, 0.2522, 0.0712, 0.1111, 0.0481, 0.1772] }, { "time": 16.5, "rms": 0.3744, "bands": [0.0173, 0.3316, 0.4437, 0.359, 0.1186, 0.163, 0.0919, 0.1895] }, { "time": 16.5333, "rms": 0.3815, "bands": [63e-4, 0.3563, 0.6367, 0.337, 0.0831, 0.0994, 0.0516, 0.3007] }, { "time": 16.5667, "rms": 0.3825, "bands": [7e-3, 0.3854, 0.6809, 0.2175, 0.0608, 0.0923, 0.0496, 0.2257] }, { "time": 16.6, "rms": 0.3875, "bands": [46e-4, 0.4194, 0.615, 0.1455, 0.0581, 0.134, 0.0581, 0.1499] }, { "time": 16.6333, "rms": 0.4054, "bands": [86e-4, 0.425, 0.5166, 0.1218, 0.0786, 0.0941, 0.1304, 0.3321] }, { "time": 16.6667, "rms": 0.2967, "bands": [61e-4, 0.3894, 0.3101, 0.1565, 0.0845, 0.0981, 0.0925, 0.3907] }, { "time": 16.7, "rms": 0.2941, "bands": [59e-4, 0.4081, 0.1738, 0.1813, 0.0834, 0.0704, 0.0741, 0.3378] }, { "time": 16.7333, "rms": 0.2591, "bands": [68e-4, 0.3859, 0.1916, 0.1902, 0.078, 0.0936, 0.0979, 0.2141] }, { "time": 16.7667, "rms": 0.4381, "bands": [0.0158, 0.3503, 0.4709, 0.1805, 0.0926, 0.1287, 0.272, 0.4405] }, { "time": 16.8, "rms": 0.4126, "bands": [0.0102, 0.3832, 0.7234, 0.1868, 0.0738, 0.0981, 0.1063, 0.2788] }, { "time": 16.8333, "rms": 0.3286, "bands": [8e-3, 0.3228, 0.5443, 0.1478, 0.0449, 0.0698, 0.0768, 0.2392] }, { "time": 16.8667, "rms": 0.2192, "bands": [0.0161, 0.1731, 0.3813, 0.1376, 0.0823, 0.1028, 0.0976, 0.2648] }, { "time": 16.9, "rms": 0.5378, "bands": [0.0221, 0.3371, 0.3722, 0.2356, 0.1543, 0.2138, 0.2563, 0.4514] }, { "time": 16.9333, "rms": 0.5139, "bands": [0.0272, 0.5357, 0.2745, 0.5522, 0.2349, 0.2877, 0.3965, 0.6266] }, { "time": 16.9667, "rms": 0.4775, "bands": [0.0225, 0.4865, 0.305, 0.6446, 0.2503, 0.4078, 0.2665, 0.4277] }, { "time": 17, "rms": 0.4634, "bands": [0.0395, 0.4973, 0.2867, 0.6775, 0.1478, 0.3049, 0.1726, 0.1882] }, { "time": 17.0333, "rms": 0.4078, "bands": [0.0278, 0.4086, 0.2469, 0.6151, 0.1814, 0.6399, 0.2629, 0.1221] }, { "time": 17.0667, "rms": 0.2903, "bands": [0.0154, 0.1579, 0.1598, 0.5086, 0.1143, 0.5548, 0.2125, 0.0684] }, { "time": 17.1, "rms": 0.224, "bands": [54e-4, 0.0655, 0.3809, 0.3974, 0.1343, 0.2121, 0.1092, 0.0713] }, { "time": 17.1333, "rms": 0.2545, "bands": [35e-4, 0.0409, 0.4771, 0.1755, 0.1669, 0.1992, 0.181, 0.0617] }, { "time": 17.1667, "rms": 0.2682, "bands": [26e-4, 0.023, 0.3711, 0.1681, 0.1378, 0.1375, 0.0806, 0.0375] }, { "time": 17.2, "rms": 0.3061, "bands": [39e-4, 93e-4, 0.6045, 0.2257, 0.2311, 0.1607, 0.0736, 0.0368] }, { "time": 17.2333, "rms": 0.2834, "bands": [8e-4, 0.0132, 0.6237, 0.1948, 0.2238, 0.0603, 0.0441, 0.0214] }, { "time": 17.2667, "rms": 0.2662, "bands": [1e-3, 0.0166, 0.583, 0.1811, 0.2135, 0.0397, 0.0462, 0.0267] }, { "time": 17.3, "rms": 0.2636, "bands": [16e-4, 0.0134, 0.4837, 0.1596, 0.1708, 0.0864, 0.0694, 0.0144] }, { "time": 17.3333, "rms": 0.2496, "bands": [32e-4, 0.0118, 0.3978, 0.3283, 0.0715, 0.2299, 0.0704, 0.0133] }, { "time": 17.3667, "rms": 0.2369, "bands": [24e-4, 2e-3, 0.414, 0.3463, 0.0555, 0.18, 0.0304, 0.011] }, { "time": 17.4, "rms": 0.2208, "bands": [13e-4, 35e-4, 0.4073, 0.2895, 0.0527, 0.0932, 0.0322, 0.012] }, { "time": 17.4333, "rms": 0.4198, "bands": [0.1537, 0.3531, 0.2986, 0.1426, 0.0944, 0.1493, 0.1253, 0.1426] }, { "time": 17.4667, "rms": 0.7813, "bands": [0.5686, 0.5387, 0.621, 0.2101, 0.1015, 0.2302, 0.1353, 0.3683] }, { "time": 17.5, "rms": 0.7246, "bands": [0.697, 0.394, 0.7952, 0.2513, 0.1166, 0.1629, 0.1581, 0.3335] }, { "time": 17.5333, "rms": 0.5683, "bands": [0.3174, 0.5729, 0.8222, 0.2964, 0.1292, 0.1496, 0.1356, 0.3141] }, { "time": 17.5667, "rms": 0.5428, "bands": [0.2073, 0.6448, 0.8065, 0.3388, 0.1136, 0.1527, 0.109, 0.2744] }, { "time": 17.6, "rms": 0.5711, "bands": [0.2819, 0.7034, 0.7741, 0.3592, 0.0979, 0.1145, 0.112, 0.3394] }, { "time": 17.6333, "rms": 0.5453, "bands": [0.2508, 0.6241, 0.7739, 0.3505, 0.0853, 0.1443, 0.1103, 0.1983] }, { "time": 17.6667, "rms": 0.3845, "bands": [0.1591, 0.3386, 0.6199, 0.2771, 0.0801, 0.1404, 0.1212, 0.2012] }, { "time": 17.7, "rms": 0.1177, "bands": [0.0561, 0.096, 0.2185, 0.1056, 0.0763, 0.0854, 0.0766, 0.2175] }, { "time": 17.7333, "rms": 0.1763, "bands": [79e-4, 0.0937, 0.1121, 0.1606, 0.0739, 0.102, 0.1123, 0.1577] }, { "time": 17.7667, "rms": 0.1597, "bands": [22e-4, 0.159, 0.2231, 0.1299, 0.0525, 0.0481, 0.0605, 0.1238] }, { "time": 17.8, "rms": 0.1482, "bands": [1e-3, 0.1511, 0.2448, 0.0877, 0.0422, 0.0585, 0.0581, 0.0964] }, { "time": 17.8333, "rms": 0.167, "bands": [19e-4, 0.1367, 0.2455, 0.1878, 0.0696, 0.1173, 0.0903, 0.0884] }, { "time": 17.8667, "rms": 0.2948, "bands": [18e-4, 0.1002, 0.2137, 0.4149, 0.1184, 0.1898, 0.1016, 0.115] }, { "time": 17.9, "rms": 0.1793, "bands": [9e-4, 0.0608, 0.1812, 0.2722, 0.11, 0.149, 0.0778, 0.1086] }, { "time": 17.9333, "rms": 0.1371, "bands": [9e-4, 0.0513, 0.1808, 0.157, 0.0959, 0.1206, 0.0577, 0.1095] }, { "time": 17.9667, "rms": 0.1875, "bands": [0.0443, 0.1362, 0.2441, 0.132, 0.127, 0.2071, 0.1539, 0.3005] }, { "time": 18, "rms": 0.7765, "bands": [0.5288, 0.6033, 0.5136, 0.2418, 0.1524, 0.3648, 0.2066, 0.6598] }, { "time": 18.0333, "rms": 0.7361, "bands": [0.8097, 0.2785, 0.3671, 0.2554, 0.1604, 0.5584, 0.2376, 0.5935] }, { "time": 18.0667, "rms": 0.469, "bands": [0.523, 0.1436, 0.1826, 0.2765, 0.1804, 0.5554, 0.3017, 0.5094] }, { "time": 18.1, "rms": 0.2834, "bands": [0.2278, 0.0551, 0.0482, 0.3141, 0.1891, 0.5568, 0.4499, 0.2789] }, { "time": 18.1333, "rms": 0.2292, "bands": [0.0408, 0.0205, 0.0671, 0.3278, 0.1873, 0.6406, 0.2821, 0.1707] }, { "time": 18.1667, "rms": 0.218, "bands": [99e-4, 0.0267, 0.0532, 0.3768, 0.1932, 0.5002, 0.1887, 0.1349] }, { "time": 18.2, "rms": 0.1392, "bands": [25e-4, 0.0277, 0.0417, 0.2765, 0.0895, 0.1342, 0.0636, 0.0671] }, { "time": 18.2333, "rms": 0.0488, "bands": [19e-4, 0.0231, 0.0304, 0.0552, 0.0563, 0.0983, 0.0418, 0.0769] }, { "time": 18.2667, "rms": 0.1782, "bands": [48e-4, 0.0508, 0.1421, 0.1334, 0.0831, 0.2028, 0.0752, 0.1654] }, { "time": 18.3, "rms": 0.1678, "bands": [63e-4, 0.1616, 0.2346, 0.1085, 0.0306, 0.1287, 0.0705, 0.103] }, { "time": 18.3333, "rms": 0.1441, "bands": [7e-4, 0.1714, 0.1837, 0.0874, 0.0309, 0.0996, 0.0485, 0.0648] }, { "time": 18.3667, "rms": 0.1027, "bands": [14e-4, 0.1306, 0.1362, 0.0775, 0.0328, 0.1211, 0.042, 0.0455] }, { "time": 18.4, "rms": 0.3189, "bands": [25e-4, 0.0562, 0.1861, 0.492, 0.1352, 0.245, 0.2115, 0.0851] }, { "time": 18.4333, "rms": 0.3566, "bands": [16e-4, 0.0228, 0.2045, 0.7643, 0.283, 0.3289, 0.211, 0.05] }, { "time": 18.4667, "rms": 0.3123, "bands": [11e-4, 74e-4, 0.1896, 0.6763, 0.3108, 0.3461, 0.1777, 0.0516] }, { "time": 18.5, "rms": 0.2796, "bands": [92e-4, 0.0224, 0.1727, 0.5329, 0.3166, 0.3221, 0.1238, 0.0568] }, { "time": 18.5333, "rms": 0.622, "bands": [0.3044, 0.4438, 0.2712, 0.2412, 0.1851, 0.1966, 0.1687, 0.2861] }, { "time": 18.5667, "rms": 0.7493, "bands": [0.7867, 0.3898, 0.1824, 0.228, 0.1255, 0.0896, 0.1044, 0.2735] }, { "time": 18.6, "rms": 0.5226, "bands": [0.6413, 0.1878, 0.1554, 0.2041, 0.1195, 0.1576, 0.0987, 0.1499] }, { "time": 18.6333, "rms": 0.3071, "bands": [0.2875, 0.0932, 0.1457, 0.2082, 0.11, 0.1948, 0.0458, 0.1155] }, { "time": 18.6667, "rms": 0.2114, "bands": [0.0455, 0.084, 0.1167, 0.2627, 0.1403, 0.1946, 0.075, 0.0467] }, { "time": 18.7, "rms": 0.2418, "bands": [39e-4, 0.0327, 0.2591, 0.4139, 0.1623, 0.1682, 0.0715, 0.0449] }, { "time": 18.7333, "rms": 0.2464, "bands": [42e-4, 0.0156, 0.3643, 0.3993, 0.1045, 0.1799, 0.0478, 0.0526] }, { "time": 18.7667, "rms": 0.2259, "bands": [31e-4, 0.0128, 0.4169, 0.3415, 0.1037, 0.1441, 0.0295, 0.0395] }, { "time": 18.8, "rms": 0.2811, "bands": [0.0503, 0.1285, 0.271, 0.2509, 0.15, 0.1767, 0.3027, 0.1009] }, { "time": 18.8333, "rms": 0.4648, "bands": [0.1478, 0.3918, 0.3585, 0.3087, 0.2897, 0.3556, 0.6152, 0.11] }, { "time": 18.8667, "rms": 0.4193, "bands": [0.142, 0.4234, 0.3634, 0.2719, 0.3098, 0.3626, 0.8875, 0.0676] }, { "time": 18.9, "rms": 0.4268, "bands": [0.1558, 0.4171, 0.3745, 0.3104, 0.2972, 0.4844, 0.5062, 0.0381] }, { "time": 18.9333, "rms": 0.4272, "bands": [0.1457, 0.4046, 0.3479, 0.3775, 0.2559, 0.5355, 0.4755, 0.0864] }, { "time": 18.9667, "rms": 0.4024, "bands": [0.1513, 0.3926, 0.3472, 0.3922, 0.2791, 0.3862, 0.4938, 0.1337] }, { "time": 19, "rms": 0.4182, "bands": [0.1611, 0.4134, 0.3382, 0.4097, 0.197, 0.3527, 0.404, 0.0463] }, { "time": 19.0333, "rms": 0.4204, "bands": [0.1634, 0.4288, 0.3275, 0.4004, 0.1367, 0.3105, 0.2527, 0.0569] }, { "time": 19.0667, "rms": 0.5348, "bands": [0.2821, 0.4429, 0.6502, 0.3204, 0.1349, 0.2973, 0.1425, 0.3055] }, { "time": 19.1, "rms": 0.827, "bands": [0.6912, 0.5085, 0.6958, 0.119, 0.0853, 0.1666, 0.1695, 0.7124] }, { "time": 19.1333, "rms": 0.6188, "bands": [0.7116, 0.2236, 0.5404, 0.0796, 0.053, 0.123, 0.1294, 0.5129] }, { "time": 19.1667, "rms": 0.4096, "bands": [0.3971, 0.0642, 0.5013, 0.0822, 0.0484, 0.0706, 0.0939, 0.3233] }, { "time": 19.2, "rms": 0.2124, "bands": [0.1245, 0.0546, 0.4003, 0.0863, 0.0642, 0.1147, 0.0587, 0.1574] }, { "time": 19.2333, "rms": 0.2712, "bands": [0.087, 0.2293, 0.2843, 0.1556, 0.2132, 0.2519, 0.072, 0.2138] }, { "time": 19.2667, "rms": 0.316, "bands": [0.1309, 0.3703, 0.2045, 0.1481, 0.2829, 0.2631, 0.0679, 0.1124] }, { "time": 19.3, "rms": 0.3032, "bands": [0.1418, 0.3792, 0.1899, 0.1197, 0.2254, 0.1915, 0.0324, 0.0816] }, { "time": 19.3333, "rms": 0.3484, "bands": [0.1715, 0.3785, 0.1593, 0.1043, 0.1072, 0.2088, 0.1725, 0.0734] }, { "time": 19.3667, "rms": 0.5211, "bands": [0.2496, 0.491, 0.3865, 0.2252, 0.1636, 0.3937, 0.4803, 0.1588] }, { "time": 19.4, "rms": 0.5046, "bands": [0.2015, 0.6555, 0.4155, 0.2464, 0.2321, 0.3323, 0.4682, 0.1128] }, { "time": 19.4333, "rms": 0.5445, "bands": [0.198, 0.6706, 0.4519, 0.1948, 0.2185, 0.2839, 0.3577, 0.0529] }, { "time": 19.4667, "rms": 0.4805, "bands": [0.1833, 0.5701, 0.2806, 0.4619, 0.1776, 0.1095, 0.2191, 0.1191] }, { "time": 19.5, "rms": 0.4281, "bands": [0.1754, 0.3963, 0.2068, 0.6173, 0.2157, 0.2848, 0.333, 0.3191] }, { "time": 19.5333, "rms": 0.4895, "bands": [0.2093, 0.5327, 0.2502, 0.6467, 0.2213, 0.3732, 0.2205, 0.1559] }, { "time": 19.5667, "rms": 0.4836, "bands": [0.2183, 0.5235, 0.2404, 0.6806, 0.1694, 0.5253, 0.211, 0.0743] }, { "time": 19.6, "rms": 0.4601, "bands": [0.1978, 0.4978, 0.2663, 0.7121, 0.1375, 0.4204, 0.1423, 0.087] }, { "time": 19.6333, "rms": 0.6849, "bands": [0.3464, 0.6041, 0.2769, 0.6017, 0.1501, 0.2228, 0.1269, 0.2206] }, { "time": 19.6667, "rms": 0.7071, "bands": [0.8122, 0.2912, 0.1372, 0.5053, 0.1166, 0.2416, 0.1106, 0.1587] }, { "time": 19.7, "rms": 0.5355, "bands": [0.5128, 0.2159, 0.1249, 0.5566, 0.1034, 0.2153, 0.0662, 0.1687] }, { "time": 19.7333, "rms": 0.3642, "bands": [0.2178, 0.2753, 0.1476, 0.6416, 0.0885, 0.1943, 0.0592, 0.1052] }, { "time": 19.7667, "rms": 0.3832, "bands": [0.2193, 0.3618, 0.1723, 0.6175, 0.1046, 0.2265, 0.0933, 0.0981] }, { "time": 19.8, "rms": 0.4294, "bands": [0.2587, 0.4502, 0.1793, 0.559, 0.0648, 0.2017, 0.1034, 0.1004] }, { "time": 19.8333, "rms": 0.4063, "bands": [0.2785, 0.4945, 0.1797, 0.5793, 0.0834, 0.3087, 0.106, 0.0683] }, { "time": 19.8667, "rms": 0.4365, "bands": [0.2851, 0.5006, 0.1618, 0.5895, 0.0829, 0.3317, 0.0577, 0.0482] }, { "time": 19.9, "rms": 0.4246, "bands": [0.2456, 0.4105, 0.1203, 0.5275, 0.0648, 0.2606, 0.073, 0.0965] }, { "time": 19.9333, "rms": 0.2903, "bands": [0.1047, 0.2222, 0.1206, 0.5334, 0.0686, 0.1858, 0.0359, 0.0951] }, { "time": 19.9667, "rms": 0.2379, "bands": [0.0139, 0.0968, 0.0877, 0.5516, 0.0747, 0.1569, 0.0252, 0.051] }] };</script><style>
+@font-face{font-family:Arimo;src:url('assets/fonts/arimo-regular.ttf');font-weight:400}@font-face{font-family:Arimo;src:url('assets/fonts/arimo-bold.ttf');font-weight:700}@font-face{font-family:Cousine;src:url('assets/fonts/cousine-regular.ttf')}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f5f4f0;color:#191919;font-family:Arimo,sans-serif}h1,h2,h3,p{margin:0}#root{position:relative;width:100%;height:100%;overflow:hidden;background:#f5f4f0}.mono{font-family:Cousine,monospace;font-size:21px;line-height:1.5;letter-spacing:1px}.blue,.brand>span{color:#2448d8}.brand{font-weight:700;letter-spacing:-1.5px}.topbar{position:absolute;top:56px;left:96px;right:96px;height:64px;border-bottom:2px solid #191919;display:flex;justify-content:space-between;z-index:20}.topbar>.brand{font-size:34px}.topbar .mono{font-size:18px;padding-top:8px}.footer{position:absolute;bottom:48px;left:96px;right:96px;border-top:2px solid #d8d6cf;padding-top:20px;display:flex;justify-content:space-between;font-size:18px;z-index:20}.accent-rule{position:absolute;left:96px;bottom:118px;width:1728px;height:6px;background:#2448d8;transform-origin:left center}.clip,.scene-body{position:absolute;inset:0}.copy{position:absolute;left:96px;top:334px;width:1000px}.step{position:absolute;left:96px;top:216px;color:#2448d8;font-family:Cousine,monospace;font-size:21px;letter-spacing:1px}.headline{font-size:124px;line-height:1.02;letter-spacing:-6px;font-weight:400}.headline>span{display:block}.support{font-size:30px;line-height:1.5;margin-top:36px}.hero-logo{position:absolute;left:1130px;top:220px;width:610px;height:610px;object-fit:contain;mix-blend-mode:multiply}.logo-caption{position:absolute;left:1155px;top:852px;color:#2448d8}
+.phone{position:absolute;left:1170px;top:160px;width:470px;height:782px;background:#f5f4f0;border:2px solid #191919;border-radius:24px;box-shadow:16px 20px 0 #d8d6cf;overflow:hidden}.status{height:40px;padding:0 27px;display:flex;align-items:center;justify-content:space-between;font-size:13px}.app-header{height:78px;padding:20px 26px;border-bottom:1.5px solid #191919;display:flex;align-items:center;justify-content:space-between;gap:20px}.app-header .brand{font-size:29px}.micro{font-family:Cousine,monospace;font-size:12px;letter-spacing:.6px;line-height:17px}.app-header .micro{font-size:10px;line-height:15px;width:110px;flex-shrink:0}.phone-main{padding:26px}.phone-main>h3{font-size:48px;line-height:49px;font-weight:400;letter-spacing:-2px;margin:12px 0 28px}.row{height:89px;border-bottom:1px solid #d8d6cf;display:flex;align-items:center;gap:17px;padding-right:4px}.icon{width:34px;height:34px;flex-shrink:0}.row-copy{flex:1}.name{font-size:20px;line-height:27px}.desc{font-size:14px;line-height:20px}.checkbox{width:24px;height:24px;border:1.5px solid #191919;display:flex;justify-content:center;align-items:center}.check{background:#2448d8;color:#f5f4f0;width:100%;height:100%;text-align:center;font-size:19px;line-height:22px}.button{height:60px;padding:0 18px;display:flex;justify-content:space-between;align-items:center;background:#2448d8;color:#f5f4f0;font-size:19px;margin-top:33px}.note{margin-top:20px;font-size:11px}.gate-logo{position:absolute;left:125px;top:175px;width:220px;height:220px;object-fit:contain;mix-blend-mode:multiply}.reader{position:absolute;left:189px;top:432px;width:92px;height:100px;display:grid;place-items:center;color:#2448d8}.fingerprint{width:76px;height:76px}.use-pin{position:absolute;bottom:34px;right:30px;color:#2448d8;font-size:18px}.gate-caption{position:absolute;left:24px;right:24px;top:568px;text-align:center;color:#2448d8}.touch{position:absolute;left:210px;top:454px;width:50px;height:50px;border:2px solid #2448d8;border-radius:50%;background:#2448d81a}#cursor{position:absolute;left:0;top:0;width:40px;height:48px;transform-origin:0 0;z-index:4}.result{position:absolute;inset:0;background:#f5f4f0;padding:42px 30px}.result>.micro{margin-top:112px;color:#2448d8}.result h3{font-size:63px;line-height:64px;letter-spacing:-3px;font-weight:400;margin-top:20px}.result h3>span{display:block}.result-logo{display:block;width:160px;height:160px;object-fit:contain;mix-blend-mode:multiply;margin-top:30px}.result-text{font-size:20px;line-height:29px;margin-top:18px}.result .button{margin-top:25px}.final-layout{position:absolute;left:96px;top:208px;right:96px;bottom:155px;display:flex;gap:80px;align-items:center}.final-logo{width:530px;height:530px;object-fit:contain;mix-blend-mode:multiply}.final-copy{flex:1}.final-wordmark{font-size:132px;line-height:1.1}.final-wordmark .brand{letter-spacing:-7px}.tagline{font-size:57px;line-height:1.2;letter-spacing:-2px;margin-top:24px}.features{font-size:24px;margin-top:44px}.final-label{font-size:20px;color:#2448d8;margin-top:26px}
+</style>
+<script data-hyperframes-preview-runtime="1" src="/api/runtime.js"></script>
+<meta name="hyperframes-project-signature" content="8571f6d53afa69d8122fb765">
+</head><body><div data-hf-id="hf-at0g" id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080"><div data-hf-id="hf-mndw" class="topbar"><span data-hf-id="hf-e2qn" class="brand">Ghost<span data-hf-id="hf-gr3f">Auth</span></span><p data-hf-id="hf-cnhk" class="mono">YOUR DEVICE / YOUR RULES</p></div><div data-hf-id="hf-qcnc" class="accent-rule" data-layout-ignore=""></div><section data-hf-id="hf-i7yz" id="hook" class="clip" data-start="0" data-duration="3.3" data-track-index="0"><div data-hf-id="hf-9r3x" class="scene-body"><p data-hf-id="hf-bjh5" class="step">PRIVATE BY DESIGN</p><div data-hf-id="hf-bdx3" class="copy"><h2 data-hf-id="hf-t43f" class="headline"><span data-hf-id="hf-darc">Your apps.</span><span data-hf-id="hf-rxwm" class="blue">Your access.</span></h2></div><img data-hf-id="hf-dp6f" class="hero-logo" src="assets/ghostauth-logo.png" alt="GhostAuth fingerprint mark"><p data-hf-id="hf-p9df" class="logo-caption mono">GHOSTAUTH / ANDROID</p></div></section><section data-hf-id="hf-ycpd" id="choose" class="clip" data-start="3.3" data-duration="5.44" data-track-index="1"><div data-hf-id="hf-jtzl" class="scene-body"><p data-hf-id="hf-13as" class="step">01 / CHOOSE</p><div data-hf-id="hf-r8s7" class="copy"><h2 data-hf-id="hf-abaz" class="headline"><span data-hf-id="hf-9ruf">Choose your</span><span data-hf-id="hf-cxoi" class="blue">private apps.</span></h2><p data-hf-id="hf-awgd" class="support">Make it personal.</p></div><div data-hf-id="hf-194r" class="phone select-phone"><div data-hf-id="hf-8kim" class="status"><span data-hf-id="hf-zwmt">9:41</span><span data-hf-id="hf-ie16">● ▰</span></div><div data-hf-id="hf-cl9d" class="app-header"><span data-hf-id="hf-squ7" class="brand">Ghost<span data-hf-id="hf-lg5n">Auth</span></span><span data-hf-id="hf-4und" class="micro">ADAPTIVE APP PROTECTION</span></div><div data-hf-id="hf-avau" class="phone-main"><p data-hf-id="hf-davi" class="micro">APP SELECTION</p><h3 data-hf-id="hf-wqhb">Choose apps.</h3><div data-hf-id="hf-thy4" class="row"><svg data-hf-id="hf-qlf8" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect data-hf-id="hf-zrr2" x="3" y="5" width="18" height="14" rx="1" /><path data-hf-id="hf-svwb" d="m3 6 9 7 9-7" /></svg><div data-hf-id="hf-ehme" class="row-copy"><p data-hf-id="hf-ssop" class="name">Mail</p><p data-hf-id="hf-23c2" class="desc">Messages &amp; accounts</p></div><div data-hf-id="hf-n30j" class="checkbox"><span data-hf-id="hf-tvw5" id="check-0" class="check">✓</span></div></div><div data-hf-id="hf-lt04" class="row"><svg data-hf-id="hf-jrik" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect data-hf-id="hf-6lkk" x="3" y="3" width="18" height="18" rx="1" /><circle data-hf-id="hf-uwfa" cx="8" cy="8" r="1.5" /><path data-hf-id="hf-s34i" d="m3 17 6-6 5 5 3-3 4 4" /></svg><div data-hf-id="hf-ch0a" class="row-copy"><p data-hf-id="hf-1xlv" class="name">Photos</p><p data-hf-id="hf-fb03" class="desc">Personal library</p></div><div data-hf-id="hf-x6df" class="checkbox"><span data-hf-id="hf-84oq" id="check-1" class="check">✓</span></div></div><div data-hf-id="hf-km31" class="row"><svg data-hf-id="hf-iklh" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path data-hf-id="hf-qh2s" d="M3 6h7l2 3h9v11H3z" /></svg><div data-hf-id="hf-cvbb" class="row-copy"><p data-hf-id="hf-mflp" class="name">Files</p><p data-hf-id="hf-i9bx" class="desc">Documents &amp; downloads</p></div><div data-hf-id="hf-ws2e" class="checkbox"></div></div><div data-hf-id="hf-l0e2" class="row"><svg data-hf-id="hf-iywi" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle data-hf-id="hf-1iwn" cx="12" cy="12" r="9" /><path data-hf-id="hf-sg7l" d="M3 12h18M12 3c-6 6-6 12 0 18 6-6 6-12 0-18" /></svg><div data-hf-id="hf-d9mc" class="row-copy"><p data-hf-id="hf-1qny" class="name">Browser</p><p data-hf-id="hf-ati2" class="desc">Browsing &amp; saved logins</p></div><div data-hf-id="hf-wdrd" class="checkbox"></div></div><div data-hf-id="hf-4yah" id="save" class="button"><span data-hf-id="hf-ielu">Save selection</span><span data-hf-id="hf-p70p">→</span></div><p data-hf-id="hf-hmb4" class="micro note">YOUR DEVICE. YOUR CHOICE.</p></div><svg data-hf-id="hf-7o9s" id="cursor" viewBox="0 0 40 48" data-layout-ignore=""><path data-hf-id="hf-ak07" d="M3 2v37l10-9 8 15 7-4-8-14 13-2Z" fill="#191919" stroke="#f5f4f0" stroke-width="2" /></svg></div></div></section><section data-hf-id="hf-9ehr" id="verify" class="clip" data-start="8.74" data-duration="5.66" data-track-index="2"><div data-hf-id="hf-l0wo" class="scene-body"><p data-hf-id="hf-4ma3" class="step">02 / VERIFY</p><div data-hf-id="hf-quh6" class="copy"><h2 data-hf-id="hf-9wzy" class="headline"><span data-hf-id="hf-w8xf">A familiar</span><span data-hf-id="hf-ali3" class="blue">way in.</span></h2><p data-hf-id="hf-wqh2" class="support">Fingerprint + PIN</p></div><div data-hf-id="hf-ile0" class="phone verify-phone"><div data-hf-id="hf-8csi" class="status"><span data-hf-id="hf-rk89">9:41</span><span data-hf-id="hf-iery">● ▰</span></div><img loading="lazy" data-hf-preview-lazy data-hf-id="hf-0zlw" class="gate-logo" src="assets/ghostauth-logo.png" alt="GhostAuth fingerprint mark"><div data-hf-id="hf-hosx" class="reader"><svg data-hf-id="hf-5dax" class="fingerprint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path data-hf-id="hf-xexa" d="M12 11v10M8 16v-5a4 4 0 0 1 8 0v10M4 14v-3a8 8 0 0 1 16 0v6M4 18v3M8 20v2M20 20v2" /></svg></div><div data-hf-id="hf-xpvk" class="touch" data-layout-ignore=""></div><p data-hf-id="hf-do2u" class="gate-caption micro">VERIFY WITH FINGERPRINT</p><p data-hf-id="hf-kt6y" class="use-pin">Use PIN</p><div data-hf-id="hf-ycrv" class="result"><p data-hf-id="hf-fnau" class="micro">IDENTITY CONFIRMED</p><h3 data-hf-id="hf-eq3o"><span data-hf-id="hf-5qxm">You’re</span><span data-hf-id="hf-ohjp">verified.</span></h3><img loading="lazy" data-hf-preview-lazy data-hf-id="hf-wkja" class="result-logo" src="assets/ghostauth-logo.png" alt="GhostAuth fingerprint mark"><div data-hf-id="hf-urrw" class="button"><span data-hf-id="hf-40a8">Open Mail</span><span data-hf-id="hf-v3ct">→</span></div></div></div></div></section><section data-hf-id="hf-n0h9" id="final" class="clip" data-start="14.4" data-duration="5.6" data-track-index="3"><div data-hf-id="hf-kmln" class="scene-body"><div data-hf-id="hf-pk5j" class="final-layout"><img loading="lazy" data-hf-preview-lazy data-hf-id="hf-lcz7" class="final-logo" src="assets/ghostauth-logo.png" alt="GhostAuth fingerprint mark"><div data-hf-id="hf-thpm" class="final-copy"><h2 data-hf-id="hf-f769" class="final-wordmark"><span data-hf-id="hf-scj6" class="brand">Ghost<span data-hf-id="hf-l1um">Auth</span></span></h2><p data-hf-id="hf-g53p" class="tagline">Your apps. Your access.</p><p data-hf-id="hf-czz4" class="features mono">Fingerprint. PIN. On-device history.</p><p data-hf-id="hf-lypn" class="final-label mono">ANDROID RESEARCH PROTOTYPE</p></div></div></div></section><div data-hf-id="hf-7gle" class="footer mono"><span data-hf-id="hf-ei83">ANDROID RESEARCH PROTOTYPE</span><span data-hf-id="hf-smr8">UI DEMONSTRATION</span></div><audio data-hf-id="hf-l3nd" id="music" src="assets/music/bed.mp3" data-start="0" data-duration="20" data-track-index="10" data-volume="0.30" data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;volume&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:0},{&quot;t&quot;:0.5,&quot;v&quot;:0.3},{&quot;t&quot;:18.5,&quot;v&quot;:0.3},{&quot;t&quot;:20,&quot;v&quot;:0}]}]}" data-end="20"></audio><audio data-hf-id="hf-tptk" id="click-0" src="assets/sfx/click.ogg" data-start="4.39" data-duration="0.01" data-track-index="11" data-volume="0.55" data-end="4.3999999999999995"></audio><audio data-hf-id="hf-xvl1" id="click-1" src="assets/sfx/click.ogg" data-start="5.34" data-duration="0.01" data-track-index="11" data-volume="0.55" data-end="5.35"></audio><audio data-hf-id="hf-uxzf" id="click-2" src="assets/sfx/click.ogg" data-start="6.56" data-duration="0.01" data-track-index="11" data-volume="0.55" data-end="6.569999999999999"></audio><audio data-hf-id="hf-9eyo" id="confirm" src="assets/sfx/confirm.ogg" data-start="12.02" data-duration="0.18" data-track-index="12" data-volume="0.45" data-end="12.2"></audio></div><script type="text/hf-after-fonts">const tl = gsap.timeline({ paused: true });
+tl.fromTo("#hook .headline span", { x: -65, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, stagger: 0.16, ease: "power3.out" }, 0.08);
+tl.fromTo(".hero-logo", { scale: 0.83, rotation: -5, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.7, ease: "power2.out" }, 0.1);
+tl.to(".hero-logo", { scale: 1.035, duration: 2.4, ease: "sine.inOut" }, 0.8);
+tl.fromTo("#choose .copy", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.48, ease: "power3.out" }, 3.3);
+tl.fromTo(".select-phone", { y: 45, rotation: 2, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 3.3);
+tl.fromTo("#check-0", { scale: 0 }, { scale: 1, duration: 0.18, ease: "back.out(1.6)" }, 4.39);
+tl.fromTo("#check-1", { scale: 0 }, { scale: 1, duration: 0.18, ease: "back.out(1.6)" }, 5.34);
+tl.fromTo("#cursor", { x: 368, y: 470, opacity: 0 }, { x: 421, y: 294, opacity: 1, duration: 0.65, ease: "power2.inOut" }, 3.74);
+tl.to("#cursor", { scale: 0.85, duration: 0.1 }, 4.39).to("#cursor", { scale: 1, duration: 0.18, ease: "back.out(1.6)" }, 4.49);
+tl.to("#cursor", { x: 421, y: 383, duration: 0.5, ease: "power2.inOut" }, 4.84);
+tl.to("#cursor", { scale: 0.85, duration: 0.1 }, 5.34).to("#cursor", { scale: 1, duration: 0.18, ease: "back.out(1.6)" }, 5.44);
+tl.to("#cursor", { x: 222, y: 669, duration: 0.7, ease: "power2.inOut" }, 5.86);
+tl.to(["#cursor", "#save"], { scale: 0.96, duration: 0.1 }, 6.56).to(["#cursor", "#save"], { scale: 1, duration: 0.22, ease: "back.out(1.5)" }, 6.66);
+tl.to("#cursor", { opacity: 0, duration: 0.2 }, 7.05);
+tl.fromTo("#verify .copy", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 8.74);
+tl.fromTo(".verify-phone", { y: 35, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 8.74);
+tl.set(".result", { opacity: 0 }, 0);
+tl.fromTo(".touch", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.067, ease: "power2.out" }, 10.863);
+tl.to(".touch", { scale: 0.9, opacity: 0, duration: 0.2, ease: "power2.out" }, 11.046);
+tl.to(".reader", { scale: 0.9, duration: 0.14 }, 10.93).to(".reader", { scale: 1, duration: 0.35, ease: "back.out(1.6)" }, 11.07);
+tl.to(".result", { opacity: 1, duration: 0.2 }, 12.02);
+tl.to(".gate-logo,.reader,.gate-caption,.use-pin", { autoAlpha: 0, duration: 0.12 }, 12.02);
+tl.fromTo(".final-logo", { x: -70, rotation: -4, opacity: 0 }, { x: 0, rotation: 0, opacity: 1, duration: 0.65, ease: "power3.out" }, 14.4);
+tl.fromTo(".final-copy", { x: 70, opacity: 0 }, { x: 0, opacity: 1, duration: 0.65, ease: "power3.out" }, 14.55);
+tl.fromTo(".final-wordmark", { scale: 0.98 }, { scale: 1, duration: 0.38, ease: "power2.out" }, 17.47);
+tl.fromTo(".accent-rule", { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "power3.out" }, 0);
+if (window.AUDIO_DATA) {
+  for (let f = 0; f < Math.min(600, AUDIO_DATA.frames.length); f++) {
+    const level = AUDIO_DATA.frames[f].bands[0];
+    tl.set(".accent-rule", { opacity: 0.72 + level * 0.28 }, f / 30);
+  }
+}
+window.__timelines["main"] = tl;</script></body></html>

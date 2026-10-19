@@ -1,0 +1,238 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 5,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "duplicate_media_discovery_risk",
+        "severity": "warning",
+        "message": "Detected 4 matching img entries with the same source/start/duration.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Avoid duplicated media nodes that can be discovered twice during compilation."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<section id=\"hook\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#hook",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <section id=\"hook\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<section id=\"choose\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#choose",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <section id=\"choose\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<section id=\"verify\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#verify",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <section id=\"verify\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<section id=\"final\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#final",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <section id=\"final\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      }
+    ],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 2,
+    "findings": [
+      {
+        "code": "text_occluded",
+        "severity": "info",
+        "time": 13.6,
+        "selector": "div.phone.verify-phone > div:nth-of-type(1) > span:nth-of-type(1)",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 1199,
+          "top": 174.5,
+          "right": 1224.31,
+          "bottom": 189.5,
+          "width": 25.31,
+          "height": 15
+        },
+        "containerSelector": "div.result",
+        "text": "9:41",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 1199,
+          "y": 174.5,
+          "width": 25.31,
+          "height": 15
+        },
+        "firstSeen": 13.6,
+        "lastSeen": 13.6,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          13.6
+        ]
+      },
+      {
+        "code": "text_occluded",
+        "severity": "info",
+        "time": 13.6,
+        "selector": "div.phone.verify-phone > div:nth-of-type(1) > span:nth-of-type(2)",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 1586.53,
+          "top": 174,
+          "right": 1611,
+          "bottom": 189,
+          "width": 24.47,
+          "height": 15
+        },
+        "containerSelector": "div.result",
+        "text": "● ▰",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 1586.53,
+          "y": 174,
+          "width": 24.47,
+          "height": 15
+        },
+        "firstSeen": 13.6,
+        "lastSeen": 13.6,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          13.6
+        ]
+      }
+    ],
+    "duration": 20,
+    "samples": [
+      1.1,
+      5.6,
+      10,
+      13.6,
+      18.9
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 2,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "specPath": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\index.motion.json",
+    "samples": 300
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      1.1,
+      5.6,
+      10,
+      13.6,
+      18.9
+    ],
+    "checked": 77,
+    "passed": 77
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  },
+  "saved": {
+    "id": "df50bbb3-0e4a-40d3-932b-f172b26b9078",
+    "revision": "fc14e2ab-5a7c-45dd-9fb9-08a1628fe584",
+    "report": "C:\\Users\\Lenovo\\Documents\\GhostAuth\\brag-output\\composition\\.hyperframes\\artifacts\\checks\\df50bbb3-0e4a-40d3-932b-f172b26b9078.json",
+    "attribution": "recorded-revision"
+  },
+  "_meta": {
+    "version": "0.8.168",
+    "latestVersion": "0.8.168",
+    "updateAvailable": false
+  }
+}

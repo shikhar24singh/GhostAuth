@@ -1,0 +1,1 @@
+Built GhostAuth: your apps, your access. An Android research prototype with fingerprint/PIN verification, selected-app protection, and security history stored on-device.

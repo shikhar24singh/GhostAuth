@@ -1,12 +1,12 @@
 {
-  "validatedOn": "2026-10-14",
-  "version": "0.6.1",
+  "validatedOn": "2026-10-17",
+  "version": "0.7.0",
   "nodeTests": {
-    "passed": 40,
+    "passed": 42,
     "failed": 0
   },
   "javaSecurityTests": {
-    "passed": 17,
+    "passed": 28,
     "failed": 0
   },
   "uiMode": "Headless installed Chrome using a deterministic mocked Capacitor bridge; no Android emulator or phone",
@@ -51,11 +51,17 @@
     "Clear discards stale frontend snapshots; malformed history does not block authentication and can be reset",
     "Preference reset retains saved history and credentials while restoring recording consent and empty app scope",
     "Native dark mode persists, overrides stale web cache, updates bar icons and handles failed saves safely",
-    "Dark fingerprint screen retains readable branding and directly opens the verified package"
+    "Dark fingerprint screen retains readable branding and directly opens the verified package",
+    "Research off by default, explicit cancellable consent, native enrollment persists on reload",
+    "PIN excluded, fast fingerprint reports insufficient data, direct app launch remains intact",
+    "Pause retains summaries; saved movement consent remains authoritative on reload",
+    "Clear preserves credentials, history and consent; stale snapshots cannot restore deleted rows",
+    "Unavailable/malformed research bridge reports error and cannot prevent native PIN verification",
+    "Preference reset pauses research, restores movement defaults and preserves native credentials"
   ],
   "browserErrors": [],
-  "physicalValidation": "Earlier 0.3.0 baseline and the three proposed 0.5.1 Presto groups have user-reported passes. The 0.6.0 history and new 0.6.1 native appearance behavior remain pending physical review.",
-  "deviceConnection": "No physical phone or emulator was exercised for 0.6.1; browser checks use mocked Capacitor bridges and actual native code was compiled/linted.",
+  "physicalValidation": "Earlier 0.3.0 baseline and the three proposed 0.5.1 Presto groups have user-reported passes. The 0.6.0 history, 0.6.1 appearance and 0.7.0 sensor/lifecycle/persistence/latency reviews remain pending on a phone.",
+  "deviceConnection": "No physical phone or emulator was exercised for 0.7.0; browser checks use mocked Capacitor bridges and native code was compiled, unit tested and linted.",
   "checklist": "android/device-review.md",
   "fullBrowserReview": {
     "version": "0.6.1",
@@ -203,7 +209,7 @@
   "appearanceReview": {
     "version": "0.6.1",
     "default": "Light",
-    "control": "Settings → Dark mode; applied immediately and saved independently from app/privacy preferences",
+    "control": "Settings \u2192 Dark mode; applied immediately and saved independently from app/privacy preferences",
     "nativeStore": "ghostauth_appearance SharedPreferences, with separate frontend cache; browser appearance stored independently",
     "ui": "Shared dark palette, readable primary actions/inputs/dialogs and dark brand rendering; app icons keep original colors",
     "native": "DayNight resources, API 31+ application night mode, AppCompat mode, SystemBars icon style, saved WebView background and matching secure protection shield",
@@ -214,6 +220,27 @@
     "screenshots": [
       "tmp/mobile-qa/native-dark-settings.png",
       "tmp/mobile-qa/native-dark-fingerprint.png"
+    ]
+  },
+  "browserChecks": {
+    "passed": 69,
+    "nativeMocked": 47,
+    "errors": [],
+    "routes": 34,
+    "viewports": 5
+  },
+  "researchScope": "Opt-in foreground motion collector compiled; JVM quality/retention/encryption and six mocked bridge UI checks pass. Physical sensor delivery, capture boundaries, native persistence/races and latency remain pending; no real pilot dataset or model.",
+  "research": {
+    "control": "Settings \u2192 Motion research, separate explicit opt-in; native movement consent additionally gates motion",
+    "storage": "Independent AES-256-GCM research.v1 AtomicFile and Keystore alias; backup excluded; bounded summaries only",
+    "retention": "500 summaries / 10 MiB / 7 days, pruning on next research read/write; future-dated entries removed on rollback",
+    "lifecycle": "Resumed + focused Activity only; stop on focus loss, pause, screen-off, cancel, settings/clear or destroy; no window restart after interruption",
+    "binding": "Native callback and package match; successful native proof required for eligible candidates; PIN, nonmatch and canceled attempts cannot contribute features",
+    "uiChecks": 6,
+    "jvmTests": 11,
+    "physicalReview": "Pending sensor availability/rate/gaps, prompt focus behavior, native persistence/clear races, battery impact and launch latency",
+    "screenshots": [
+      "tmp/mobile-qa/native-research.png"
     ]
   }
 }

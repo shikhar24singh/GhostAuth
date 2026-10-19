@@ -1,5 +1,19 @@
 # GhostAuth phone review
 
+## 0.7.0 motion collection pilot
+
+Physical research review is pending. Upgrade over the existing app; record phone model, Android version, sensor availability, eligible/total sessions and any added launch delay. No model or behavioral access decision runs yet.
+
+- [ ] Open Settings → Motion research after upgrade/fresh install. Confirm collection is Off even if Movement signals was previously enabled. Cancel enrollment once; agree explicitly only after reviewing the disclosure.
+- [ ] Open Presto with fingerprint enabled. Confirm the same automatic prompt and immediate launch. Refresh research data afterward; record total/usable/insufficient counts. A fast or interrupted prompt may legitimately supply no eligible window. Do not add artificial waits to improve this measurement.
+- [ ] Repeat wrong scans, cancellation, PIN fallback and a correct PIN. Confirm no failed/canceled/PIN request contributes usable motion features. No typing or PIN interactions should be collected. Review native diagnostics in a development inspection if aggregate UI alone cannot establish this.
+- [ ] During verification, lose focus, background, open another app and lock the screen. Use a development sensor trace to verify listeners stop and raw samples never continue into Presto or resume across a focus gap. Repeat with missing/unreliable sensors where available.
+- [ ] Pause collection, reopen/reboot, verify and refresh. Confirm no new sessions while paused and old summaries remain. Disable Movement signals and save; confirm the independent motion gate persists on reload. Security history consent must remain independent.
+- [ ] Cancel Clear research data, then confirm deletion. Reopen and confirm deleted summaries cannot return. PIN, fingerprint, selected apps, appearance and security history remain intact; research consent remains as configured. Review pending-write races and storage corruption using a development test harness.
+- [ ] Reset saved preferences. Confirm research becomes Off, selected apps empty and default privacy choices return, while credentials and retained research/history remain. Reset learned profile should clear research data without changing consent or credentials.
+- [ ] Review 500-session/10 MiB eviction, 7-day expiry on the next read/write, clock rollback and storage failure on a development build. Storage failure must stop collection and still permit normal fingerprint/PIN verification.
+- [ ] Measure normal-flow coverage, prompt focus loss, actual delivery rates, sensor gaps, battery impact and added launch latency across sessions/days. Complete the collection plan's feasibility gate before training.
+
 ## 0.6.1 dark mode
 
 Physical appearance review is pending. Install over the current app to preserve existing credentials, selections, privacy choices and history.

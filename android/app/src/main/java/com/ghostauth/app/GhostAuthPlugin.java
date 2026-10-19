@@ -39,6 +39,7 @@ public class GhostAuthPlugin extends Plugin {
     private volatile boolean promptEnrollment;
 
     private void recordHistory(PluginCall call, String method, String outcome) {
+        ResearchCapture.finish(call, outcome);
         String pkg = call.getString("packageName");
         if (pkg == null) return; // Credential management never masquerades as an app check.
         android.content.Context context = getContext().getApplicationContext();
@@ -53,10 +54,11 @@ public class GhostAuthPlugin extends Plugin {
         worker.execute(() -> {
             try {
                 requireForeground(epoch);
-                if (prompting) { call.reject("Finish the Android prompt first.", "BUSY"); return; }
+                if (prompting) { ResearchCapture.finish(call, "unavailable"); call.reject("Finish the Android prompt first.", "BUSY"); return; }
                 work.run(new CredentialVault(getContext()), epoch);
             } catch (Exception ignored) {
                 session.clear();
+                ResearchCapture.finish(call, "unavailable");
                 call.reject("Authentication unavailable. Your credentials were kept. Restart GhostAuth and try again.", "AUTH_UNAVAILABLE");
             }
         });
@@ -150,6 +152,7 @@ public class GhostAuthPlugin extends Plugin {
             && (!ProtectionPreferences.store(getContext()).contains("packages")
                 || ProtectionPreferences.packages(getContext()).contains(target))) return true;
         call.reject("This app is no longer available. Refresh your app selection.", "APP_UNAVAILABLE");
+        ResearchCapture.finish(call, "unavailable");
         return false;
     }
 
@@ -167,6 +170,7 @@ public class GhostAuthPlugin extends Plugin {
 
     @PluginMethod
     public void verifyPin(PluginCall call) {
+        ResearchCapture.begin(call, "PIN");
         execute(call, (vault, epoch) -> {
             if (!requireTarget(call)) return;
             JSONObject record = vault.read();
@@ -241,6 +245,7 @@ public class GhostAuthPlugin extends Plugin {
 
     @PluginMethod
     public void verifyBiometric(PluginCall call) {
+        ResearchCapture.begin(call, "fingerprint");
         execute(call, (vault, epoch) -> {
             if (!requireTarget(call)) return;
             JSONObject record = vault.read();
@@ -337,6 +342,7 @@ public class GhostAuthPlugin extends Plugin {
     }
 
     private void endSession() {
+        ResearchCapture.cancel();
         generation.incrementAndGet(); session.clear();
         PluginCall pending = promptCall;
         if (pending != null && !promptEnrollment) recordHistory(pending, "fingerprint", "canceled");

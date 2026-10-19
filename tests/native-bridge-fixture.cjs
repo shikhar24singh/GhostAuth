@@ -5,8 +5,13 @@ module.exports = async function installBridge(context, initial = {}) {
     permissions: { usage: false, service: false, notifications: false },
     protection: { configured: false, enabled: false, connected: false, packages: [] },
     darkMode: false, historyEnabled: null, historyEntries: [], nextHistoryId: 1, nativeEpoch: 0,
+    researchEnabled: false, movementAllowed: null, researchEntries: [],
     attempts: 0, lockedUntil: 0, expiresAt: 0, verifiedPackage: null, launched: [], biometric: 'success', ...initial, calls: [] };
   const recordHistory = (pkg, method, outcome) => {
+    if (fixture.researchEnabled && pkg) {
+      fixture.researchEntries.push({ reason: outcome !== 'verified' ? 'not_verified' : !fixture.movementAllowed ? 'movement_disabled' : method === 'PIN' ? 'pin_flow' : 'too_short' });
+      fixture.researchEntries = fixture.researchEntries.slice(-500);
+    }
     if (fixture.historyEnabled !== true || !pkg) return;
     fixture.historyEntries.unshift({ id: fixture.nextHistoryId++, occurredAt: Date.now(), packageName: pkg,
       label: (fixture.apps.find(app => app.id === pkg)?.name || pkg).slice(0, 160), method, outcome });
@@ -33,6 +38,23 @@ module.exports = async function installBridge(context, initial = {}) {
         return { value: { dark: fixture.darkMode } };
       }
       if (plugin === 'SystemBars') { fixture.systemBarsStyle = options.style; return { value: undefined }; }
+      if (plugin === 'GhostResearch') {
+        if (fixture.researchUnavailable) throw { code: 'RESEARCH_UNAVAILABLE' };
+        if (method === 'getSnapshot' && fixture.movementAllowed === null) fixture.movementAllowed = options?.initialMovement ?? true;
+        if (method === 'configure') {
+          if (options.enabled !== undefined) fixture.researchEnabled = options.enabled;
+          if (options.movementAllowed !== undefined) fixture.movementAllowed = options.movementAllowed;
+        }
+        if (method === 'clearData') fixture.researchEntries = [];
+        const reasons = {};
+        for (const entry of fixture.researchEntries) reasons[entry.reason] = (reasons[entry.reason] || 0) + 1;
+        const value = { enabled: fixture.researchEnabled, movementAllowed: fixture.movementAllowed === true,
+          collecting: false, pausedForError: false, total: fixture.researchEntries.length,
+          eligible: reasons.eligible || 0, rejected: fixture.researchEntries.length - (reasons.eligible || 0),
+          accelerometer: true, gyroscope: !fixture.gyroscopeMissing, reasons };
+        if (method === 'getSnapshot' && fixture.researchSnapshotPending) await new Promise(resolve => { fixture.completeResearchSnapshot = resolve; });
+        return { value: fixture.malformedResearch ? { ...value, eligible: -1 } : value };
+      }
       if (plugin === 'GhostHistory') {
         if (method === 'simulateFingerprintFailure') { recordHistory(fixture.activeBio?.pkg, 'fingerprint', 'failed'); return { value: undefined }; }
         if (fixture.historyUnavailable || (method === 'getSnapshot' && fixture.historyReadUnavailable)) throw { code: 'HISTORY_UNAVAILABLE' };
@@ -141,9 +163,12 @@ module.exports = async function installBridge(context, initial = {}) {
     window.__appListeners = {};
     window.__deviceListeners = {};
     window.__historyListeners = {};
+    window.__researchListeners = {};
     window.__appCallbacks = {};
     window.Capacitor = {
       PluginHeaders: [
+        { name: 'GhostResearch', methods: ['getSnapshot', 'configure', 'clearData'].map(name => ({ name, rtype: 'promise' }))
+          .concat([{ name: 'addListener', rtype: 'callback' }, { name: 'removeListener', rtype: 'callback' }]) },
         { name: 'GhostAppearance', methods: ['getTheme', 'setTheme'].map(name => ({ name, rtype: 'promise' })) },
         { name: 'SystemBars', methods: [{ name: 'setStyle', rtype: 'promise' }] },
         { name: 'GhostHistory', methods: ['getSnapshot', 'configureRecording', 'clearHistory'].map(name => ({ name, rtype: 'promise' }))
@@ -161,6 +186,7 @@ module.exports = async function installBridge(context, initial = {}) {
           if (plugin === 'GhostAuth') window.__authListeners[options.eventName] = callback;
           if (plugin === 'GhostDevice') window.__deviceListeners[options.eventName] = callback;
           if (plugin === 'GhostHistory') window.__historyListeners[options.eventName] = callback;
+          if (plugin === 'GhostResearch') window.__researchListeners[options.eventName] = callback;
         }
         return 'mock-listener';
       },

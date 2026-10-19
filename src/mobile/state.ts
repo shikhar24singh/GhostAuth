@@ -46,6 +46,7 @@ export type Action =
   | { type: 'native-device-unavailable' }
   | { type: 'lock' }
   | { type: 'native-history'; enabled: boolean; events: SecurityEvent[] }
+  | { type: 'native-movement'; enabled: boolean }
   | { type: 'native-verified'; app: AppId; time: string; method: 'PIN' | 'fingerprint' };
 export function canVerify(state: State, app: AppId) {
   return !state.restricted && state.selected.includes(app) && state.apps.some(a => a.id === app)
@@ -77,6 +78,7 @@ export function reducer(state: State, action: Action): State {
     case 'native-status': return state.nativeAuth ? { ...state, fingerprint: action.fingerprint } : state;
     case 'lock': return { ...state, verified: null };
     case 'native-history': return state.nativeAuth ? { ...state, events: action.events, privacy: { ...state.privacy, history: action.enabled } } : state;
+    case 'native-movement': return state.nativeAuth ? { ...state, privacy: { ...state.privacy, movement: action.enabled } } : state;
     case 'native-verified': {
       if (!state.nativeAuth || !canVerify(state, action.app)) return { ...state, verified: null };
       return { ...state, verified: action.app };

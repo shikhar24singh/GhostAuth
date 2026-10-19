@@ -21,6 +21,7 @@ export const screens = {
   event: ['SECURITY EVENT', 'An access\ncheck.', ''],
   settings: ['YOUR PREFERENCES', 'Make it\nyours.', ''],
   privacySettings: ['PRIVACY & DATA', 'Your data.\nYour choice.', ''],
+  research: ['OPTIONAL RESEARCH', 'Motion\nresearch.', 'Measure whether normal verification provides useful motion signals.'],
   permissionHealth: ['PERMISSION STATUS', 'One thing\nto fix.', 'Protection is limited until the required access is restored.'],
   recovery: ['ACCOUNT & DEVICE ACCESS', 'Find your\nway back.', 'Recovery should verify you without bypassing a security restriction.'],
   selectionEmpty: ['PROTOTYPE PREVIEW', 'Choose an app first.', 'Select at least one app to turn on protection. You can change your selection at any time.'],
