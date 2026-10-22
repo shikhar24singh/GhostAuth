@@ -1,6 +1,5 @@
 import type { AuditEntry, DemoSession, DemoUser, ProtectedResource, RiskFactor, Role, Scenario } from './types.ts'
 
-/** All identities, locations, events, signals, and IP addresses below are synthetic. */
 export const USERS: Record<Role, DemoUser> = {
   student: {
     id: 'demo-student',

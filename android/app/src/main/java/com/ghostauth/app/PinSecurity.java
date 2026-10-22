@@ -7,7 +7,6 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-/** Platform-independent credential and retry policy, also exercised by JVM tests. */
 final class PinSecurity {
     static final int ITERATIONS = 600_000;
     static final long SESSION_MILLIS = 30_000;
@@ -16,7 +15,6 @@ final class PinSecurity {
         return pin != null && pin.matches("[0-9]{6}");
     }
 
-    // PBKDF2-HMAC-SHA256, one 256-bit block. Mac supports API 24 too.
     static byte[] derive(String pin, byte[] salt, int iterations) throws GeneralSecurityException {
         if (pin == null || salt == null || iterations < 1) throw new IllegalArgumentException("Invalid KDF parameters");
         byte[] password = pin.getBytes(StandardCharsets.UTF_8);

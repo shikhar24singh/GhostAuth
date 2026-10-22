@@ -18,7 +18,7 @@ public class ProtectionPolicyTest {
         assertFalse(policy.approveLaunch("mail", 3));
         assertTrue(policy.approveLaunch("presto", 4));
         assertFalse(policy.observe("ghost", 5)); assertFalse(policy.observe("presto", 6));
-        assertFalse(policy.observe("presto", 500_000)); // Continuous foreground use needs no repeated PIN.
+        assertFalse(policy.observe("presto", 500_000));
     }
     @Test public void leavingScreenLockSelectionChangeAndRestartRelock() {
         ProtectionPolicy policy = policy();

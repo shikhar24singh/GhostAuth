@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** History is evidence of an attempt, never an authentication or launch approval. */
 final class SecurityHistoryLog {
     static final int LIMIT = 100;
     static final long MAX_ID = 9_007_199_254_740_991L;

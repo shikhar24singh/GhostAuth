@@ -1,4 +1,3 @@
-// Optional production UI smoke test. Set PLAYWRIGHT_MODULE to an installed playwright package.
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const http = require('node:http');
 const fs = require('node:fs');

@@ -73,7 +73,6 @@ export function simulateScenario(state: DemoState, scenario: Scenario): DemoStat
 }
 
 export function verifyMfa(state: DemoState): DemoState {
-  // A challenge is a UI demonstration, never a security control or an authentication claim.
   if (state.decision !== 'challenge' || state.sessions.some((session) => session.isCurrent && session.status === 'revoked')) return state
   const next: DemoState = {
     ...state,

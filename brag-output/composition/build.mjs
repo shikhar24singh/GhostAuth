@@ -26,7 +26,6 @@ tl.fromTo('.hero-logo',{scale:.83,rotation:-5,opacity:0},{scale:1,rotation:0,opa
 tl.to('.hero-logo',{scale:1.035,duration:2.4,ease:'sine.inOut'},.8);
 tl.fromTo('#choose .copy',{x:-50,opacity:0},{x:0,opacity:1,duration:.48,ease:'power3.out'},3.3);
 tl.fromTo('.select-phone',{y:45,rotation:2,opacity:0},{y:0,rotation:0,opacity:1,duration:.55,ease:'power3.out'},3.3);
-// beat-grid: selections 4.39 and 5.34s, followed by settled reading hold.
 tl.fromTo('#check-0',{scale:0},{scale:1,duration:.18,ease:'back.out(1.6)'},4.39);
 tl.fromTo('#check-1',{scale:0},{scale:1,duration:.18,ease:'back.out(1.6)'},5.34);
 tl.fromTo('#cursor',{x:368,y:470,opacity:0},{x:421,y:294,opacity:1,duration:.65,ease:'power2.inOut'},3.74);
@@ -36,20 +35,16 @@ tl.to('#cursor',{scale:.85,duration:.1},5.34).to('#cursor',{scale:1,duration:.18
 tl.to('#cursor',{x:222,y:669,duration:.7,ease:'power2.inOut'},5.86);
 tl.to(['#cursor','#save'],{scale:.96,duration:.1},6.56).to(['#cursor','#save'],{scale:1,duration:.22,ease:'back.out(1.5)'},6.66);
 tl.to('#cursor',{opacity:0,duration:.2},7.05);
-// beat-locked: strong cue 8.74s.
 tl.fromTo('#verify .copy',{x:-50,opacity:0},{x:0,opacity:1,duration:.5,ease:'power3.out'},8.74);
 tl.fromTo('.verify-phone',{y:35,opacity:0},{y:0,opacity:1,duration:.45,ease:'power2.out'},8.74);
 tl.set('.result',{opacity:0},0);
-// Adapted from the registry touch-indicator: contact, target response, lift.
 tl.fromTo('.touch',{scale:.8,opacity:0},{scale:1,opacity:1,duration:.067,ease:'power2.out'},10.863);
 tl.to('.touch',{scale:.9,opacity:0,duration:.2,ease:'power2.out'},11.046);
 tl.to('.reader',{scale:.9,duration:.14},10.93).to('.reader',{scale:1,duration:.35,ease:'back.out(1.6)'},11.07);
-// beat-locked: successful identity confirmation 12.02s.
 tl.to('.result',{opacity:1,duration:.2},12.02);
 tl.to('.gate-logo,.reader,.gate-caption,.use-pin',{autoAlpha:0,duration:.12},12.02);
 tl.fromTo('.final-logo',{x:-70,rotation:-4,opacity:0},{x:0,rotation:0,opacity:1,duration:.65,ease:'power3.out'},14.4);
 tl.fromTo('.final-copy',{x:70,opacity:0},{x:0,opacity:1,duration:.65,ease:'power3.out'},14.55);
-// beat-locked: final brand emphasis 17.47s.
 tl.fromTo('.final-wordmark',{scale:.98},{scale:1,duration:.38,ease:'power2.out'},17.47);
 tl.fromTo('.accent-rule',{scaleX:0},{scaleX:1,duration:1.1,ease:'power3.out'},0);
 if(window.AUDIO_DATA){for(let f=0;f<Math.min(600,AUDIO_DATA.frames.length);f++){const level=AUDIO_DATA.frames[f].bands[0];tl.set('.accent-rule',{opacity:.72+level*.28},f/30);}}

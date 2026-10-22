@@ -18,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import org.json.JSONObject;
 
-/** The PIN verifier, retry counters and biometric binding are one authenticated ciphertext. */
 final class CredentialVault {
     private static final String ALIAS = "ghostauth.credentials.v1";
     private static final byte[] AAD = "com.ghostauth.app.credentials.v1".getBytes(StandardCharsets.UTF_8);
@@ -51,7 +50,6 @@ final class CredentialVault {
     JSONObject read() throws Exception {
         String stored = preferences.getString("record", null);
         if (stored == null) {
-            // A surviving key without its record is not a fresh installation.
             if (keys.containsAlias(ALIAS)) throw new IllegalStateException("Credential record unavailable");
             return new JSONObject();
         }
@@ -68,8 +66,6 @@ final class CredentialVault {
                 || record.getLong("lockDuration") > 3_600_000) throw new IllegalStateException("Invalid credential record");
             long now = SystemClock.elapsedRealtime();
             long boot = bootCount();
-            // Device clock edits cannot shorten the lockout. After reboot, wait the last
-            // imposed delay again, rather than trust a user-editable wall clock.
             if (record.getLong("lockDuration") > 0 && (record.getLong("lockBoot") != boot || now < record.getLong("savedElapsed"))) {
                 record.put("lockedUntilElapsed", now + record.getLong("lockDuration")).put("lockBoot", boot);
                 save(record);
@@ -118,7 +114,7 @@ final class CredentialVault {
         long delay = PinSecurity.delayMillis(failures);
         record.put("failures", failures).put("lockedUntilElapsed", delay == 0 ? 0L : SystemClock.elapsedRealtime() + delay)
             .put("lockDuration", delay).put("lockBoot", bootCount());
-        save(record); // Persist before returning a result, including on failed attempts.
+        save(record);
         return ok;
     }
 

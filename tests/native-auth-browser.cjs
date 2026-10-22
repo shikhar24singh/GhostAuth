@@ -52,7 +52,6 @@ module.exports = async function reviewNativeAuth(browser, url, output) {
     fixture.biometric = 'success'; await btn('Verify with fingerprint').click(); await heading('You’re verified.');
     await page.clock.fastForward(30_001); await heading('Confirm it’s you.');
     assert.equal(fixture.expiresAt, 0);
-    // A late response after native background invalidation cannot grant frontend access.
     await btn('Use fingerprint instead').click(); fixture.biometric = 'pending'; await btn('Verify with fingerprint').click();
     await page.waitForFunction(() => document.querySelector('main').getAttribute('aria-busy') === 'true');
     while (!fixture.completeBiometric) await new Promise(resolve => setTimeout(resolve, 10));

@@ -2,7 +2,6 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Chromium touch/viewport emulation; physical Android keyboard and system UI need a device review.
 module.exports = async function reviewAndroid(browser, url, output, errors) {
   const context = await browser.newContext({ isMobile: true, hasTouch: true, deviceScaleFactor: 2,
     userAgent: `Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${browser.version()} Mobile Safari/537.36` });
@@ -64,7 +63,6 @@ module.exports = async function reviewAndroid(browser, url, output, errors) {
     const homeNav = await page.getByRole('navigation').boundingBox();
     assert.ok(action && homeNav && action.y + action.height <= homeNav.y, 'Main action must not sit behind navigation');
     await button('Choose apps').tap(); await page.getByRole('searchbox').tap();
-    // A reduced viewport checks that search/results/actions remain scrollable with less visible space.
     await page.setViewportSize({ width: 360, height: 360 });
     await page.getByRole('searchbox').fill('no app matches'); await checkTargets('No-results search');
     await button('Clear search').tap(); assert.equal(await page.getByRole('checkbox').count(), 4);

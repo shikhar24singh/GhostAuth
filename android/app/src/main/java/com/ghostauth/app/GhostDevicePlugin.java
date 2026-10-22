@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 import java.io.ByteArrayOutputStream;
 
-/** Device integration only: does not read usage history or enforce app protection. */
 @CapacitorPlugin(name = "GhostDevice")
 public class GhostDevicePlugin extends Plugin {
     private static volatile GhostDevicePlugin current;
@@ -87,8 +86,6 @@ public class GhostDevicePlugin extends Plugin {
     private String applicationIcon(PackageManager manager, ApplicationInfo info) {
         Bitmap bitmap = null;
         try {
-            // Draw the actual Android drawable, including adaptive/vector icons,
-            // into a bounded PNG suitable for the offline WebView interface.
             Drawable drawable = manager.getApplicationIcon(info).mutate();
             bitmap = Bitmap.createBitmap(96, 96, Bitmap.Config.ARGB_8888);
             drawable.setBounds(0, 0, 96, 96);
@@ -97,7 +94,6 @@ public class GhostDevicePlugin extends Plugin {
             if (!bitmap.compress(Bitmap.CompressFormat.PNG, 100, png)) return null;
             return "data:image/png;base64," + Base64.encodeToString(png.toByteArray(), Base64.NO_WRAP);
         } catch (RuntimeException unavailable) {
-            // One unavailable icon must not hide the app or fail the catalog.
             return null;
         } finally {
             if (bitmap != null) bitmap.recycle();
@@ -141,7 +137,6 @@ public class GhostDevicePlugin extends Plugin {
                 call.resolve();
             } catch (RuntimeException ignored) {
                 try {
-                    // Some OEMs don't implement the package-specific settings activity.
                     Intent fallback = permission.equals("service") ? new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         : permission.equals("usage") ? new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS) : appDetails();
                     getActivity().startActivity(fallback);

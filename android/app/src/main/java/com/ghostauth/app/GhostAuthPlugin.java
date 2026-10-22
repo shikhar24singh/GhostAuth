@@ -25,7 +25,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import org.json.JSONObject;
 
-/** Local device authentication. No credential or biometric image leaves Android. */
 @CapacitorPlugin(name = "GhostAuth")
 public class GhostAuthPlugin extends Plugin {
     private static final String BIO_ALIAS = "ghostauth.biometric.v1";
@@ -41,7 +40,7 @@ public class GhostAuthPlugin extends Plugin {
     private void recordHistory(PluginCall call, String method, String outcome) {
         ResearchCapture.finish(call, outcome);
         String pkg = call.getString("packageName");
-        if (pkg == null) return; // Credential management never masquerades as an app check.
+        if (pkg == null) return;
         android.content.Context context = getContext().getApplicationContext();
         long ticket = HistoryStore.ticket(), time = System.currentTimeMillis();
         worker.execute(() -> HistoryStore.record(context, ticket, time, pkg, method, outcome));
@@ -92,7 +91,7 @@ public class GhostAuthPlugin extends Plugin {
         boolean valid = remaining > 0;
         boolean enabled = false;
         if (record.has("bioCiphertext") && available()) {
-            try { biometricCipher(record); enabled = true; } catch (Exception ignored) { /* PIN remains available. */ }
+            try { biometricCipher(record); enabled = true; } catch (Exception ignored) {   }
         }
         return new JSObject().put("pinSet", record.has("verifier"))
             .put("biometricAvailable", available()).put("biometricEnabled", enabled)
@@ -114,8 +113,6 @@ public class GhostAuthPlugin extends Plugin {
         String target = call.getString("packageName");
         getActivity().runOnUiThread(() -> {
             try {
-                // Resolution and the final authorization check run together on the UI
-                // thread, where foreground lifecycle transitions are also delivered.
                 Intent intent = AppLauncher.resolve(getContext(), target);
                 if (intent == null || (ProtectionPreferences.store(getContext()).contains("packages")
                     && !ProtectionPreferences.packages(getContext()).contains(target))) {
@@ -129,7 +126,6 @@ public class GhostAuthPlugin extends Plugin {
                     call.reject("Verify this app again before opening it.", "SESSION_ENDED");
                     return;
                 }
-                // Approval is already consumed before Android receives the intent.
                 if (!ProtectionService.approveLaunch(target)) {
                     endSession();
                     call.reject("The protected app changed. Verify the current app again.", "SESSION_ENDED"); return;

@@ -16,7 +16,6 @@ import javax.crypto.SecretKey;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/** Separate key/file from credentials. All state changes commit before publication. */
 final class HistoryStore {
     private static final String ALIAS = "ghostauth.history.v1";
     private static SecurityHistoryLog log;
@@ -103,7 +102,7 @@ final class HistoryStore {
     static synchronized long ticket() { return revision; }
     static synchronized void record(Context context, long ticket, long time, String pkg, String method, String outcome) {
         try {
-            if (ticket != revision) return; // Clear/pause discards older queued writes.
+            if (ticket != revision) return;
             SecurityHistoryLog value = load(context);
             if (!value.configured || !value.enabled) return;
             String label = pkg;

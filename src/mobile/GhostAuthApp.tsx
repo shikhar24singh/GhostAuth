@@ -132,7 +132,6 @@ export default function GhostAuthApp() {
       if (!auth.status.sessionValid) dispatch({ type: 'lock' });
     }
   }, [auth.status]);
-  // Clear a partially entered new PIN when navigating away from credential setup.
   useEffect(() => {
     if (!['pinSetup', 'pinConfirm', 'pinVerify', 'pinError'].includes(route)) { setNewPin(''); setAuthIntent('verify'); }
   }, [route]);
@@ -241,7 +240,6 @@ export default function GhostAuthApp() {
     const target = verifiedTarget ?? currentApp;
     launchPending.current = true; setLaunching(true); setLaunchError('');
     try {
-      // Native code consumes a fresh approval bound to this exact package.
       await AndroidAuth.launchApp({ packageName: target });
       go('home');
     } catch (failure) {

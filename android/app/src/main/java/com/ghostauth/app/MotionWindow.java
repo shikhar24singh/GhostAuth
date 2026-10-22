@@ -1,6 +1,5 @@
 package com.ghostauth.app;
 
-/** Bounded streaming statistics: no raw samples, credential timing or wall-clock features. */
 final class MotionWindow {
     static final long MIN_NANOS = 2_000_000_000L, MAX_GAP_NANOS = 250_000_000L, MAX_NANOS = 10_000_000_000L;
     int count;

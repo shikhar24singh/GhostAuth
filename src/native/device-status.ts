@@ -5,7 +5,6 @@ export type ProtectionStatus = { configured: boolean; enabled: boolean; connecte
   pending?: { packageName: string; id: string }; error?: string };
 export type DeviceStatus = { apps: AppInfo[]; permissions: Record<Permission, boolean>; protection: ProtectionStatus };
 
-// An unavailable or malformed native response must never become a demo catalog.
 export function checkedDeviceStatus(value: unknown): DeviceStatus {
   if (!value || typeof value !== 'object' || !('apps' in value) || !Array.isArray(value.apps)
     || !('permissions' in value) || !value.permissions || typeof value.permissions !== 'object') {

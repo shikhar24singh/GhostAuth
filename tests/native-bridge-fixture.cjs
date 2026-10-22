@@ -1,4 +1,3 @@
-// A deterministic bridge fixture for UI integration checks, not an Android emulator.
 module.exports = async function installBridge(context, initial = {}) {
   const fixture = { pin: null, biometricAvailable: true, biometricEnabled: false,
     apps: [{ id: 'com.example.mail', name: 'Mail', icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aTXkAAAAASUVORK5CYII=' }, { id: 'com.example.photos', name: 'Photos' }],
@@ -29,7 +28,7 @@ module.exports = async function installBridge(context, initial = {}) {
     return ok;
   };
   await context.exposeBinding('__mockNativeCall', async (_source, plugin, method, options) => {
-    fixture.calls.push({ plugin, method, packageName: options?.packageName }); // No PIN values in diagnostic records.
+    fixture.calls.push({ plugin, method, packageName: options?.packageName });
     if (plugin === 'App') return { value: undefined };
     try {
       if (plugin === 'GhostAppearance') {

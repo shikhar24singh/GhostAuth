@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.getcapacitor.JSObject;
 
-/** User-enabled, package-only detection. This is not an OS-level app sandbox. */
 public class ProtectionService extends AccessibilityService {
     private static volatile java.lang.ref.WeakReference<ProtectionService> current = new java.lang.ref.WeakReference<>(null);
     private final String token = java.util.UUID.randomUUID().toString();
@@ -77,7 +76,6 @@ public class ProtectionService extends AccessibilityService {
     static void ghostAuthVisible() {
         ProtectionService service = current.get();
         if (service != null) {
-            // Use the actual Activity lifecycle; OEM window-event class names vary.
             service.lastPackage = service.getPackageName();
             service.policy.observe(service.getPackageName(), SystemClock.elapsedRealtime());
             service.removeShield();
@@ -88,8 +86,6 @@ public class ProtectionService extends AccessibilityService {
     static void cancelRequest() {
         ProtectionService service = current.get();
         if (service != null) {
-            // Keep a visible shield and its request until Android actually reports
-            // leaving the target. A failed HOME action must not uncover the app.
             if (service.shield == null) service.policy.clear();
             service.performGlobalAction(GLOBAL_ACTION_HOME);
             GhostDevicePlugin.protectionChanged();
@@ -120,7 +116,6 @@ public class ProtectionService extends AccessibilityService {
         if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || event.getPackageName() == null
             || event.getEventTime() < lastEventTime) return;
         String pkg = event.getPackageName().toString();
-        // The shield is our own window, but only the real GhostAuth activity may dismiss it.
         if (pkg.equals(getPackageName()) && !MainActivity.class.getName().contentEquals(event.getClassName() == null ? "" : event.getClassName())) return;
         ComponentName keyboard = ComponentName.unflattenFromString(Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD) == null
             ? "" : Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD));
@@ -145,7 +140,6 @@ public class ProtectionService extends AccessibilityService {
         try {
             startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         } catch (RuntimeException unavailable) {
-            // The opaque shield remains; the user can tap Verify if the OEM denied auto-opening.
         }
     }
 
@@ -185,8 +179,6 @@ public class ProtectionService extends AccessibilityService {
         android.content.res.ColorStateList buttonColor = android.content.res.ColorStateList.valueOf(dark ? Color.rgb(57, 61, 72) : Color.rgb(216, 214, 207));
         verify.setBackgroundTintList(buttonColor); close.setBackgroundTintList(buttonColor);
         verify.setVisibility(android.view.View.GONE); close.setVisibility(android.view.View.GONE);
-        // Keep the handoff quiet. On phones that block the Activity launch, retain
-        // a user-initiated way to enter verification without exposing the app.
         main.postDelayed(() -> {
             if (shield == view) { verify.setVisibility(android.view.View.VISIBLE); close.setVisibility(android.view.View.VISIBLE); }
         }, 800);

@@ -14,7 +14,6 @@ import javax.crypto.SecretKey;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/** Accessed only on ResearchCapture's I/O executor. Independent from the credential/history stores. */
 final class ResearchStore {
     static final int LIMIT = ResearchRetention.LIMIT, MAX_BYTES = ResearchRetention.MAX_BYTES;
     private static final String ALIAS = "ghostauth.research.v1";
@@ -55,7 +54,6 @@ final class ResearchStore {
         for (int i = ResearchRetention.firstRetainedIndex(old.length()); i < old.length(); i++) {
             JSONObject entry = old.getJSONObject(i);
             long time = entry.getLong("occurredAt");
-            // Clock rollback conservatively removes future-dated samples.
             if (ResearchRetention.retain(time, now)) next.put(entry);
         }
         value.put("entries", next); return next.length() != old.length();

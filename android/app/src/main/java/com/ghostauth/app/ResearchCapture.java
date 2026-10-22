@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/** Main-thread sensor ownership; independent I/O never waits on the authentication executor. */
 final class ResearchCapture implements SensorEventListener {
     private static volatile ResearchCapture current;
     private final Handler main = new Handler(Looper.getMainLooper());
@@ -95,7 +94,6 @@ final class ResearchCapture implements SensorEventListener {
         if (!ready || fault || !enabled || !resumed || pkg == null) return;
         pending = new Pending(callback, pkg, method, revision.get());
         if (!movementAllowed) { pending.stopReason = "movement_disabled"; return; }
-        // PIN flows contribute only outcome diagnostics. Never measure credential-entry motion/timing.
         if (!"fingerprint".equals(method)) { pending.stopReason = "pin_flow"; return; }
         if (!focused) { pending.stopReason = "focus_lost"; return; }
         if (sensors == null || (accelerometer == null && gyroscope == null)) { pending.stopReason = "no_sensors"; return; }
@@ -192,7 +190,6 @@ final class ResearchCapture implements SensorEventListener {
         ResearchCapture capture = current;
         if (capture == null) { call.reject("Research collection is unavailable.", "RESEARCH_UNAVAILABLE"); return; }
         capture.main.post(() -> {
-            // Invalidate before queuing I/O: older buffers and queued records cannot survive settings/clear.
             if (!"snapshot".equals(action)) {
                 capture.revision.incrementAndGet(); capture.stop("settings_changed"); capture.pending = null;
                 capture.enabled = false;

@@ -30,20 +30,17 @@ module.exports = async function reviewHistory(browser, url, output) {
     await page.getByText('Identity check did not match.', { exact: true }).waitFor();
     assert.match(await page.locator('main').innerText(), /com.example.mail/);
     await page.reload(); await heading('Your recent activity.'); assert.equal(await rows().count(), 2);
-    // A new WebView/page restores native evidence, never native launch authorization.
     const previous = page; page = await context.newPage(); watch(); await previous.close();
     await page.goto(url + '#success'); await heading('Confirm it’s you.');
     assert.equal(await btn('Open Mail').count(), 0); await history(); assert.equal(await rows().count(), 2);
     assert.equal(await page.evaluate(() => JSON.stringify({ ...localStorage }).includes('654321')), false);
     assert.equal(JSON.stringify(fixture.historyEntries).includes('111111'), false);
-    // Capture another package with the same label, then remove it from the catalog.
     await route('home', 'App protection.'); await page.locator('button.app-row').filter({ hasText: 'com.example.other' }).click();
     await btn('Verify & open app').click(); await heading('App protection.');
     assert.equal(fixture.historyEntries[0].packageName, 'com.example.other');
     fixture.apps.pop(); await page.evaluate(() => window.__appListeners.appStateChange({ isActive: true }));
     await history(); await page.getByRole('button', { name: /Mail · verified with fingerprint/ }).click();
     assert.match(await page.locator('main').innerText(), /com.example.other/); await btn('Back to activity').click();
-    // A nonmatching scan and a later match are distinct native outcomes.
     fixture.biometric = 'pending'; fixture.completeBiometric = null;
     await route('home', 'App protection.'); await btn('Open Mail protection details').click(); await btn('Verify & open app').click();
     await page.locator('.fingerprint-gate').waitFor();
@@ -65,7 +62,6 @@ module.exports = async function reviewHistory(browser, url, output) {
     await privacy(false); await route('pinVerify', 'Confirm it’s you.'); await pin('654321'); await heading('You’re verified.');
     assert.equal(fixture.historyEntries.length, count); await page.reload(); await heading('Confirm it’s you.');
     await history(); assert.equal(await rows().count(), count); assert.match(await page.locator('main').innerText(), /recording is paused/);
-    // Native consent remains authoritative even if the old frontend copy disagrees.
     await page.evaluate(() => { const key = 'ghostauth.android.preferences.v1'; const saved = JSON.parse(localStorage.getItem(key)); saved.privacy.history = true; localStorage.setItem(key, JSON.stringify(saved)); });
     await page.reload(); await heading('Your recent activity.'); assert.match(await page.locator('main').innerText(), /recording is paused/);
     await privacy(true); await route('pinVerify', 'Confirm it’s you.'); await pin('000000'); await page.getByRole('alert').waitFor();
@@ -80,14 +76,12 @@ module.exports = async function reviewHistory(browser, url, output) {
     assert.equal(fixture.pin, '654321'); assert.equal(fixture.biometricEnabled, true); assert.equal(fixture.historyEnabled, true);
     assert.deepEqual(fixture.protection.packages, ['com.example.mail']);
     await page.reload(); await heading('Your recent activity.'); assert.equal(await rows().count(), 0);
-    // A snapshot taken before clear cannot repopulate the cleared screen.
     await route('pinVerify', 'Confirm it’s you.'); await pin('654321'); await heading('You’re verified.'); await history();
     fixture.historySnapshotPending = true; await btn('Refresh history').click();
     while (!fixture.completeHistorySnapshot) await new Promise(resolve => setTimeout(resolve, 10));
     await dialogClear(); await page.getByRole('dialog').waitFor({ state: 'detached' });
     fixture.historySnapshotPending = false; fixture.completeHistorySnapshot();
     assert.equal(await rows().count(), 0); assert.equal(fixture.historyEntries.length, 0);
-    // Privacy-off upgrades are covered separately below; a broken history bridge must not block identity checks.
     fixture.malformedHistory = true; await btn('Refresh history').click(); await page.getByRole('alert').waitFor();
     await route('pinVerify', 'Confirm it’s you.'); await pin('654321'); await heading('You’re verified.');
     assert.equal(fixture.pin, '654321'); await history();

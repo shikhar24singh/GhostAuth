@@ -14,7 +14,6 @@ try {
             try {
                 $graphics.Clear([System.Drawing.ColorTranslator]::FromHtml('#F5F4F0'))
                 $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
-                # Resample the approved square mark, preserving its existing padding and colors.
                 $graphics.DrawImage($source, [System.Drawing.Rectangle]::new(0,0,$size,$size))
                 $bitmap.Save((Join-Path $folder ($entry[0] + '.png')), [System.Drawing.Imaging.ImageFormat]::Png)
             } finally { $graphics.Dispose(); $bitmap.Dispose() }

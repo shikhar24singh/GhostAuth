@@ -11,7 +11,6 @@ source=source.replace("const image=figma.createImage(figma.base64Decode(ASSETS.l
 source=source.replace("'brand','ink',180", "'brand','ink',180");
 source=source.replace("const allCreated=[];", "const styleAssignments=[];const allCreated=[];");
 source=source.replace("for(const [node,key] of links){if(!screens[key])", "for(const [node,key] of links){let owner=node;while(owner.parent&&owner.parent!==screenPage)owner=owner.parent;if(owner===screens[key])continue;if(!screens[key])");
-// Three coherent operations, one page context each, using the saved builder.
 const fontCode=source.slice(source.indexOf('  const fonts ='),source.indexOf('  const hex='));
 const tokens=source.slice(source.indexOf('  const hex='),source.indexOf('  const screenPage='));
 const helpers=source.slice(source.indexOf('  const styleAssignments='),source.indexOf('  function component('));

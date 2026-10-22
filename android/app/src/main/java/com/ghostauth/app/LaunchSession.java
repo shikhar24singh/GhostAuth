@@ -1,6 +1,5 @@
 package com.ghostauth.app;
 
-/** In-memory, package-bound approval. Never persisted across process restarts. */
 final class LaunchSession {
     private long grantedAt = -1;
     private String packageName;
@@ -12,7 +11,7 @@ final class LaunchSession {
     }
     synchronized boolean consume(String target, long now) {
         boolean allowed = target != null && target.equals(packageName) && remaining(now) > 0;
-        clear(); // Every launch attempt consumes approval, including an incorrect target.
+        clear();
         return allowed;
     }
 }

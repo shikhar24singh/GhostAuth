@@ -7,7 +7,6 @@ const paths = new Set([DOWNLOAD_PATH, '/GhostAuth-preview.apk', '/GhostAuth-debu
 
 function byteRange(header, size) {
   const match = /^bytes=(\d*)-(\d*)$/.exec(header || '');
-  // Ignore unsupported or malformed ranges, including multipart requests.
   if (!match || (!match[1] && !match[2])) return null;
   const suffix = !match[1];
   const first = Number(suffix ? match[2] : match[1]);
@@ -22,7 +21,6 @@ function byteRange(header, size) {
 export function createApkServer(apk) {
   let cached;
   return createServer((req, res) => {
-    // Finish each response with an explicit connection close for download clients.
     res.setHeader('Connection', 'close');
     const pathname = new URL(req.url, 'http://localhost').pathname;
     if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405); res.end(); return; }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 
-/** Resolve only enabled, exported launcher activities in this Android profile. */
 final class AppLauncher {
     static boolean protectable(Context context, String pkg) {
         Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);

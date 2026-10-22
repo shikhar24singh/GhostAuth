@@ -70,7 +70,7 @@ test('native selection is bounded by the installed catalog, and uninstall or sta
   assert.equal(state.verified, mail.id);
   const unavailable = reducer(state, { type: 'native-device-unavailable' });
   assert.equal(unavailable.verified, null); assert.equal(canVerify(unavailable, mail.id), false);
-  assert.deepEqual(unavailable.selected, [mail.id]); // Retry can restore the user's selection.
+  assert.deepEqual(unavailable.selected, [mail.id]);
   const uninstalled = reducer(state, { type: 'native-device', apps: [photos], permissions });
   assert.deepEqual(uninstalled.selected, []); assert.equal(uninstalled.verified, null);
   const changed = reducer(state, { type: 'native-device', apps: [mail, photos], permissions: { ...permissions, usage: true } });

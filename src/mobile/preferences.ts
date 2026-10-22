@@ -1,6 +1,5 @@
 import { APPS, initialState, type Privacy, type State } from './state.ts';
 
-// Keep the original storage key so the brand correction preserves saved choices.
 export const PREFERENCES_KEY = 'ghostnet.preferences.v1';
 export const ANDROID_PREFERENCES_KEY = 'ghostauth.android.preferences.v1';
 export function validPackageName(value: string): boolean {
@@ -27,8 +26,6 @@ export function loadPreferences(storage = deviceStorage(), native = false): Pref
   try {
     const raw = storage.getItem(native ? ANDROID_PREFERENCES_KEY : PREFERENCES_KEY);
     if (raw === null) {
-      // Previous Android builds saved sample-app IDs in the browser-format key.
-      // Retain consent choices, but never treat those IDs as installed packages.
       const legacy = native ? loadPreferences(storage) : null;
       return legacy ? { selected: [], privacy: legacy.privacy } : null;
     }
@@ -52,7 +49,6 @@ export function loadInitialState(storage = deviceStorage(), native = false): Sta
 
 export function savePreferences(preferences: Preferences, storage = deviceStorage(), native = false): boolean {
   if (!storage) return false;
-  // Explicit fields keep temporary verification/session data out of saved preferences.
   const privacy: Privacy = {
     behavior: preferences.privacy.behavior,
     movement: preferences.privacy.movement,
@@ -69,8 +65,6 @@ export function savePreferences(preferences: Preferences, storage = deviceStorag
 
 export function clearSavedPreferences(storage = deviceStorage(), native = false): boolean {
   if (!storage) return false;
-  // Persist explicit native defaults so legacy consent isn't restored after reset.
-  // The legacy record remains intact, preserving the browser preview's choices.
   if (native) return savePreferences(initialState(true), storage, true);
   try { storage.removeItem(native ? ANDROID_PREFERENCES_KEY : PREFERENCES_KEY); return true; }
   catch { return false; }

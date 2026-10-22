@@ -50,7 +50,6 @@ export function useNativeDevice() {
     });
     const protectionListener = AndroidDevice.addListener('protectionChanged', () => { if (!document.hidden) void refresh(); });
     void protectionListener.catch(() => {});
-    // Visibility changes still refresh status if the App listener is unavailable.
     void listener.catch(() => {});
     return () => {
       mounted.current = false; epoch.current++;

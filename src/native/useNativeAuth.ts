@@ -81,7 +81,6 @@ export function useNativeAuth(onLock: () => void, route: string) {
     };
   }, [ended, refresh]);
 
-  // Native code independently enforces the same deadline with a monotonic clock.
   useEffect(() => {
     if (!status?.sessionValid) return;
     const timer = window.setTimeout(() => { ended(); void AndroidAuth.lock().catch(() => {}); }, status.sessionRemainingMillis);

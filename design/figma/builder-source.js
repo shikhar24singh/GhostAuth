@@ -1,4 +1,3 @@
-/* Local, network-free Figma builder. Only creates a dedicated GhostNet design. */
 async function buildGhostNet() {
   const existing = figma.root.children.find(p => p.name === '01 — Android screens');
   if (existing) { await figma.setCurrentPageAsync(existing); figma.viewport.scrollAndZoomIntoView(existing.children); figma.closePlugin('GhostNet already exists. No duplicate created.'); return; }

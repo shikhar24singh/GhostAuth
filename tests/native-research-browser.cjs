@@ -33,7 +33,6 @@ module.exports = async function reviewResearch(browser, url, output) {
     await heading('You’re verified.'); await research();
     await page.getByText('1 total · 0 usable · 1 insufficient or unverified', { exact: true }).waitFor();
     await page.getByText('PIN flow excluded from motion capture', { exact: true }).waitFor();
-    // A mocked fast fingerprint outcome never invents a usable window.
     await route('home', 'App protection.'); await btn('Open Mail protection details').click(); await btn('Verify & open app').click();
     await heading('App protection.'); await research(); assert.equal(fixture.researchEntries.length, 2);
     assert.deepEqual(fixture.launched, ['com.example.mail']);

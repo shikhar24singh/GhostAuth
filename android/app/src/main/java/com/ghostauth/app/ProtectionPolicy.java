@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Package-only foreground policy. No screen contents or approvals are persisted. */
 final class ProtectionPolicy {
     private final String ownPackage;
     private Set<String> selected = new HashSet<>();
@@ -23,7 +22,7 @@ final class ProtectionPolicy {
             if (!arrived && ownPackage.equals(pkg) && now < arrivingUntil) return false;
             approved = null; arrived = false;
         }
-        if (ownPackage.equals(pkg)) return false; // Keep the trusted request while the user verifies.
+        if (ownPackage.equals(pkg)) return false;
         if (!selected.contains(pkg)) { pending = null; return false; }
         if (!pkg.equals(pending)) { pending = pkg; request++; }
         return true;

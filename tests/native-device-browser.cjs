@@ -68,7 +68,6 @@ module.exports = async function reviewNativeDevice(browser, url, output) {
     assert.equal(await page.getByRole('alert').count(), 0, 'Errors from a previous Settings screen should not carry over');
     assert.equal(await btn('Open Android settings').count(), 0);
     assert.equal(await btn('Simulate access enabled').count(), 0);
-    // A later refresh supersedes an earlier snapshot captured before access was revoked.
     fixture.snapshotPending = true; await btn('Refresh Android status').click();
     await page.waitForFunction(() => document.querySelector('[role="status"]') !== null);
     while (!fixture.completeSnapshot) await new Promise(resolve => setTimeout(resolve, 10));

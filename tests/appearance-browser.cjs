@@ -46,7 +46,6 @@ module.exports = async function reviewAppearance(browser, url, output) {
       await page.reload(); await settings(); assert.equal(await theme(), 'light');
       if (fixture) {
         assert.equal(fixture.systemBarsStyle, 'LIGHT'); assert.equal(fixture.pin, '654321');
-        // Native preference wins over the browser cache on startup.
         fixture.darkMode = true;
         await page.evaluate(() => localStorage.setItem('ghostauth.android.appearance.v1', 'light'));
         await page.reload(); await settings(); await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
