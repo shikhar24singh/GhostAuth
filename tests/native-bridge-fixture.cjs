@@ -5,10 +5,12 @@ module.exports = async function installBridge(context, initial = {}) {
     protection: { configured: false, enabled: false, connected: false, packages: [] },
     darkMode: false, historyEnabled: null, historyEntries: [], nextHistoryId: 1, nativeEpoch: 0,
     researchEnabled: false, movementAllowed: null, researchEntries: [],
+    diagnosticState: 'idle', diagnosticRun: null, diagnosticLease: null, diagnosticLeaseCounter: 0, diagnosticCounter: 0,
     attempts: 0, lockedUntil: 0, expiresAt: 0, verifiedPackage: null, launched: [], biometric: 'success', ...initial, calls: [] };
   const recordHistory = (pkg, method, outcome) => {
     if (fixture.researchEnabled && pkg) {
-      fixture.researchEntries.push({ reason: outcome !== 'verified' ? 'not_verified' : !fixture.movementAllowed ? 'movement_disabled' : method === 'PIN' ? 'pin_flow' : 'too_short' });
+      fixture.researchEntries.push({ method, stoppedBy: !fixture.movementAllowed ? 'movement_disabled' : method === 'PIN' ? 'pin_flow' : 'focus_lost',
+        reason: outcome !== 'verified' ? 'not_verified' : !fixture.movementAllowed ? 'movement_disabled' : method === 'PIN' ? 'pin_flow' : 'too_short' });
       fixture.researchEntries = fixture.researchEntries.slice(-500);
     }
     if (fixture.historyEnabled !== true || !pkg) return;
@@ -27,6 +29,19 @@ module.exports = async function installBridge(context, initial = {}) {
     if (!ok && fixture.attempts >= 5) fixture.lockedUntil = Date.now() + 30_000;
     return ok;
   };
+  const emptyDiagnosticSensor = units => ({ samples: 0, durationMillis: 0, rateHz: null, maxGapMillis: null, quality: 'too_short', units });
+  fixture.finishDiagnostic = (reason = 'completed', sensors) => {
+    if (fixture.diagnosticState !== 'running') return;
+    fixture.diagnosticState = reason === 'completed' ? 'complete' : 'stopped';
+    fixture.diagnosticRun = { ...fixture.diagnosticRun, reason, remainingMillis: 0, ...sensors };
+  };
+  const diagnosticSnapshot = () => {
+    const blockedReason = fixture.diagnosticState === 'running' ? 'running' : fixture.researchUnavailable ? 'storage_unavailable'
+      : !fixture.researchEnabled ? 'research_disabled' : !fixture.movementAllowed ? 'movement_disabled'
+      : fixture.diagnosticNotForeground ? 'not_foreground' : null;
+    return structuredClone({ canStart: blockedReason === null, blockedReason, accelerometer: true, gyroscope: !fixture.gyroscopeMissing,
+      windowMillis: 5000, state: fixture.diagnosticState, run: fixture.diagnosticRun });
+  };
   await context.exposeBinding('__mockNativeCall', async (_source, plugin, method, options) => {
     fixture.calls.push({ plugin, method, packageName: options?.packageName });
     if (plugin === 'App') return { value: undefined };
@@ -38,19 +53,56 @@ module.exports = async function installBridge(context, initial = {}) {
       }
       if (plugin === 'SystemBars') { fixture.systemBarsStyle = options.style; return { value: undefined }; }
       if (plugin === 'GhostResearch') {
+        if (['openDiagnostic', 'closeDiagnostic', 'getDiagnostic', 'startDiagnostic', 'stopDiagnostic', 'clearDiagnostic', 'copyDiagnostic'].includes(method)) {
+          if (fixture.diagnosticUnavailable) throw { code: 'DIAGNOSTIC_UNAVAILABLE' };
+          if (method === 'openDiagnostic') {
+            fixture.finishDiagnostic('screen_left'); fixture.diagnosticLease = 'screen:' + ++fixture.diagnosticLeaseCounter;
+            return { value: { lease: fixture.diagnosticLease, status: diagnosticSnapshot() } };
+          }
+          if (options.lease !== fixture.diagnosticLease || !fixture.diagnosticLease) {
+            if (method === 'closeDiagnostic') return { value: undefined };
+            throw { code: 'DIAGNOSTIC_CLOSED' };
+          }
+          if (method === 'closeDiagnostic') { fixture.finishDiagnostic('screen_left'); fixture.diagnosticLease = null; return { value: undefined }; }
+          if (method === 'startDiagnostic') {
+            if (options.consent !== true || !diagnosticSnapshot().canStart) throw { code: 'DIAGNOSTIC_BLOCKED' };
+            fixture.diagnosticState = 'running'; fixture.diagnosticRun = { id: ++fixture.diagnosticCounter, remainingMillis: 5000, reason: null,
+              acceleration: emptyDiagnosticSensor('m/s²'), rotation: emptyDiagnosticSensor('rad/s') };
+          }
+          if (method === 'stopDiagnostic') fixture.finishDiagnostic('stopped_by_user');
+          if (method === 'clearDiagnostic') { fixture.finishDiagnostic('cleared'); fixture.diagnosticState = 'idle'; fixture.diagnosticRun = null; }
+          if (method === 'copyDiagnostic') {
+            if (!fixture.diagnosticRun || fixture.diagnosticState === 'running' || options.runId !== fixture.diagnosticRun.id || fixture.diagnosticNotForeground)
+              throw { code: 'DIAGNOSTIC_UNAVAILABLE' };
+            fixture.copiedDiagnostic = 'GhostAuth motion diagnostic only\n' + JSON.stringify({ reason: fixture.diagnosticRun.reason,
+              acceleration: fixture.diagnosticRun.acceleration, rotation: fixture.diagnosticRun.rotation }) + '\nNo identity verification or training sample.';
+            return { value: { copied: true } };
+          }
+          const value = diagnosticSnapshot();
+          if (fixture.diagnosticSnapshotPending && method === 'getDiagnostic') await new Promise(resolve => { fixture.completeDiagnosticSnapshot = resolve; });
+          return { value: fixture.malformedDiagnostic ? { ...value, windowMillis: 10000 } : value };
+        }
         if (fixture.researchUnavailable) throw { code: 'RESEARCH_UNAVAILABLE' };
         if (method === 'getSnapshot' && fixture.movementAllowed === null) fixture.movementAllowed = options?.initialMovement ?? true;
         if (method === 'configure') {
+          fixture.finishDiagnostic('settings_changed');
           if (options.enabled !== undefined) fixture.researchEnabled = options.enabled;
           if (options.movementAllowed !== undefined) fixture.movementAllowed = options.movementAllowed;
         }
-        if (method === 'clearData') fixture.researchEntries = [];
+        if (method === 'clearData') { fixture.researchEntries = []; fixture.finishDiagnostic('cleared'); fixture.diagnosticState = 'idle'; fixture.diagnosticRun = null; }
         const reasons = {};
         for (const entry of fixture.researchEntries) reasons[entry.reason] = (reasons[entry.reason] || 0) + 1;
+        const fingerprint = fixture.researchEntries.filter(entry => entry.method !== 'PIN');
+        const stops = {};
+        for (const entry of fingerprint) stops[entry.stoppedBy || 'focus_lost'] = (stops[entry.stoppedBy || 'focus_lost'] || 0) + 1;
+        const emptySensor = () => ({ windows: 0, usableWindows: 0, medianDurationMillis: null, medianRateHz: null, maxGapMillis: null });
+        const diagnostics = fixture.researchDiagnostics || { fingerprintSessions: fingerprint.length,
+          pinSessions: fixture.researchEntries.length - fingerprint.length, usableFingerprintSessions: reasons.eligible || 0,
+          bothSensorsUsable: 0, stops, acceleration: emptySensor(), rotation: emptySensor() };
         const value = { enabled: fixture.researchEnabled, movementAllowed: fixture.movementAllowed === true,
           collecting: false, pausedForError: false, total: fixture.researchEntries.length,
           eligible: reasons.eligible || 0, rejected: fixture.researchEntries.length - (reasons.eligible || 0),
-          accelerometer: true, gyroscope: !fixture.gyroscopeMissing, reasons };
+          accelerometer: true, gyroscope: !fixture.gyroscopeMissing, reasons, diagnostics };
         if (method === 'getSnapshot' && fixture.researchSnapshotPending) await new Promise(resolve => { fixture.completeResearchSnapshot = resolve; });
         return { value: fixture.malformedResearch ? { ...value, eligible: -1 } : value };
       }
@@ -104,6 +156,11 @@ module.exports = async function installBridge(context, initial = {}) {
           if (!allowed) throw { code: 'SESSION_ENDED' };
           if (fixture.protection.pending && fixture.protection.pending.packageName !== options.packageName) throw { code: 'SESSION_ENDED' };
           delete fixture.protection.pending;
+          if (fixture.launchConfirmationPending) {
+            const arrived = await new Promise(resolve => { fixture.completeHandoff = resolve; });
+            fixture.completeHandoff = null;
+            if (arrived !== true) throw { code: 'APP_NOT_OPENED' };
+          }
           fixture.launched.push(options.packageName);
           return { value: undefined };
         }
@@ -166,7 +223,7 @@ module.exports = async function installBridge(context, initial = {}) {
     window.__appCallbacks = {};
     window.Capacitor = {
       PluginHeaders: [
-        { name: 'GhostResearch', methods: ['getSnapshot', 'configure', 'clearData'].map(name => ({ name, rtype: 'promise' }))
+        { name: 'GhostResearch', methods: ['getSnapshot', 'configure', 'clearData', 'openDiagnostic', 'closeDiagnostic', 'getDiagnostic', 'startDiagnostic', 'stopDiagnostic', 'clearDiagnostic', 'copyDiagnostic'].map(name => ({ name, rtype: 'promise' }))
           .concat([{ name: 'addListener', rtype: 'callback' }, { name: 'removeListener', rtype: 'callback' }]) },
         { name: 'GhostAppearance', methods: ['getTheme', 'setTheme'].map(name => ({ name, rtype: 'promise' })) },
         { name: 'SystemBars', methods: [{ name: 'setStyle', rtype: 'promise' }] },

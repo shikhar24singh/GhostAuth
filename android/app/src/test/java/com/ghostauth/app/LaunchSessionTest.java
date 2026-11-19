@@ -4,6 +4,28 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class LaunchSessionTest {
+    @Test public void externalReturnBelongsToOneVerifiedPackageAndIsConsumed() {
+        LaunchSession session = new LaunchSession();
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 100));
+        session.grant("com.example.mail", 100, true);
+        assertTrue(session.returnsToProtectedApp("com.example.mail", 101));
+        assertFalse(session.returnsToProtectedApp("com.example.photos", 101));
+        assertTrue(session.consume("com.example.mail", 102));
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 102));
+        session.grant("com.example.mail", 200);
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 201));
+    }
+    @Test public void expiredRevokedOrReplacedProofCannotHideTheVerifierForAnOldTarget() {
+        LaunchSession session = new LaunchSession();
+        session.grant("com.example.mail", 100, true);
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 30_100));
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 99));
+        session.grant("com.example.mail", 200, true); session.clear();
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 201));
+        session.grant("com.example.mail", 300, true); session.grant("com.example.photos", 301);
+        assertFalse(session.returnsToProtectedApp("com.example.mail", 302));
+        assertFalse(session.returnsToProtectedApp("com.example.photos", 302));
+    }
     @Test public void approvalIsBoundToPackageAndConsumedOnce() {
         LaunchSession session = new LaunchSession();
         assertFalse(session.consume("com.example.mail", 100));

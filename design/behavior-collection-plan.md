@@ -1,7 +1,7 @@
 # Behavioral data collection pilot
 
 Status: initial collector implemented in 0.7.0; physical coverage validation, a pilot dataset and a behavioral model remain pending.
-Decision recorded: 2026-10-17. Current Android build: 0.7.0.
+Decision recorded: 2026-10-17. Current Android build: 0.7.1.
 
 ## Research question
 
@@ -81,3 +81,25 @@ The collection milestone is complete when a physical-device coverage report and 
 ## 0.7.0 implementation scope
 
 Separate off-by-default research consent, native authoritative movement permission, foreground motion summaries, encrypted bounded storage, quality counts/reasons, pause/delete controls, and native verification binding are implemented. No touch collector, study-operator labeling, export or model is implemented. PIN checks record outcome diagnostics with zero motion. A nonmatching scan ends its research sample; later success in that prompt cannot enroll that sample. Packages are bound in memory but not persisted. Retention is enforced on the next research read/write; deleting research data does not delete security history or credentials. Physical-device checks and the complete pilot remain pending.
+
+## 0.7.1 feasibility diagnostics
+
+Motion research now shows retained fingerprint coverage with PIN checks excluded, usable sensor combinations, median sampled duration/rate per sensor, worst measured gaps, and fingerprint capture-stop counts. Unsampled streams and unmeasurable rates/gaps remain missing. Good-quality but unverified windows can contribute delivery diagnostics, never usable enrollment counts. Rates/durations are diagnostic metadata, not new identity features. The persisted summary schema, consent and collection scope are unchanged; 0.7.0 summaries remain readable.
+
+Capture now preserves the first observed interruption rather than overwriting it on completion; background, screen-off, cancellation and replacement are distinguished when observed first. Focus loss cannot identify which system window caused it, and historical summaries keep their original reasons. No measurement delays authentication. Launch latency and battery impact still need independent physical measurement.
+
+The first target phone is a Nothing Phone 2a on Android 16, provided by the user on 2026-11-16. Follow [the owner feasibility pilot](../android/motion-pilot.md). Preparation and automated tests do not establish physical coverage, label quality or a training dataset.
+
+## First physical observation: 2026-11-17
+
+A user-provided photo shows 0 usable of 12 retained fingerprint checks on the reported Nothing Phone 2a / Android 16, with all 12 capture stops attributed to focus loss. Accelerometer delivery was observed in 12 windows (median duration 0.11 s); gyroscope delivery in 6 windows (displayed median duration 0.00 s). The complete visible aggregates and limitations are recorded in [the pilot observations](../android/motion-pilot.md). App version, exact per-session quality/outcomes, protocol adherence and latency are not established by the photo.
+
+This group provides no eligible training candidates and does not establish capture feasibility for the current fingerprint-first flow. Investigate sustained sensor delivery separately from prompt lifecycle behavior before redesigning capture. Any explicit foreground diagnostic must have its own disclosure and separate data purpose, retain lifecycle/consent stops, and must not substitute its task data for natural-use evaluation. Do not lower quality thresholds, delay normal authentication or continue collection after focus loss to make the gate pass. Other phone/device reviews and an independently labeled research dataset remain incomplete.
+
+## Offline model foundation: 2026-11-17
+
+Version 0.7.3 now implements the separately disclosed foreground delivery diagnostic described above. The five-second native session requires research and movement consent plus an explicit per-run agreement; lifecycle, screen navigation, authentication and settings changes stop it without restart. Counts, duration, rate, gaps and quality remain temporarily in memory, with explicit clipboard copy. No diagnostic features are persisted, exported as a dataset, bound to identity, included in fingerprint coverage or used for training. [Physical sustained-delivery checks](../android/motion-diagnostic.md) remain pending; this task cannot resolve natural-use model validity on its own.
+
+The user requested starting the behavioral model and specified a future policy of low risk -> direct opening, medium -> fingerprint, high -> PIN, with failed verification reported inside GhostAuth. The [offline research pipeline](../research/README.md) now implements per-owner distance/Isolation Forest comparisons, sensor-specific feature sets, strict study labels/quality, temporal session partitions, validation-only cutoffs and held-out metrics. Model action recommendations exist in research code only. Unknown/missing signals are not assigned low risk. No real study dataset, physical-data model or Android risk bypass is established.
+
+The present summaries only retain eligible features after native verification, so using them to decide whether to request that same verification would be circular. Collection must produce relevant, consented signals at decision time and pass a new natural-flow feasibility study before risk-based enforcement. Synthetic fixtures test the pipeline mechanics only; they are not evidence for the conference paper or the app's recognition accuracy.

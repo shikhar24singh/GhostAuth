@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const installBridge = require('./native-bridge-fixture.cjs');
 module.exports = async function reviewFingerprint(browser, url, output) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-  const fixture = await installBridge(context, { pin: '654321', biometricEnabled: true, biometric: 'pending',
+    const fixture = await installBridge(context, { pin: '654321', biometricEnabled: true, biometric: 'pending',
     protection: { configured: true, enabled: true, connected: true, packages: ['com.example.photos', 'com.example.mail'],
       pending: { packageName: 'com.example.photos', id: 'cold:1' } } });
   const page = await context.newPage(), errors = [];
@@ -11,9 +11,16 @@ module.exports = async function reviewFingerprint(browser, url, output) {
   const home = () => page.getByRole('heading', { name: 'App protection.', exact: true }).waitFor();
   const refresh = () => page.evaluate(() => window.__deviceListeners.protectionChanged({}));
   const idle = () => page.waitForFunction(() => document.querySelector('main').getAttribute('aria-busy') === 'false');
-  const waitForScan = async () => { await page.locator('.fingerprint-gate').waitFor();
-    const deadline = Date.now() + 5000; while (!fixture.completeBiometric) {
+  const waitForScan = async (target = 'com.example.photos') => { await page.locator('.fingerprint-gate').waitFor();
+    const deadline = Date.now() + 5000; while (!fixture.completeBiometric || fixture.activeBio?.pkg !== target) {
       if (Date.now() > deadline) throw Error('Automatic scanner did not start'); await new Promise(resolve => setTimeout(resolve, 10));
+    }
+  };
+  const waitForHandoff = async () => {
+    const deadline = Date.now() + 5000;
+    while (!fixture.completeHandoff) {
+      if (Date.now() > deadline) throw Error('Protected-app arrival was not awaited');
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
   };
   const request = async (id, mode = 'pending', target = 'com.example.photos') => {
@@ -29,7 +36,17 @@ module.exports = async function reviewFingerprint(browser, url, output) {
     assert.equal(await page.getByAltText('GhostAuth').evaluate(n => n.complete && n.naturalWidth > 0), true);
     await refresh(); assert.equal(fixture.calls.filter(call => call.method === 'verifyBiometric').length, 1);
     await page.screenshot({ path: require('node:path').join(output, 'native-fingerprint-primary.png') });
-    fixture.completeBiometric(); await home(); assert.deepEqual(fixture.launched, ['com.example.photos']);
+    fixture.launchConfirmationPending = true;
+    fixture.completeBiometric(); await waitForHandoff();
+    await page.getByRole('status').filter({ hasText: 'Opening Photos…' }).waitFor();
+    assert.equal(await page.getByRole('heading', { name: 'App protection.', exact: true }).count(), 0);
+    assert.deepEqual(fixture.launched, []);
+    await page.evaluate(() => {
+      window.__authListeners.sessionEnded({ active: false });
+      window.__appListeners.appStateChange({ isActive: false });
+    });
+    fixture.completeHandoff(true); fixture.launchConfirmationPending = false;
+    await home(); assert.deepEqual(fixture.launched, ['com.example.photos']);
     const scansBeforePin = fixture.calls.filter(call => call.method === 'verifyBiometric').length;
     await request('cold:2', 'pin'); await page.getByLabel('Six-digit PIN').waitFor(); await idle();
     assert.equal(await page.getByRole('alert').count(), 0);
@@ -56,12 +73,23 @@ module.exports = async function reviewFingerprint(browser, url, output) {
     await request('cold:6'); await waitForScan(); const oldScan = fixture.completeBiometric;
     fixture.lateBiometric = true;
     await request('cold:7', 'pending', 'com.example.mail'); oldScan(); fixture.lateBiometric = false;
-    await waitForScan(); fixture.completeBiometric(); await home();
+    await waitForScan('com.example.mail'); fixture.completeBiometric(); await home();
     assert.deepEqual(fixture.launched, ['com.example.photos', 'com.example.photos', 'com.example.photos', 'com.example.photos', 'com.example.mail']);
     fixture.biometricEnabled = false; await page.reload(); await home();
     await request('cold:8'); await page.getByLabel('Six-digit PIN').waitFor();
     assert.equal(await page.locator('.fingerprint-gate').count(), 0);
     await verifyPin('654321'); await home(); assert.equal(fixture.launched.length, 6);
+    fixture.biometricEnabled = true; await page.reload(); await home();
+    await request('cold:9'); await waitForScan();
+    fixture.launchConfirmationPending = true; fixture.completeBiometric(); await waitForHandoff();
+    fixture.completeHandoff(false); fixture.launchConfirmationPending = false;
+    await page.getByRole('alert').waitFor(); await idle();
+    assert.match(await page.getByRole('alert').innerText(), /confirm the selected app opened/);
+    assert.equal(await page.getByRole('heading', { name: 'App protection.', exact: true }).count(), 0);
+    assert.equal(fixture.launched.length, 6);
+    fixture.completeBiometric = null;
+    await btn('Try fingerprint again').click(); await waitForScan(); fixture.completeBiometric(); await home();
+    assert.equal(fixture.launched.length, 7);
     assert.deepEqual(errors, []);
     return [
       'Cold protected-app opening automatically starts one fingerprint prompt with only the GhostAuth mark, reader and PIN fallback',
@@ -69,6 +97,14 @@ module.exports = async function reviewFingerprint(browser, url, output) {
       'Choosing PIN cancels fingerprint and ignores late biometric proof',
       'Fingerprint cancellation, retry and biometric lockout show errors without opening the app',
       'Replacement requests reject old biometric proof; unenrolled or invalidated fingerprint starts with PIN',
+      'External fingerprint success waits for protected-app arrival across backgrounding before leaving the verification screen',
+      'Unconfirmed app opening stays at verification with an actionable retry instead of showing the app list',
     ];
+  } catch (failure) {
+    require('node:fs').writeFileSync(require('node:path').join(output, 'native-fingerprint-failure.json'), JSON.stringify({
+      calls: fixture.calls.slice(-35), protection: fixture.protection, launched: fixture.launched,
+      text: await page.locator('body').innerText(), errors,
+    }, null, 2));
+    throw failure;
   } finally { await context.close(); }
 };

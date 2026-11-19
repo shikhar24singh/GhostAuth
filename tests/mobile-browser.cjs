@@ -22,6 +22,10 @@ async function run() {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   page.on('pageerror', error => errors.push(error.message));
   const url = 'http://127.0.0.1:4178/';
+  if (process.argv.includes('--diagnostic-only')) {
+    checks.push(...await require('./native-diagnostic-browser.cjs')(browser, url, output));
+    console.log(JSON.stringify({ checks, errors }, null, 2)); return;
+  }
   if (process.argv.includes('--research-only')) {
     checks.push(...await require('./native-research-browser.cjs')(browser, url, output));
     console.log(JSON.stringify({ checks, errors }, null, 2)); return;
@@ -35,6 +39,7 @@ async function run() {
     console.log(JSON.stringify({ checks, errors }, null, 2)); return;
   }
   if (process.argv.includes('--native-only')) {
+    checks.push(...await require('./native-diagnostic-browser.cjs')(browser, url, output));
     checks.push(...await require('./native-research-browser.cjs')(browser, url, output));
     checks.push(...await require('./native-shell-browser.cjs')(browser, url, output));
     checks.push(...await require('./native-auth-browser.cjs')(browser, url, output));
@@ -139,6 +144,7 @@ async function run() {
     checks.push(...await require('./appearance-browser.cjs')(browser, url, output));
   assert.deepEqual(errors, []); checks.push('No uncaught browser errors');
   checks.push(...await require('./native-research-browser.cjs')(browser, url, output));
+  checks.push(...await require('./native-diagnostic-browser.cjs')(browser, url, output));
   fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify({ checks, errors }, null, 2));
   console.log(JSON.stringify({ checks, errors, screenshots: output }, null, 2));
 }

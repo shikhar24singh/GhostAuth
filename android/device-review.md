@@ -1,5 +1,39 @@
 # GhostAuth phone review
 
+## 0.7.3 separate motion diagnostic
+
+Automated build, logic, native session and mocked UI checks pass. Physical sensor delivery and clipboard behavior remain pending on Nothing Phone 2a / Android 16. Follow [the diagnostic protocol](motion-diagnostic.md).
+
+- [ ] Upgrade over the existing app and confirm 0.7.3. Enable Movement signals and motion research, then run three separately consented five-second tests and paste each copied report.
+- [ ] Cancel the diagnostic disclosure and confirm no capture starts. Disable Movement signals or pause research and confirm new tests are blocked.
+- [ ] Start another test, press Home and return. Confirm capture stopped and did not restart. Repeat with screen lock and leaving the diagnostic screen.
+- [ ] Confirm diagnostic tests do not change retained verification sessions, fingerprint coverage or security history. Copy and clear a result, then check PIN/fingerprint and selected-app protection still work.
+- [ ] Independently inspect sensor listener boundaries on-device; UI counters alone do not prove absence of background callbacks or native clipboard behavior.
+
+These are delivery tests only. No enrollment sample or model decision is generated. The 0.7.2 protected-app return fix below remains pending physical confirmation in this build.
+
+## 0.7.2 protected-app return
+
+User reported on 2026-11-17 that external app opening performs verification but then leaves GhostAuth's app list in front. This fix is pending physical confirmation on Nothing Phone 2a / Android 16.
+
+- [ ] Open a protected app from its launcher icon. Verify fingerprint; confirm the selected app appears immediately without selecting it inside GhostAuth.
+- [ ] Repeat with PIN fallback. A wrong PIN or canceled/nonmatching fingerprint must show an error and never open the target; security history records attempts when recording is enabled.
+- [ ] Open through notifications and Recents where supported. Check that the handoff does not repeatedly relock or return to the app list. OEM/task behavior and preservation of a specific deep-linked screen require actual-device review.
+- [ ] Leave the protected app and return, then repeat after screen lock. Confirm a fresh verification is required. Try switching to another protected app while verification is in progress; stale proof must not open the previous target.
+- [ ] If Android does not confirm opening within the existing five-second arrival allowance, confirm GhostAuth shows a retry error instead of claiming success. Reverify to retry; no old proof may be reused.
+
+With the enabled accessibility service connected, launch success now waits for a new matching package window event. External verification remembers its origin only in the single-use native proof; launching yields GhostAuth's task so the selected app can come forward. Brief `com.android.systemui` events are tolerated only within the fixed five-second handoff, without authorizing another package. Missing events, OEM restrictions and service interruption remain limitations. This update does not add a behavioral model or enable risk-based bypass.
+
+## 0.7.1 feasibility diagnostics
+
+Initial physical aggregate results received on 2026-11-17 for Nothing Phone 2a / Android 16 (user-provided): 0 usable of 12 fingerprint checks, all 12 captures stopped on focus loss. Both sensors delivered some readings; the accelerometer median window was 0.11 seconds. See [the owner pilot observations](motion-pilot.md). The photo does not show the app version or full outcomes. Physical boundary, persistence, launch-latency and battery review remains pending. Earlier 0.7.0 collection-boundary checks below remain applicable.
+
+- [ ] Confirm retained fingerprint coverage excludes PIN checks, and missing sensor readings/rates remain explicitly missing.
+- [x] Record an initial retained aggregate: accelerometer 12 sampled / 0 usable, median 0.11 s / 104.9 Hz, largest gap 9 ms; gyroscope 6 sampled / 0 usable, median 0.00 s / 21.0 Hz, largest gap 47 ms; focus loss on all 12 checks. No usable sensor combination was demonstrated.
+- [ ] Confirm 0.7.0 summaries remain readable after upgrade; their original stop reasons are retained.
+- [ ] Run the pause, movement-gate, PIN, cancellation, foreground, screen-lock and clear checks in the pilot. Verify credentials, protection and history remain functional.
+- [ ] Keep sensor-listener trace, native storage/race checks, launch latency and battery measurement pending until independently observed; screen counters alone do not establish them.
+
 ## 0.7.0 motion collection pilot
 
 Physical research review is pending. Upgrade over the existing app; record phone model, Android version, sensor availability, eligible/total sessions and any added launch delay. No model or behavioral access decision runs yet.

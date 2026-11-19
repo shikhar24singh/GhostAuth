@@ -1,6 +1,6 @@
 # GhostAuth Android preview
 
-This Capacitor 8 project packages the frontend into an installable debug APK. Its screens, fonts and approved fingerprint mark are bundled in the app; opening it does not require the Vite server or Wi-Fi. The Android application ID is `com.ghostauth.app`, version `0.7.0`, minimum API 24 and target API 36.
+This Capacitor 8 project packages the frontend into an installable debug APK. Its screens, fonts and approved fingerprint mark are bundled in the app; opening it does not require the Vite server or Wi-Fi. The Android application ID is `com.ghostauth.app`, version `0.7.3`, minimum API 24 and target API 36.
 
 Android PIN and biometric checks use native authentication. App selection uses installed launchable apps, and usage access/notification status is read from Android. Selected apps can be opened after native verification. An experimental user-enabled accessibility service covers selected apps opening externally. Behavior learning and risk decisions remain previews. Browser preferences and installed-app preferences are separate. Browser authentication remains a demo; native authentication runs only in the installed APK.
 
@@ -128,3 +128,21 @@ The core [System Bars documentation](https://capacitorjs.com/docs/apis/system-ba
 Phone review should cover installing/opening while offline, native PIN setup and verification after force-close/reopen, wrong PIN and lockout, PIN changes, enabling/canceling/verifying/disabling fingerprint, leaving and returning during verification, Back with a confirmation open, installed app names/selections, real usage/notification settings and portrait/landscape layouts. Build and mocked-bridge browser checks cannot substitute for a physical Android review. The user reports the three proposed 0.5.1 Presto phone-review groups passed on 2026-10-13, including direct fingerprint/PIN launching, wrong-scan denial, cancellation, re-entry, screen locking, notifications/Recents and opening after swiping GhostAuth away. Additional detailed scenarios, service interruption and other OEM behavior remain unreported.
 
 See `build-validation.json` and `device-integration-validation.json` for the current build and native UI integration results. `native-auth-validation.json` and `native-shell-validation.json` retain earlier authentication/shell records. The user reports all four summary phone-review groups passed: catalog/preferences, usage access/notifications/Settings return, PIN persistence/reboot lockout, and biometric prompt/enrollment invalidation. Additional unreported scenarios remain listed in `device-review.md`. Phone model and Android version were not provided.
+
+## 0.7.1 feasibility diagnostics
+
+Settings -> Motion research shows usable retained fingerprint checks divided by all retained fingerprint checks while enrolled; PIN checks are counted separately. Sensor summaries show sampled/usable windows, median duration and delivered rate, and worst measured gaps. Unsampled streams use null measurements; rates/gaps need at least two readings. Usable sensor combinations are reported independently. Delivery diagnostics include insufficient and unverified windows; eligibility still requires native verification. Capture-stop counts preserve the first observed interruption in this build and do not infer which system window caused focus loss. Existing 0.7.0 entries retain their schema and recorded reasons.
+
+Start the [Nothing Phone 2a / Android 16 owner pilot](motion-pilot.md). Physical coverage, listener traces, launch latency and battery impact remain pending. No automatic export, upload, participant labeling, model or behavioral access decision is added.
+
+## 0.7.2 return to the protected app
+
+External verification now binds its origin to the native single-use proof. After exact-package authorization, Android starts the selected app and moves the GhostAuth task behind it. With active protection, success is acknowledged only after a new matching accessibility package window event; timeout, another app, screen lock, changed selection or service interruption produce an unconfirmed-opening error. Pre-handoff queued events cannot confirm the launch. Brief System UI events during the existing fixed five-second allowance do not discard the selected package approval; other apps never inherit it. The frontend keeps an Opening status until confirmation, and binds automatic fingerprint readiness to the exact app/request generation.
+
+This addresses a user-reported return-to-list issue. Native task/OEM behavior is still pending phone confirmation. Model-driven low/medium/high routing is offline research only; missing behavioral evidence cannot currently bypass PIN/fingerprint. Failed verification remains in local Activity when Security history recording is enabled.
+
+## 0.7.3 separate motion diagnostic
+
+Settings -> Motion research -> Open motion diagnostic runs an explicitly consented five-second foreground accelerometer/gyroscope test without authentication. Research enrollment and saved Movement signals consent are required. Native code limits the window, unregisters on lifecycle/settings interruptions and rejects commands from closed diagnostic screens. Tests never resume automatically. The result reports counts, durations, rates, gaps and delivery quality only; it has no persisted features, enrollment eligibility or access authority. The latest result stays in memory and can be cleared independently. Copy results uses an explicit native clipboard action for the finished summary; screenshot protection remains enabled.
+
+Follow [the diagnostic phone protocol](motion-diagnostic.md) on Nothing Phone 2a / Android 16. Automated checks do not establish physical sensor delivery or Android clipboard behavior.

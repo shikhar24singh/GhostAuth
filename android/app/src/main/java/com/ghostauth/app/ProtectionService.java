@@ -37,10 +37,16 @@ public class ProtectionService extends AccessibilityService {
     private volatile String failure;
     private SharedPreferences.OnSharedPreferenceChangeListener changes;
     private boolean receiverRegistered;
+    private String arrivingPackage;
+    private long launchStartedUptime;
+    private Runnable launchArrived, launchRejected;
+    private final Runnable launchTimeout = () -> {
+        policy.revokeArrival(arrivingPackage); settleLaunch(false);
+    };
 
     private final BroadcastReceiver screen = new BroadcastReceiver() {
         @Override public void onReceive(Context context, Intent intent) {
-            policy.clear(); removeShield();
+            policy.clear(); settleLaunch(false); removeShield();
             if (Intent.ACTION_USER_PRESENT.equals(intent.getAction()) && lastPackage != null) observe(lastPackage);
             GhostDevicePlugin.protectionChanged();
         }
@@ -68,9 +74,32 @@ public class ProtectionService extends AccessibilityService {
         return true;
     }
 
+    static boolean hasPendingTarget(String target) {
+        ProtectionService service = current.get();
+        return service != null && ProtectionPreferences.enabled(service) && target != null && target.equals(service.policy.pending());
+    }
+
+    static boolean awaitLaunch(String target, Runnable arrived, Runnable rejected) {
+        ProtectionService service = current.get();
+        if (service == null || !ProtectionPreferences.enabled(service) || service.failure != null) return false;
+        service.settleLaunch(false);
+        if (!service.policy.arriving(target, SystemClock.elapsedRealtime())) { rejected.run(); return true; }
+        service.arrivingPackage = target; service.launchArrived = arrived; service.launchRejected = rejected;
+        service.launchStartedUptime = SystemClock.uptimeMillis();
+        service.main.postDelayed(service.launchTimeout, ProtectionPolicy.ARRIVAL_MILLIS);
+        return true;
+    }
+
+    private void settleLaunch(boolean arrived) {
+        main.removeCallbacks(launchTimeout);
+        Runnable result = arrived ? launchArrived : launchRejected;
+        arrivingPackage = null; launchArrived = null; launchRejected = null;
+        if (result != null) result.run();
+    }
+
     static void launchFailed() {
         ProtectionService service = current.get();
-        if (service != null) { service.policy.clear(); service.removeShield(); }
+        if (service != null) { service.policy.clear(); service.settleLaunch(false); service.removeShield(); }
     }
 
     static void ghostAuthVisible() {
@@ -87,6 +116,7 @@ public class ProtectionService extends AccessibilityService {
         ProtectionService service = current.get();
         if (service != null) {
             if (service.shield == null) service.policy.clear();
+            service.settleLaunch(false);
             service.performGlobalAction(GLOBAL_ACTION_HOME);
             GhostDevicePlugin.protectionChanged();
         }
@@ -107,6 +137,7 @@ public class ProtectionService extends AccessibilityService {
     private void reloadSelection() {
         failure = null;
         policy.select(ProtectionPreferences.packages(this));
+        settleLaunch(false);
         removeShield();
         if (lastPackage != null) observe(lastPackage);
         GhostDevicePlugin.protectionChanged();
@@ -114,7 +145,7 @@ public class ProtectionService extends AccessibilityService {
 
     @Override public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || event.getPackageName() == null
-            || event.getEventTime() < lastEventTime) return;
+            || event.getEventTime() < lastEventTime || (arrivingPackage != null && event.getEventTime() <= launchStartedUptime)) return;
         String pkg = event.getPackageName().toString();
         if (pkg.equals(getPackageName()) && !MainActivity.class.getName().contentEquals(event.getClassName() == null ? "" : event.getClassName())) return;
         ComponentName keyboard = ComponentName.unflattenFromString(Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD) == null
@@ -126,9 +157,14 @@ public class ProtectionService extends AccessibilityService {
     }
 
     private void observe(String pkg) {
-        if (!ProtectionPreferences.enabled(this) || failure != null) { policy.clear(); removeShield(); return; }
+        if (!ProtectionPreferences.enabled(this) || failure != null) { policy.clear(); settleLaunch(false); removeShield(); return; }
         String previous = policy.pending();
-        boolean blocked = policy.observe(pkg, SystemClock.elapsedRealtime());
+        long now = SystemClock.elapsedRealtime();
+        boolean blocked = policy.observe(pkg, now, "com.android.systemui".equals(pkg));
+        if (arrivingPackage != null) {
+            if (arrivingPackage.equals(pkg) && policy.confirmed(pkg)) settleLaunch(true);
+            else if (!policy.arriving(arrivingPackage, now)) settleLaunch(false);
+        }
         if (!blocked) { removeShield(); if (previous != null && policy.pending() == null) GhostDevicePlugin.protectionChanged(); return; }
         if (AppLauncher.resolve(this, pkg) == null) { policy.clear(); removeShield(); return; }
         showShield(pkg);
@@ -202,11 +238,12 @@ public class ProtectionService extends AccessibilityService {
 
     @Override public void onInterrupt() {
         failure = "Protection was interrupted. Re-enable the accessibility service.";
-        policy.clear(); removeShield(); GhostDevicePlugin.protectionChanged();
+        policy.clear(); settleLaunch(false); removeShield(); GhostDevicePlugin.protectionChanged();
     }
 
     @Override public void onDestroy() {
         if (current.get() == this) current.clear();
+        settleLaunch(false);
         main.removeCallbacksAndMessages(null);
         if (changes != null) ProtectionPreferences.store(this).unregisterOnSharedPreferenceChangeListener(changes);
         if (receiverRegistered) unregisterReceiver(screen);

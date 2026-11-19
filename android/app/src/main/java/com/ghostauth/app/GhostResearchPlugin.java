@@ -11,6 +11,14 @@ public class GhostResearchPlugin extends Plugin {
     private static volatile GhostResearchPlugin current;
     @Override public void load() { current = this; }
     static void changed() { GhostResearchPlugin plugin = current; if (plugin != null) plugin.notifyListeners("researchChanged", new JSObject()); }
+    static void diagnosticChanged() { GhostResearchPlugin plugin = current; if (plugin != null) plugin.notifyListeners("diagnosticChanged", new JSObject()); }
+    @PluginMethod public void openDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "open"); }
+    @PluginMethod public void closeDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "close"); }
+    @PluginMethod public void getDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "snapshot"); }
+    @PluginMethod public void startDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "start"); }
+    @PluginMethod public void stopDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "stop"); }
+    @PluginMethod public void clearDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "clear"); }
+    @PluginMethod public void copyDiagnostic(PluginCall call) { ResearchCapture.diagnosticOperation(call, "copy"); }
     @PluginMethod public void getSnapshot(PluginCall call) { ResearchCapture.operation(call, "snapshot", null, call.getBoolean("initialMovement")); }
     @PluginMethod public void configure(PluginCall call) {
         Boolean enabled = call.getBoolean("enabled"), movement = call.getBoolean("movementAllowed");

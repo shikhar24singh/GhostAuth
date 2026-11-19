@@ -1,12 +1,12 @@
 {
-  "validatedOn": "2026-10-17",
+  "validatedOn": "2026-11-17",
   "appName": "GhostAuth",
   "applicationId": "com.ghostauth.app",
-  "version": "0.7.0",
-  "versionCode": 10,
+  "version": "0.7.3",
+  "versionCode": 13,
   "artifact": "artifacts/GhostAuth-debug.apk",
-  "bytes": 6517819,
-  "sha256": "7cb0a2f77983ff6a3c0fa9ee3b91a901ec590b19697c67f4359f3d56c35581e9",
+  "bytes": 6419886,
+  "sha256": "b977bd5d746fca3cff0eb0223d48be012b6a98c97ed77eb9ed4a05563ea81b32",
   "minimumSdk": 24,
   "targetSdk": 36,
   "build": "assembleDebug, app:testDebugUnitTest and lintDebug passed",
@@ -19,8 +19,8 @@
     "Production frontend and bundled assets built and synced",
     "Native authentication, device integration and package-only accessibility protection service compiled and registered",
     "Accessibility service requires BIND_ACCESSIBILITY_SERVICE; screen-content retrieval and gestures disabled",
-    "42 Node tests and 28 JVM security tests (plus the generated example test) passed",
-    "69 full browser checks passed, including 47 mocked native bridge checks and 34 routes at five viewport sizes",
+    "47 Node tests and 44 JVM security tests (plus the generated example test) passed",
+    "77 full browser checks passed, including 55 mocked native bridge checks and 35 routes at five viewport sizes",
     "Focusable opaque secure lock screen blocks touch/keyboard input; Back/Close retain the shield until the target is left",
     "Native saved scope, explicit consent, reconnect/disconnection status, reset and package-bound verification covered by policy/UI checks",
     "APK v2 signature, version/SDK metadata and SHA-256 verified",
@@ -32,11 +32,19 @@
     "Saved Settings dark mode, shared palette, readable brand mark, native DayNight/bar styling and matching opaque protection shield compiled and visually checked",
     "Appearance persistence across reload/new tabs, reset preservation, native cache reconciliation, failed-save rollback and dark fingerprint handoff passed browser checks",
     "Opt-in native foreground motion capture, independent encrypted research storage and research-specific authenticated encryption compiled; no new permissions or accessibility capabilities",
-    "Research consent, pause/delete, movement gating, PIN exclusion/short-window diagnostics, reload, reset and stale snapshots passed six mocked bridge UI checks",
+    "Research consent, pause/delete, movement gating, PIN exclusion/short-window diagnostics, reload, reset and stale snapshots passed seven mocked bridge UI checks",
     "Eleven research JVM tests passed: six streaming statistics/quality tests, three authenticated encryption tests and two retention-policy tests; physical Android sensor/storage behavior not exercised",
-    "Native callback/package matching and consent revision invalidation protect enrollment eligibility; no trained model or behavioral authorization is included"
+    "Native callback/package matching and consent revision invalidation protect enrollment eligibility; no trained model or behavioral authorization is included",
+    "Six JVM diagnostics tests passed: fingerprint/PIN denominators, missing sensors, medians and gaps, unverified windows, malformed data and bounded aggregation",
+    "Motion research shows retained fingerprint coverage, usable sensor combinations, sampled duration/rate medians, worst measured gaps and capture-stop counts",
+    "Native collection preserves first observed interruption; persisted summary schema, capture scope, consent, native authentication and launch requirements are unchanged",
+    "Five additional JVM launch-policy tests passed: external proof origin/consumption, expiry/replacement, bounded System UI transitions, target arrival, timeout and selection revocation",
+    "External verification yields the GhostAuth task; active service launch completion waits for a new matching package event and errors on unconfirmed arrival",
+    "Automatic fingerprint readiness is bound to exact target/request generation; stale replacement proof and failure/retry covered by mocked browser checks",
+    "Separate five-second native motion diagnostic, screen lease, per-run consent, lifecycle stops and explicit native clipboard copy compiled without new permissions",
+    "Five native diagnostic session tests and five mocked diagnostic browser checks pass; temporary delivery summaries never enter research enrollment, verification coverage or history"
   ],
-  "physicalAndroidTest": "Pending 0.7.0 physical motion collection: sensor delivery/quality, prompt focus/lifecycle stopping, pause/clear persistence and race handling, battery impact and launch latency. Earlier 0.6.0 history and 0.6.1 appearance phone reviews also remain pending. See android/device-review.md.",
+  "physicalAndroidTest": "Nothing Phone 2a / Android 16: photo received 2026-11-17 shows 0 usable of 12 fingerprint windows and 12 focus-loss stops in the intended 0.7.1 pilot (version not visible). Full lifecycle/storage/latency/battery review remains pending. Version 0.7.2 app-return fix is automated-tested and still needs physical confirmation. Version 0.7.3 foreground diagnostic delivery/clipboard review is pending; protocol: android/motion-diagnostic.md.",
   "simulatedFeatures": [
     "risk and behavior learning"
   ],
@@ -49,5 +57,28 @@
     "version": "0.5.1",
     "reportedOn": "2026-10-13",
     "source": "User-reported; see android/device-review.md for scope"
+  },
+  "pilotDevice": {
+    "model": "Nothing Phone 2a",
+    "android": "16",
+    "source": "User-provided on 2026-11-16",
+    "status": "First photo observations received: 0 usable of 12; collection approach needs investigation. Version 0.7.2 handoff phone check pending. Separate diagnostic physical results pending."
+  },
+  "behavioralModel": {
+    "location": "research/README.md",
+    "state": "Offline software foundation; no physical-data model trained or enabled",
+    "unitTests": 14,
+    "trainingWindowsFromPhone": 0,
+    "androidEnforcement": false
+  },
+  "motionDiagnostic": {
+    "protocol": "android/motion-diagnostic.md",
+    "durationMillis": 5000,
+    "persisted": false,
+    "trainingData": false,
+    "enforcement": false,
+    "nativeSessionTests": 5,
+    "mockedBrowserChecks": 5,
+    "physicalReview": "Pending Nothing Phone 2a / Android 16"
   }
 }

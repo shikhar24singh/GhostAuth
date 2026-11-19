@@ -39,6 +39,36 @@ module.exports = async function reviewResearch(browser, url, output) {
     await page.getByText('Too little motion data', { exact: true }).waitFor();
     checks.push('PIN excluded, fast fingerprint reports insufficient data, direct app launch remains intact');
 
+    await page.getByText('0 of 1 (0.0%)', { exact: false }).waitFor();
+    await page.getByText('1 PIN checks excluded from this percentage', { exact: false }).waitFor();
+    assert.equal(await page.getByText('No readings in retained fingerprint checks', { exact: true }).count(), 2);
+    const originalEntries = structuredClone(fixture.researchEntries);
+    fixture.researchEntries.push({ method: 'fingerprint', reason: 'eligible' }, { method: 'fingerprint', reason: 'eligible' },
+      { method: 'fingerprint', reason: 'not_verified' });
+    fixture.researchDiagnostics = { fingerprintSessions: 4, pinSessions: 1, usableFingerprintSessions: 2, bothSensorsUsable: 1,
+      stops: { focus_lost: 1, verification_finished: 2, backgrounded: 1 },
+      acceleration: { windows: 3, usableWindows: 2, medianDurationMillis: 2000, medianRateHz: 20, maxGapMillis: 600 },
+      rotation: { windows: 1, usableWindows: 1, medianDurationMillis: 2200, medianRateHz: 19.5, maxGapMillis: 55 } };
+    await research();
+    await page.getByText('2 of 4 (50.0%)', { exact: false }).waitFor();
+    await page.getByText('Both sensors 1 · accelerometer only 1 · gyroscope only 0', { exact: true }).waitFor();
+    await page.getByText(/Median window 2.00 s · median rate 20.0 Hz/).waitFor();
+    await page.getByText(/Largest gap 600 ms/).waitFor();
+    await page.getByText('GhostAuth left the foreground', { exact: true }).waitFor();
+    for (const viewport of [{ width: 320, height: 568 }, { width: 844, height: 390 }]) {
+      await page.setViewportSize(viewport);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await btn('Refresh research data').scrollIntoViewIfNeeded();
+      assert.ok(await btn('Refresh research data').isVisible());
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('main').evaluate(node => node.scrollTo(0, 0));
+    await page.screenshot({ path: require('node:path').join(output, 'native-research-coverage.png') });
+    await page.getByText('Accelerometer delivery', { exact: true }).scrollIntoViewIfNeeded();
+    await page.screenshot({ path: require('node:path').join(output, 'native-research-delivery.png') });
+    fixture.researchEntries = originalEntries; delete fixture.researchDiagnostics; await research();
+    checks.push('Retained fingerprint denominator excludes PIN; sampled durations, rates, gaps and sensor combinations remain readable on small screens');
+
     await btn('Pause research collection').click(); await btn('Enable research collection').waitFor();
     const retained = fixture.researchEntries.length;
     await route('pinVerify', 'Confirm it’s you.'); await page.getByLabel('Six-digit PIN').fill('654321'); await btn('Verify PIN').click();
@@ -67,6 +97,10 @@ module.exports = async function reviewResearch(browser, url, output) {
     fixture.researchUnavailable = false; await research();
     fixture.malformedResearch = true; await btn('Refresh research data').click(); await page.getByRole('alert').first().waitFor();
     fixture.malformedResearch = false; await btn('Refresh research data').click(); await btn('Pause research collection').waitFor();
+    fixture.researchDiagnostics = { fingerprintSessions: 999 };
+    await btn('Refresh research data').click(); await page.getByRole('alert').first().waitFor();
+    assert.equal(await page.getByText('Usable fingerprint checks', { exact: true }).count(), 0);
+    delete fixture.researchDiagnostics; await btn('Refresh research data').click(); await btn('Pause research collection').waitFor();
     checks.push('Unavailable/malformed research bridge reports error and cannot prevent native PIN verification');
 
     await route('settings', 'Make it yours.'); await btn('Reset saved preferences Restore app selection and data choices').click();

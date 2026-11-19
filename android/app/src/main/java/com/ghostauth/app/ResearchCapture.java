@@ -28,6 +28,7 @@ final class ResearchCapture implements SensorEventListener {
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final AtomicLong revision = new AtomicLong();
     private final ResearchStore store;
+    private final MotionDiagnosticCapture diagnostic;
     private final SensorManager sensors;
     private final Sensor accelerometer, gyroscope;
     private volatile boolean enabled, movementAllowed, ready, fault;
@@ -48,11 +49,15 @@ final class ResearchCapture implements SensorEventListener {
     }
     private ResearchCapture(Context context) {
         store = new ResearchStore(context);
+        diagnostic = new MotionDiagnosticCapture(context, this);
         sensors = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensors == null ? null : sensors.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyroscope = sensors == null ? null : sensors.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         BroadcastReceiver screen = new BroadcastReceiver() {
-            @Override public void onReceive(Context ignored, Intent intent) { lifecycle(false, false); }
+            @Override public void onReceive(Context ignored, Intent intent) {
+                diagnostic.stop("screen_off");
+                stop("screen_locked"); lifecycle(false, false);
+            }
         };
         if (Build.VERSION.SDK_INT >= 33) context.registerReceiver(screen, new IntentFilter(Intent.ACTION_SCREEN_OFF), Context.RECEIVER_NOT_EXPORTED);
         else context.registerReceiver(screen, new IntentFilter(Intent.ACTION_SCREEN_OFF));
@@ -68,14 +73,15 @@ final class ResearchCapture implements SensorEventListener {
         ResearchCapture capture = current;
         if (capture == null) return;
         capture.resumed = resumed; capture.focused = focused;
-        if (!resumed) { capture.finishPending("canceled"); }
+        capture.diagnostic.lifecycle(resumed, focused);
+        if (!resumed) { capture.stop("backgrounded"); capture.finishPending("canceled"); }
         else if (!focused) capture.stop("focus_lost");
     }
     static void begin(PluginCall call, String method) {
         ResearchCapture capture = current;
         if (capture == null) return;
         String callback = call.getCallbackId(), pkg = call.getString("packageName");
-        capture.main.post(() -> capture.start(callback, pkg, method));
+        capture.main.post(() -> { capture.diagnostic.stop("verification_started"); capture.start(callback, pkg, method); });
     }
     static void finish(PluginCall call, String outcome) {
         ResearchCapture capture = current;
@@ -87,10 +93,10 @@ final class ResearchCapture implements SensorEventListener {
     }
     static void cancel() {
         ResearchCapture capture = current;
-        if (capture != null) capture.main.post(() -> capture.finishPending("canceled"));
+        if (capture != null) capture.main.post(() -> { capture.diagnostic.stop("authentication_changed"); capture.stop("canceled"); capture.finishPending("canceled"); });
     }
     private void start(String callback, String pkg, String method) {
-        finishPending("canceled");
+        stop("request_replaced"); finishPending("canceled");
         if (!ready || fault || !enabled || !resumed || pkg == null) return;
         pending = new Pending(callback, pkg, method, revision.get());
         if (!movementAllowed) { pending.stopReason = "movement_disabled"; return; }
@@ -109,7 +115,8 @@ final class ResearchCapture implements SensorEventListener {
         main.removeCallbacks(timeout);
         if (pending == null) return;
         if (pending.listening && sensors != null) sensors.unregisterListener(this);
-        pending.listening = false; pending.stopReason = reason;
+        if (pending.listening || "too_short".equals(pending.stopReason)) pending.stopReason = reason;
+        pending.listening = false;
     }
     @Override public void onSensorChanged(SensorEvent event) {
         Pending value = pending;
@@ -146,7 +153,7 @@ final class ResearchCapture implements SensorEventListener {
                 : "sensor_gap".equals(value.acceleration.reason()) || "sensor_gap".equals(value.rotation.reason()) ? "sensor_gap"
                 : value.acceleration.invalid || value.rotation.invalid ? "invalid_samples" : "too_short";
             JSONObject entry = new JSONObject().put("version", 1).put("id", value.id).put("occurredAt", value.occurredAt)
-                .put("build", "0.7.0").put("method", value.method).put("outcome", outcome).put("eligible", eligible)
+                .put("build", BuildConfig.VERSION_NAME).put("method", value.method).put("outcome", outcome).put("eligible", eligible)
                 .put("reason", reason).put("stoppedBy", value.stopReason)
                 .put("acceleration", summary(value.acceleration, verified, "m/s²"))
                 .put("rotation", summary(value.rotation, verified, "rad/s"));
@@ -164,33 +171,54 @@ final class ResearchCapture implements SensorEventListener {
     }
     private void publish(JSONObject value) throws Exception {
         enabled = value.getBoolean("enabled"); movementAllowed = value.getBoolean("movementAllowed"); ready = true;
+        GhostResearchPlugin.diagnosticChanged();
     }
     private void fail() {
         fault = true; enabled = false; ready = true;
         error = "Research storage is unavailable. Collection stopped. Clear research data or pause and re-enable collection to recover; credentials are kept.";
-        main.post(() -> { stop("storage_unavailable"); pending = null; });
+        main.post(() -> { diagnostic.stop("storage_unavailable"); stop("storage_unavailable"); pending = null; });
     }
     private JSObject snapshot(JSONObject value) throws Exception {
         Pending active = pending;
         JSONArray entries = value.getJSONArray("entries"); int eligible = 0;
         JSONObject reasons = new JSONObject();
+        ResearchDiagnostics diagnostics = new ResearchDiagnostics();
         for (int i = 0; i < entries.length(); i++) {
             JSONObject entry = entries.getJSONObject(i);
             if (entry.getBoolean("eligible")) eligible++;
             String reason = entry.getString("reason"); reasons.put(reason, reasons.optInt(reason) + 1);
+            boolean verified = "verified".equals(entry.getString("outcome"));
+            diagnostics.add(entry.getString("method"), entry.getBoolean("eligible"), entry.getString("stoppedBy"),
+                sensorDiagnostics(entry.getJSONObject("acceleration"), verified), sensorDiagnostics(entry.getJSONObject("rotation"), verified));
         }
         JSObject result = new JSObject().put("enabled", value.getBoolean("enabled")).put("movementAllowed", value.getBoolean("movementAllowed"))
             .put("collecting", !fault && enabled && movementAllowed && active != null && active.listening)
             .put("pausedForError", fault).put("total", entries.length()).put("eligible", eligible).put("rejected", entries.length() - eligible)
-            .put("accelerometer", accelerometer != null).put("gyroscope", gyroscope != null).put("reasons", reasons);
+            .put("accelerometer", accelerometer != null).put("gyroscope", gyroscope != null).put("reasons", reasons)
+            .put("diagnostics", new JSObject().put("fingerprintSessions", diagnostics.fingerprintSessions).put("pinSessions", diagnostics.pinSessions)
+                .put("usableFingerprintSessions", diagnostics.usableFingerprintSessions).put("bothSensorsUsable", diagnostics.bothSensorsUsable)
+                .put("stops", new JSONObject(diagnostics.stops)).put("acceleration", sensorTotals(diagnostics.acceleration))
+                .put("rotation", sensorTotals(diagnostics.rotation)));
         if (error != null) result.put("error", error);
         return result;
+    }
+    private ResearchDiagnostics.SensorSummary sensorDiagnostics(JSONObject sensor, boolean verified) throws Exception {
+        return new ResearchDiagnostics.SensorSummary(sensor.getInt("count"), sensor.getLong("durationMillis"), sensor.getLong("maxGapMillis"),
+            sensor.getDouble("rateHz"), verified && "eligible".equals(sensor.getString("quality")));
+    }
+    private JSObject sensorTotals(ResearchDiagnostics.SensorTotals sensor) {
+        return new JSObject().put("windows", sensor.windows).put("usableWindows", sensor.usableWindows)
+            .put("medianDurationMillis", sensor.medianDurationMillis() == null ? JSONObject.NULL : sensor.medianDurationMillis())
+            .put("medianRateHz", sensor.medianRateHz() == null ? JSONObject.NULL : sensor.medianRateHz())
+            .put("maxGapMillis", sensor.maxGapMillis == null ? JSONObject.NULL : sensor.maxGapMillis);
     }
     static void operation(PluginCall call, String action, Boolean enabled, Boolean movement) {
         ResearchCapture capture = current;
         if (capture == null) { call.reject("Research collection is unavailable.", "RESEARCH_UNAVAILABLE"); return; }
         capture.main.post(() -> {
             if (!"snapshot".equals(action)) {
+                if ("clear".equals(action)) capture.diagnostic.clear();
+                else capture.diagnostic.stop("settings_changed");
                 capture.revision.incrementAndGet(); capture.stop("settings_changed"); capture.pending = null;
                 capture.enabled = false;
             }
@@ -218,5 +246,17 @@ final class ResearchCapture implements SensorEventListener {
                 if (!"snapshot".equals(action)) GhostResearchPlugin.changed();
             });
         });
+    }
+    String diagnosticBlock() {
+        if (!ready || fault) return "storage_unavailable";
+        if (!enabled) return "research_disabled";
+        if (!movementAllowed) return "movement_disabled";
+        if (pending != null) return "verification_active";
+        return null;
+    }
+    static void diagnosticOperation(PluginCall call, String action) {
+        ResearchCapture capture = current;
+        if (capture == null) { call.reject("Diagnostic unavailable.", "DIAGNOSTIC_UNAVAILABLE"); return; }
+        capture.diagnostic.operation(call, action);
     }
 }

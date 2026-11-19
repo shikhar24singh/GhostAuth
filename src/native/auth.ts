@@ -34,6 +34,7 @@ export function authError(error: unknown): string {
       case 'SESSION_ENDED': return 'Your verification ended. Please verify again.';
       case 'BUSY': return 'Complete the Android prompt first.';
       case 'APP_UNAVAILABLE': return 'This app could not be opened. It may have been removed or disabled. Refresh your app selection and verify again.';
+      case 'APP_NOT_OPENED': return 'GhostAuth couldn’t confirm the selected app opened. Verify again to retry. If this repeats, reopen GhostAuth and check the protection service.';
     }
   }
   return 'Native authentication is unavailable. Restart GhostAuth and try again. Your saved PIN has been kept.';

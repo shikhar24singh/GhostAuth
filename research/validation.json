@@ -1,0 +1,16 @@
+{
+  "validatedOn": "2026-11-17",
+  "scope": "Offline software only; no real GhostAuth behavioral model trained",
+  "unitTests": 14,
+  "unitFailures": 0,
+  "cliChecks": [
+    "audit with full missing-data coverage",
+    "synthetic training rejected by default",
+    "explicit synthetic train/evaluate produces observation-only JSON artifacts",
+    "existing run results cannot be overwritten"
+  ],
+  "physicalTrainingSamples": 0,
+  "androidModelEnforcement": false,
+  "syntheticMetricsAreResearchResults": false,
+  "inputContract": "Versioned GhostAuth summaries; enforced native units, independent operator labels, time/session partitions"
+}

@@ -11,6 +11,7 @@ import { useAppearance } from '../native/useAppearance';
 import { useNativeHistory } from '../native/useNativeHistory';
 import { useNativeResearch } from '../native/useNativeResearch';
 import ResearchPanel from './ResearchPanel';
+import MotionDiagnosticPanel from './MotionDiagnosticPanel';
 import { eventTime, eventOutcome } from '../native/history-status';
 import './mobile.css';
 
@@ -76,6 +77,7 @@ export default function GhostAuthApp() {
   const [quickVerification, setQuickVerification] = useState(false);
   const [verificationReady, setVerificationReady] = useState(false);
   const verificationGeneration = useRef(0);
+  const readyVerification = useRef<{ generation: number; target: AppId } | null>(null);
   const automaticPrompt = useRef('');
   const verificationRoute = useRef(route);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -122,10 +124,10 @@ export default function GhostAuthApp() {
   useEffect(() => {
     const pending = device.status?.protection.pending;
     if (!pending) { protectionRequest.current = ''; return; }
-    if (!auth.status || !history.ready || protectionRequest.current === pending.id) return;
+    if (!auth.status || !history.ready || launching || protectionRequest.current === pending.id) return;
     protectionRequest.current = pending.id;
     void beginVerification(pending.packageName);
-  }, [device.status, auth.status, history.ready]);
+  }, [device.status, auth.status, history.ready, launching]);
   useEffect(() => {
     if (nativeAuthentication && auth.status) {
       dispatch({ type: 'native-status', fingerprint: auth.status.biometricEnabled });
@@ -200,7 +202,8 @@ export default function GhostAuthApp() {
   useEffect(() => { document.title = `GhostAuth · ${title.replace(/\n/g, ' ')}`; }, [title]);
   useEffect(() => {
     if (!quickVerification || !verificationReady || route !== 'biometricVerify' || view !== 'biometricVerify'
-      || auth.busy || launching || !auth.status || !canVerify(state, currentApp)) return;
+      || auth.busy || launching || launchPending.current || !auth.status || !canVerify(state, currentApp)
+      || readyVerification.current?.generation !== verificationGeneration.current || readyVerification.current.target !== currentApp) return;
     const key = `${verificationGeneration.current}:${currentApp}`;
     if (automaticPrompt.current === key) return;
     automaticPrompt.current = key;
@@ -220,18 +223,21 @@ export default function GhostAuthApp() {
   async function beginVerification(target: AppId) {
     if (!history.ready) return;
     const epoch = ++verificationGeneration.current;
+    readyVerification.current = null;
     automaticPrompt.current = ''; setVerificationReady(false); setQuickVerification(true);
     setCurrentApp(target); dispatch({ type: 'lock' }); auth.clearError();
     setPin(''); setNewPin(''); setAuthIntent('verify'); setPinContext('setup'); setLaunchError(''); setModal(null);
     await AndroidAuth.lock().catch(() => {});
     if (epoch !== verificationGeneration.current) return;
     go(auth.status?.biometricEnabled ? 'biometricVerify' : 'pinVerify');
+    readyVerification.current = { generation: epoch, target };
     setVerificationReady(true);
   }
   function usePinInstead() {
     verificationGeneration.current++; setVerificationReady(false); auth.cancel(); setPin(''); go('pinVerify');
   }
   function useFingerprintInstead() {
+    readyVerification.current = { generation: verificationGeneration.current, target: currentApp };
     automaticPrompt.current = ''; setVerificationReady(true); auth.clearError(); go('biometricVerify');
   }
   async function launchApp(verifiedTarget?: AppId) {
@@ -409,8 +415,9 @@ export default function GhostAuthApp() {
       case 'success': return <><Check className="cobalt feature-icon" size={64} strokeWidth={1.5} /><Note title={nativeAuthentication ? 'Local identity verified' : 'Verification preview'}>{nativeAuthentication ? 'Open the selected app using this verification. You will need to verify again for another launch.' : 'GhostAuth simulates checking the session when conditions change.'}</Note><Spacer /><ActionButton disabled={auth.busy || launching} onClick={() => { if (nativeAuthentication) void launchApp(); else go('handoff'); }}>{nativeAuthentication ? launching ? 'Opening…' : `Open ${app.name}` : 'Continue to protected app'}</ActionButton><p className="small-copy muted">{nativeAuthentication ? 'Android checks verification again before opening the app.' : 'Opens the app-handoff preview.'}</p></>;
       case 'activity': return <><div className="section-label"><span>{nativeAuthentication ? 'Latest 100 checks' : 'Today'}</span><span>{String(state.events.length).padStart(2, '0')}</span></div>{state.events.map(e => <Row key={e.id} title={`${e.appLabel ?? appName(e.app)} · ${eventOutcome(e)}`} detail={nativeAuthentication ? `${eventTime(e)} · ${e.method}` : `${e.time} · ${e.decision === 'restricted' ? 'high session risk' : e.decision === 'allowed' ? 'low session risk' : 'additional verification'}`} onClick={() => { setEvent(e); setCurrentApp(e.app); go('event'); }} />)}{nativeAuthentication && !state.events.length && !history.loading && <Note title="No saved security history">{state.privacy.history ? 'Verification attempts will appear here.' : 'New recording is paused. Enable Security history in Privacy & data to record future checks.'}</Note>}<Spacer /><p className="small-copy muted">{nativeAuthentication ? 'Saved only on this device. The latest 100 verification attempts are retained; app content and credentials are never included.' : 'Only security events appear here. App content is never included.'}{!state.privacy.history && ' New event recording is paused.'}</p>{nativeAuthentication && <><ActionButton secondary disabled={history.loading || history.busy} onClick={() => void history.refresh()}>Refresh history</ActionButton><ActionButton secondary disabled={history.busy || (!state.events.length && !history.error)} onClick={() => setModal('clear-history')}>Clear history</ActionButton></>}</>;
       case 'event': return event && <><Row title="Decision" detail={nativeAuthentication && event.outcome && event.outcome !== 'verified' ? `${eventOutcome(event)} (${event.method}).` : event.decision === 'verified' ? nativeAuthentication ? `Identity verified with ${event.method}.` : `Allowed after ${event.method} verification.` : event.decision === 'allowed' ? 'Allowed · low session risk.' : event.decision === 'failed' ? 'Verification failed.' : 'Access restricted.'} /><Row title="Trigger" detail={event.reason} /><Row title="Session risk" detail={nativeAuthentication ? 'Not calculated in this build.' : event.decision === 'restricted' ? 'High.' : event.decision === 'allowed' ? 'Low.' : 'Medium before verification.'} /><Row title="Data retained" detail={nativeAuthentication ? 'App label and package, date and time, verification method and outcome.' : 'App name, time, reason and result.'} />{nativeAuthentication && <Row title="Package" detail={event.app} />}<Spacer />{event.decision === 'restricted' && <ActionButton secondary onClick={() => { dispatch({ type: 'restrict' }); go('blocked'); }}>Preview restricted session</ActionButton>}<ActionButton onClick={() => go('activity')}>Back to activity</ActionButton></>;
-      case 'research': return nativeAuthentication ? <ResearchPanel research={research} onPrivacy={editPrivacy} /> : <Note title="Android only">Motion research requires the installed Android app. This browser does not collect research data.</Note>;
-      case 'settings': return <><label className="app-row appearance-option"><input type="checkbox" aria-label="Dark mode" checked={appearance.dark} disabled={!appearance.ready || appearance.busy} onChange={e => void appearance.change(e.target.checked)} /><span className="row-copy"><span className="row-title">Dark mode</span><span className="row-detail">{appearance.busy ? 'Saving appearance…' : appearance.dark ? 'On · saved on this device' : 'Off · light appearance'}</span></span><span className={`checkbox${appearance.dark ? ' checked' : ''}`} aria-hidden="true">{appearance.dark && <Check size={18} strokeWidth={1.5} />}</span></label>{appearance.error && <p className="form-error" role="alert">{appearance.error}</p>}<Row title="PIN & fingerprint" detail="Manage identity verification" onClick={() => setModal('security')} /><Row title="Privacy & data" detail="Choose what GhostAuth can use" onClick={editPrivacy} />{nativeAuthentication && <Row title="Motion research" detail="Optional collection pilot" onClick={() => go('research')} />}<Row title="Permissions" detail="Review protection access" onClick={() => go('permissionHealth')} /><Row title="Recovery" detail="Plan for lost access" onClick={() => go('recovery')} /><Row title="Reset saved preferences" detail="Restore app selection and data choices" onClick={() => { setResetError(''); setModal('reset-preferences'); }} /><Spacer /><p className="small-copy muted">GhostAuth for Android<br />Research prototype · version {nativeAuthentication ? '0.7.0' : '0.1'}</p><button className="text-link demo-session" onClick={() => setModal('new-session')}>Start a new demo session</button></>;
+      case 'research': return nativeAuthentication ? <ResearchPanel research={research} onPrivacy={editPrivacy} onDiagnostic={() => go('motionDiagnostic')} /> : <Note title="Android only">Motion research requires the installed Android app. This browser does not collect research data.</Note>;
+      case 'motionDiagnostic': return nativeAuthentication ? <MotionDiagnosticPanel onBack={() => go('research')} /> : <Note title="Android only">The motion diagnostic requires the installed Android app. No motion data is collected in this browser.</Note>;
+      case 'settings': return <><label className="app-row appearance-option"><input type="checkbox" aria-label="Dark mode" checked={appearance.dark} disabled={!appearance.ready || appearance.busy} onChange={e => void appearance.change(e.target.checked)} /><span className="row-copy"><span className="row-title">Dark mode</span><span className="row-detail">{appearance.busy ? 'Saving appearance…' : appearance.dark ? 'On · saved on this device' : 'Off · light appearance'}</span></span><span className={`checkbox${appearance.dark ? ' checked' : ''}`} aria-hidden="true">{appearance.dark && <Check size={18} strokeWidth={1.5} />}</span></label>{appearance.error && <p className="form-error" role="alert">{appearance.error}</p>}<Row title="PIN & fingerprint" detail="Manage identity verification" onClick={() => setModal('security')} /><Row title="Privacy & data" detail="Choose what GhostAuth can use" onClick={editPrivacy} />{nativeAuthentication && <Row title="Motion research" detail="Optional collection pilot" onClick={() => go('research')} />}<Row title="Permissions" detail="Review protection access" onClick={() => go('permissionHealth')} /><Row title="Recovery" detail="Plan for lost access" onClick={() => go('recovery')} /><Row title="Reset saved preferences" detail="Restore app selection and data choices" onClick={() => { setResetError(''); setModal('reset-preferences'); }} /><Spacer /><p className="small-copy muted">GhostAuth for Android<br />Research prototype · version {nativeAuthentication ? '0.7.3' : '0.1'}</p><button className="text-link demo-session" onClick={() => setModal('new-session')}>Start a new demo session</button></>;
       case 'privacySettings': return <>{privacyItems.map(([key, label, detail]) => <AppRow key={key} title={label} detail={detail} checked={draftPrivacy[key]} onToggle={() => setDraftPrivacy(p => ({ ...p, [key]: !p[key] }))} />)}<Note title="Never collected">Messages, photos, passwords and fingerprint images are outside the behavior profile.</Note>{nativeAuthentication && <Note title="Motion research">Movement signals only permits motion collection after separate enrollment in Settings → Motion research. Touch collection is not implemented.</Note>}<Spacer /><ActionButton disabled={history.busy || !history.ready || research.busy || (nativeAuthentication && !research.status)} onClick={() => void savePrivacy()}>Save preferences</ActionButton><ActionButton secondary onClick={() => setModal('reset-profile')}>Reset learned profile</ActionButton></>;
       case 'permissionHealth': return <>{(Object.keys(permissionLabels) as Permission[]).map(key => <Row key={key} title={permissionLabels[key]} detail={permissionDetail(key)} onClick={() => openPermission(key)} />)}<Note title={nativeAuthentication ? 'Protection status' : healthy ? 'Permissions are ready' : 'Until access is restored'}>{nativeAuthentication ? 'Protection requires enabling GhostAuth in Android Accessibility. Usage access and notifications are optional. If Android disconnects the service, selected apps may open normally until it is re-enabled.' : healthy ? 'This is a browser preview. No Android permissions have been changed.' : 'GhostAuth cannot reliably present verification over selected apps.'}</Note><Spacer />{nativeAuthentication ? <ActionButton disabled={device.loading} onClick={() => void device.refresh()}>Refresh Android status</ActionButton> : <ActionButton onClick={() => openPermission('service')}>Open Android settings</ActionButton>}<ActionButton secondary onClick={() => go('home')}>Back to GhostAuth</ActionButton></>;
       case 'recovery': return <><Row title={state.fingerprint ? 'Fingerprint available' : 'Set up fingerprint'} detail={state.fingerprint ? 'Try device biometric verification.' : 'Enable the preview or use your PIN.'} onClick={() => go('biometricVerify')} /><Row title="Forgot your PIN" detail="Review recovery availability." onClick={() => go('recoveryInfo')} /><Note title="High-risk sessions stay restricted">Recovery does not override failed device or session checks.</Note><p className="small-copy muted">Recovery enrollment is an implementation decision to validate before release.</p><Spacer /><ActionButton onClick={() => go('settings')}>Back to settings</ActionButton></>;
@@ -431,6 +438,7 @@ export default function GhostAuthApp() {
       <h1 className="visually-hidden">Verify with fingerprint</h1>
       <img className="gate-logo" src="/assets/ghostauth-logo.png" width="160" height="160" alt="GhostAuth" />
       <button type="button" className="fingerprint-reader" aria-label="Try fingerprint again" disabled={auth.busy || launching || !verificationReady} onClick={() => void verifyBiometric()}><Fingerprint size={64} strokeWidth={1.25} aria-hidden="true" /></button>
+      {launching && <p className="small-copy" role="status">Opening {app.name}…</p>}
       {(auth.error || launchError) && <p className="gate-error" role="alert">{launchError || auth.error}</p>}
       <button type="button" className="gate-pin" disabled={launching} onClick={usePinInstead}>Use PIN instead</button>
     </main>

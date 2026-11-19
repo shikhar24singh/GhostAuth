@@ -1,4 +1,10 @@
 node_modules/
+.model-tools/
+.venv-model/
+research/data/
+research/runs/
+__pycache__/
+*.pyc
 dist/
 tmp/
 *.tsbuildinfo

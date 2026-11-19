@@ -19,6 +19,7 @@ import java.security.SecureRandom;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -111,6 +112,7 @@ public class GhostAuthPlugin extends Plugin {
     public void launchApp(PluginCall call) {
         long epoch = generation.get();
         String target = call.getString("packageName");
+        AtomicBoolean settled = new AtomicBoolean();
         getActivity().runOnUiThread(() -> {
             try {
                 Intent intent = AppLauncher.resolve(getContext(), target);
@@ -120,6 +122,7 @@ public class GhostAuthPlugin extends Plugin {
                     call.reject("This app is no longer available. Refresh your app selection.", "APP_UNAVAILABLE");
                     return;
                 }
+                boolean returningToApp = session.returnsToProtectedApp(target, SystemClock.elapsedRealtime());
                 if (!foreground || generation.get() != epoch
                     || !session.consume(target, SystemClock.elapsedRealtime())) {
                     endSession();
@@ -130,13 +133,19 @@ public class GhostAuthPlugin extends Plugin {
                     endSession();
                     call.reject("The protected app changed. Verify the current app again.", "SESSION_ENDED"); return;
                 }
+                boolean awaitingArrival = ProtectionService.awaitLaunch(target,
+                    () -> { if (settled.compareAndSet(false, true)) call.resolve(); },
+                    () -> { if (settled.compareAndSet(false, true)) call.reject("GhostAuth could not confirm the selected app opened. Verify again to retry.", "APP_NOT_OPENED"); });
+                if (settled.get()) { endSession(); return; }
                 getActivity().startActivity(intent);
+                if (returningToApp) getActivity().moveTaskToBack(true);
                 endSession();
-                call.resolve();
+                if (!awaitingArrival && settled.compareAndSet(false, true)) call.resolve();
             } catch (RuntimeException unavailable) {
+                boolean report = settled.compareAndSet(false, true);
                 ProtectionService.launchFailed();
                 endSession();
-                call.reject("Android could not open this app. Verify again to retry.", "APP_UNAVAILABLE");
+                if (report) call.reject("Android could not open this app. Verify again to retry.", "APP_UNAVAILABLE");
             }
         });
     }
@@ -166,6 +175,7 @@ public class GhostAuthPlugin extends Plugin {
 
     @PluginMethod
     public void verifyPin(PluginCall call) {
+        boolean externalOpening = ProtectionService.hasPendingTarget(call.getString("packageName"));
         ResearchCapture.begin(call, "PIN");
         execute(call, (vault, epoch) -> {
             if (!requireTarget(call)) return;
@@ -174,7 +184,7 @@ public class GhostAuthPlugin extends Plugin {
             boolean verified = vault.check(record, call.getString("pin"));
             requireForeground(epoch);
             recordHistory(call, "PIN", verified ? "verified" : locked ? "locked-out" : "failed");
-            if (verified) session.grant(call.getString("packageName"), SystemClock.elapsedRealtime());
+            if (verified) session.grant(call.getString("packageName"), SystemClock.elapsedRealtime(), externalOpening);
             requireForeground(epoch);
             JSObject result = status(record);
             result.put("verified", verified).put("expiresInSeconds", verified ? 30 : 0);
@@ -254,6 +264,7 @@ public class GhostAuthPlugin extends Plugin {
     }
 
     private void showPrompt(PluginCall call, CredentialVault vault, JSONObject record, Cipher cipher, boolean enroll, long epoch) {
+        boolean externalOpening = !enroll && ProtectionService.hasPendingTarget(call.getString("packageName"));
         prompting = true;
         promptEnrollment = enroll;
         promptCall = call;
@@ -303,7 +314,7 @@ public class GhostAuthPlugin extends Plugin {
                                         byte[] marker = authorized.doFinal(CredentialVault.decode(record.getString("bioCiphertext")));
                                         if (!MessageDigest.isEqual(marker, CredentialVault.decode(record.getString("bioMarker"))))
                                             throw new IllegalStateException("Invalid biometric proof");
-                                        session.grant(call.getString("packageName"), SystemClock.elapsedRealtime());
+                                        session.grant(call.getString("packageName"), SystemClock.elapsedRealtime(), externalOpening);
                                     }
                                     requireForeground(epoch);
                                     JSObject response = status(record);
