@@ -4,7 +4,6 @@ import android.content.Context;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.AtomicFile;
-import com.getcapacitor.JSObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -79,20 +78,20 @@ final class HistoryStore {
             log = next;
         } finally { Arrays.fill(plaintext, (byte) 0); }
     }
-    static synchronized JSObject snapshot(Context context, Boolean initialEnabled) throws Exception {
+    static synchronized NativePayload snapshot(Context context, Boolean initialEnabled) throws Exception {
         SecurityHistoryLog value = load(context);
         if (!value.configured && initialEnabled != null) { save(context, value.configure(initialEnabled)); revision++; }
-        JSObject result = new JSObject().put("enabled", log.enabled).put("entries", entries(log));
+        NativePayload result = new NativePayload().put("enabled", log.enabled).put("entries", entries(log));
         if (error != null) result.put("error", error);
         return result;
     }
-    static synchronized JSObject configure(Context context, boolean enabled) throws Exception {
+    static synchronized NativePayload configure(Context context, boolean enabled) throws Exception {
         SecurityHistoryLog value = load(context);
         if (value.configured && value.enabled == enabled) return snapshot(context, null);
         save(context, value.configure(enabled)); revision++; error = null;
         return snapshot(context, null);
     }
-    static synchronized JSObject clear(Context context) throws Exception {
+    static synchronized NativePayload clear(Context context) throws Exception {
         SecurityHistoryLog value;
         try { value = load(context).clear(); }
         catch (Exception unavailable) { value = new SecurityHistoryLog().configure(false); }

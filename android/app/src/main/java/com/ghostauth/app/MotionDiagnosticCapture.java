@@ -10,8 +10,6 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.PluginCall;
 import java.util.Locale;
 import java.util.UUID;
 import org.json.JSONObject;
@@ -57,19 +55,19 @@ final class MotionDiagnosticCapture implements SensorEventListener {
         if (!resumed || !focused) return "not_foreground";
         return null;
     }
-    private JSObject sensor(MotionWindow window, String units) {
-        return new JSObject().put("samples", window.count).put("durationMillis", window.durationMillis())
+    private NativePayload sensor(MotionWindow window, String units) {
+        return new NativePayload().put("samples", window.count).put("durationMillis", window.durationMillis())
             .put("rateHz", window.count < 2 ? JSONObject.NULL : window.rate())
             .put("maxGapMillis", window.count < 2 ? JSONObject.NULL : window.maxGap / 1_000_000L)
             .put("quality", window.reason()).put("units", units);
     }
-    private JSObject snapshot() {
+    private NativePayload snapshot() {
         String blocked = blocked();
-        JSObject value = new JSObject().put("canStart", blocked == null).put("blockedReason", blocked == null ? JSONObject.NULL : blocked)
+        NativePayload value = new NativePayload().put("canStart", blocked == null).put("blockedReason", blocked == null ? JSONObject.NULL : blocked)
             .put("accelerometer", accelerometer != null).put("gyroscope", gyroscope != null).put("windowMillis", 5000);
         if (session == null) return value.put("state", "idle").put("run", JSONObject.NULL);
         return value.put("state", session.running() ? "running" : "completed".equals(session.reason()) ? "complete" : "stopped")
-            .put("run", new JSObject().put("id", session.id).put("remainingMillis", session.remainingMillis(SystemClock.elapsedRealtimeNanos()))
+            .put("run", new NativePayload().put("id", session.id).put("remainingMillis", session.remainingMillis(SystemClock.elapsedRealtimeNanos()))
                 .put("reason", session.reason() == null ? JSONObject.NULL : session.reason())
                 .put("acceleration", sensor(session.acceleration, "m/s²")).put("rotation", sensor(session.rotation, "rad/s")));
     }
@@ -113,12 +111,12 @@ final class MotionDiagnosticCapture implements SensorEventListener {
             window.count, window.durationMillis() / 1000.0, window.count < 2 ? "unavailable" : String.format(Locale.ROOT, "%.2f Hz", window.rate()),
             window.count < 2 ? "unavailable" : (window.maxGap / 1_000_000L) + " ms", window.reason());
     }
-    void operation(PluginCall call, String action) {
+    void operation(NativeCall call, String action) {
         main.post(() -> {
             try {
                 if ("open".equals(action)) {
                     stop("screen_left"); lease = UUID.randomUUID().toString();
-                    call.resolve(new JSObject().put("lease", lease).put("status", snapshot())); return;
+                    call.resolve(new NativePayload().put("lease", lease).put("status", snapshot())); return;
                 }
                 if (lease == null || !lease.equals(call.getString("lease"))) {
                     if ("close".equals(action)) call.resolve();
@@ -139,7 +137,7 @@ final class MotionDiagnosticCapture implements SensorEventListener {
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                     if (clipboard == null) throw new IllegalStateException("Clipboard unavailable");
                     clipboard.setPrimaryClip(ClipData.newPlainText("GhostAuth motion diagnostic", report()));
-                    call.resolve(new JSObject().put("copied", true)); return;
+                    call.resolve(new NativePayload().put("copied", true)); return;
                 }
                 call.resolve(snapshot());
             } catch (RuntimeException unavailable) {

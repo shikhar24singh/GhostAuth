@@ -8,11 +8,6 @@ import android.security.keystore.KeyProperties;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginCall;
-import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.CapacitorPlugin;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -26,19 +21,20 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import org.json.JSONObject;
 
-@CapacitorPlugin(name = "GhostAuth")
-public class GhostAuthPlugin extends Plugin {
+public class GhostAuthPlugin extends NativeHandler {
+    GhostAuthPlugin(MainActivity activity, GhostChannels channels) { super(activity, channels); }
+
     private static final String BIO_ALIAS = "ghostauth.biometric.v1";
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private final AtomicLong generation = new AtomicLong();
     private final LaunchSession session = new LaunchSession();
     private volatile boolean foreground = true;
     private volatile BiometricPrompt prompt;
-    private volatile PluginCall promptCall;
+    private volatile NativeCall promptCall;
     private volatile boolean prompting;
     private volatile boolean promptEnrollment;
 
-    private void recordHistory(PluginCall call, String method, String outcome) {
+    private void recordHistory(NativeCall call, String method, String outcome) {
         ResearchCapture.finish(call, outcome);
         String pkg = call.getString("packageName");
         if (pkg == null) return;
@@ -49,7 +45,7 @@ public class GhostAuthPlugin extends Plugin {
 
     private interface Work { void run(CredentialVault vault, long epoch) throws Exception; }
 
-    private void execute(PluginCall call, Work work) {
+    private void execute(NativeCall call, Work work) {
         long epoch = generation.get();
         worker.execute(() -> {
             try {
@@ -86,7 +82,7 @@ public class GhostAuthPlugin extends Plugin {
         return cipher;
     }
 
-    private JSObject status(JSONObject record) {
+    private NativePayload status(JSONObject record) {
         long now = SystemClock.elapsedRealtime();
         long remaining = foreground ? session.remaining(now) : 0;
         boolean valid = remaining > 0;
@@ -94,22 +90,19 @@ public class GhostAuthPlugin extends Plugin {
         if (record.has("bioCiphertext") && available()) {
             try { biometricCipher(record); enabled = true; } catch (Exception ignored) {   }
         }
-        return new JSObject().put("pinSet", record.has("verifier"))
+        return new NativePayload().put("pinSet", record.has("verifier"))
             .put("biometricAvailable", available()).put("biometricEnabled", enabled)
             .put("lockedForSeconds", PinSecurity.remainingSeconds(record.optLong("lockedUntilElapsed"), now))
             .put("sessionValid", valid).put("sessionRemainingMillis", remaining);
     }
 
-    @PluginMethod
-    public void getStatus(PluginCall call) {
+    public void getStatus(NativeCall call) {
         execute(call, (vault, epoch) -> call.resolve(status(vault.read())));
     }
 
-    @PluginMethod
-    public void lock(PluginCall call) { endSession(); call.resolve(); }
+    public void lock(NativeCall call) { endSession(); call.resolve(); }
 
-    @PluginMethod
-    public void launchApp(PluginCall call) {
+    public void launchApp(NativeCall call) {
         long epoch = generation.get();
         String target = call.getString("packageName");
         AtomicBoolean settled = new AtomicBoolean();
@@ -150,7 +143,7 @@ public class GhostAuthPlugin extends Plugin {
         });
     }
 
-    private boolean requireTarget(PluginCall call) {
+    private boolean requireTarget(NativeCall call) {
         session.clear();
         String target = call.getString("packageName");
         if (AppLauncher.resolve(getContext(), target) != null
@@ -161,8 +154,7 @@ public class GhostAuthPlugin extends Plugin {
         return false;
     }
 
-    @PluginMethod
-    public void enrollPin(PluginCall call) {
+    public void enrollPin(NativeCall call) {
         execute(call, (vault, epoch) -> {
             session.clear();
             String pin = call.getString("pin");
@@ -173,8 +165,7 @@ public class GhostAuthPlugin extends Plugin {
         });
     }
 
-    @PluginMethod
-    public void verifyPin(PluginCall call) {
+    public void verifyPin(NativeCall call) {
         boolean externalOpening = ProtectionService.hasPendingTarget(call.getString("packageName"));
         ResearchCapture.begin(call, "PIN");
         execute(call, (vault, epoch) -> {
@@ -186,14 +177,13 @@ public class GhostAuthPlugin extends Plugin {
             recordHistory(call, "PIN", verified ? "verified" : locked ? "locked-out" : "failed");
             if (verified) session.grant(call.getString("packageName"), SystemClock.elapsedRealtime(), externalOpening);
             requireForeground(epoch);
-            JSObject result = status(record);
+            NativePayload result = status(record);
             result.put("verified", verified).put("expiresInSeconds", verified ? 30 : 0);
             call.resolve(result);
         });
     }
 
-    @PluginMethod
-    public void changePin(PluginCall call) {
+    public void changePin(NativeCall call) {
         execute(call, (vault, epoch) -> {
             String next = call.getString("newPin");
             if (!PinSecurity.valid(next)) { call.reject("Enter a six-digit PIN.", "INVALID_PIN"); return; }
@@ -208,8 +198,7 @@ public class GhostAuthPlugin extends Plugin {
         });
     }
 
-    @PluginMethod
-    public void disableBiometric(PluginCall call) {
+    public void disableBiometric(NativeCall call) {
         execute(call, (vault, epoch) -> {
             session.clear();
             JSONObject record = vault.read();
@@ -224,8 +213,7 @@ public class GhostAuthPlugin extends Plugin {
         });
     }
 
-    @PluginMethod
-    public void enableBiometric(PluginCall call) {
+    public void enableBiometric(NativeCall call) {
         execute(call, (vault, epoch) -> {
             session.clear();
             JSONObject record = vault.read();
@@ -249,8 +237,7 @@ public class GhostAuthPlugin extends Plugin {
         });
     }
 
-    @PluginMethod
-    public void verifyBiometric(PluginCall call) {
+    public void verifyBiometric(NativeCall call) {
         ResearchCapture.begin(call, "fingerprint");
         execute(call, (vault, epoch) -> {
             if (!requireTarget(call)) return;
@@ -263,7 +250,7 @@ public class GhostAuthPlugin extends Plugin {
         });
     }
 
-    private void showPrompt(PluginCall call, CredentialVault vault, JSONObject record, Cipher cipher, boolean enroll, long epoch) {
+    private void showPrompt(NativeCall call, CredentialVault vault, JSONObject record, Cipher cipher, boolean enroll, long epoch) {
         boolean externalOpening = !enroll && ProtectionService.hasPendingTarget(call.getString("packageName"));
         prompting = true;
         promptEnrollment = enroll;
@@ -291,7 +278,7 @@ public class GhostAuthPlugin extends Plugin {
                             if (promptCall != call || !foreground || generation.get() != epoch) return;
                             session.clear();
                             if (!enroll) recordHistory(call, "fingerprint", "failed");
-                            notifyListeners("biometricFailed", new JSObject());
+                            notifyListeners("biometricFailed", new NativePayload());
                         }
 
                         @Override
@@ -317,7 +304,7 @@ public class GhostAuthPlugin extends Plugin {
                                         session.grant(call.getString("packageName"), SystemClock.elapsedRealtime(), externalOpening);
                                     }
                                     requireForeground(epoch);
-                                    JSObject response = status(record);
+                                    NativePayload response = status(record);
                                     if (!enroll) recordHistory(call, "fingerprint", "verified");
                                     response.put(enroll ? "changed" : "verified", true).put("expiresInSeconds", enroll ? 0 : 30);
                                     promptCall = null; prompting = false; prompt = null;
@@ -351,13 +338,13 @@ public class GhostAuthPlugin extends Plugin {
     private void endSession() {
         ResearchCapture.cancel();
         generation.incrementAndGet(); session.clear();
-        PluginCall pending = promptCall;
+        NativeCall pending = promptCall;
         if (pending != null && !promptEnrollment) recordHistory(pending, "fingerprint", "canceled");
         promptCall = null; prompting = false;
         BiometricPrompt active = prompt; prompt = null;
         if (active != null) getActivity().runOnUiThread(active::cancelAuthentication);
         if (pending != null) pending.reject("Authentication canceled because the session ended.", "SESSION_ENDED");
-        notifyListeners("sessionEnded", new JSObject().put("active", foreground));
+        notifyListeners("sessionEnded", new NativePayload().put("active", foreground));
     }
 
     @Override
@@ -366,7 +353,7 @@ public class GhostAuthPlugin extends Plugin {
     @Override
     protected void handleOnResume() {
         foreground = true;
-        notifyListeners("sessionEnded", new JSObject().put("active", true));
+        notifyListeners("sessionEnded", new NativePayload().put("active", true));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ghostauth.app;
 
+import org.json.JSONArray;
 import android.accessibilityservice.AccessibilityService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -23,7 +24,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.getcapacitor.JSObject;
 
 public class ProtectionService extends AccessibilityService {
     private static volatile java.lang.ref.WeakReference<ProtectionService> current = new java.lang.ref.WeakReference<>(null);
@@ -52,16 +52,16 @@ public class ProtectionService extends AccessibilityService {
         }
     };
 
-    static JSObject status(Context context) {
+    static NativePayload status(Context context) {
         ProtectionService service = current.get();
         boolean enabled = ProtectionPreferences.enabled(context);
-        JSObject result = new JSObject().put("configured", ProtectionPreferences.store(context).contains("packages"))
+        NativePayload result = new NativePayload().put("configured", ProtectionPreferences.store(context).contains("packages"))
             .put("enabled", enabled).put("connected", service != null && service.failure == null);
-        com.getcapacitor.JSArray packages = new com.getcapacitor.JSArray();
+        JSONArray packages = new JSONArray();
         for (String pkg : ProtectionPreferences.packages(context)) packages.put(pkg);
         result.put("packages", packages);
         String pending = service == null ? null : service.policy.pending();
-        if (enabled && pending != null) result.put("pending", new JSObject().put("packageName", pending).put("id", service.token + ":" + service.policy.request()));
+        if (enabled && pending != null) result.put("pending", new NativePayload().put("packageName", pending).put("id", service.token + ":" + service.policy.request()));
         if (service != null && service.failure != null) result.put("error", service.failure);
         return result;
     }
@@ -197,7 +197,7 @@ public class ProtectionService extends AccessibilityService {
         int ink = dark ? Color.rgb(240, 241, 245) : Color.rgb(25, 25, 25);
         view.setOrientation(LinearLayout.VERTICAL); view.setGravity(Gravity.CENTER);
         view.setPadding(32, 32, 32, 32); view.setBackgroundColor(paper);
-        try (java.io.InputStream asset = getAssets().open("public/assets/ghostauth-logo.png")) {
+        try (java.io.InputStream asset = getAssets().open("flutter_assets/public/assets/ghostauth-logo.png")) {
             ImageView logo = new ImageView(this); logo.setImageBitmap(BitmapFactory.decodeStream(asset));
             if (dark) logo.setColorFilter(new android.graphics.ColorMatrixColorFilter(new float[] {
                 .574f, -1.430f, -.144f, 0, 255, -.426f, -.430f, -.144f, 0, 255,

@@ -13,8 +13,6 @@ import android.os.Handler;
 import android.os.Build;
 import android.os.Looper;
 import android.os.SystemClock;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.PluginCall;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,13 +75,13 @@ final class ResearchCapture implements SensorEventListener {
         if (!resumed) { capture.stop("backgrounded"); capture.finishPending("canceled"); }
         else if (!focused) capture.stop("focus_lost");
     }
-    static void begin(PluginCall call, String method) {
+    static void begin(NativeCall call, String method) {
         ResearchCapture capture = current;
         if (capture == null) return;
         String callback = call.getCallbackId(), pkg = call.getString("packageName");
         capture.main.post(() -> { capture.diagnostic.stop("verification_started"); capture.start(callback, pkg, method); });
     }
-    static void finish(PluginCall call, String outcome) {
+    static void finish(NativeCall call, String outcome) {
         ResearchCapture capture = current;
         if (capture == null) return;
         String callback = call.getCallbackId(), pkg = call.getString("packageName");
@@ -178,7 +176,7 @@ final class ResearchCapture implements SensorEventListener {
         error = "Research storage is unavailable. Collection stopped. Clear research data or pause and re-enable collection to recover; credentials are kept.";
         main.post(() -> { diagnostic.stop("storage_unavailable"); stop("storage_unavailable"); pending = null; });
     }
-    private JSObject snapshot(JSONObject value) throws Exception {
+    private NativePayload snapshot(JSONObject value) throws Exception {
         Pending active = pending;
         JSONArray entries = value.getJSONArray("entries"); int eligible = 0;
         JSONObject reasons = new JSONObject();
@@ -191,11 +189,11 @@ final class ResearchCapture implements SensorEventListener {
             diagnostics.add(entry.getString("method"), entry.getBoolean("eligible"), entry.getString("stoppedBy"),
                 sensorDiagnostics(entry.getJSONObject("acceleration"), verified), sensorDiagnostics(entry.getJSONObject("rotation"), verified));
         }
-        JSObject result = new JSObject().put("enabled", value.getBoolean("enabled")).put("movementAllowed", value.getBoolean("movementAllowed"))
+        NativePayload result = new NativePayload().put("enabled", value.getBoolean("enabled")).put("movementAllowed", value.getBoolean("movementAllowed"))
             .put("collecting", !fault && enabled && movementAllowed && active != null && active.listening)
             .put("pausedForError", fault).put("total", entries.length()).put("eligible", eligible).put("rejected", entries.length() - eligible)
             .put("accelerometer", accelerometer != null).put("gyroscope", gyroscope != null).put("reasons", reasons)
-            .put("diagnostics", new JSObject().put("fingerprintSessions", diagnostics.fingerprintSessions).put("pinSessions", diagnostics.pinSessions)
+            .put("diagnostics", new NativePayload().put("fingerprintSessions", diagnostics.fingerprintSessions).put("pinSessions", diagnostics.pinSessions)
                 .put("usableFingerprintSessions", diagnostics.usableFingerprintSessions).put("bothSensorsUsable", diagnostics.bothSensorsUsable)
                 .put("stops", new JSONObject(diagnostics.stops)).put("acceleration", sensorTotals(diagnostics.acceleration))
                 .put("rotation", sensorTotals(diagnostics.rotation)));
@@ -206,13 +204,13 @@ final class ResearchCapture implements SensorEventListener {
         return new ResearchDiagnostics.SensorSummary(sensor.getInt("count"), sensor.getLong("durationMillis"), sensor.getLong("maxGapMillis"),
             sensor.getDouble("rateHz"), verified && "eligible".equals(sensor.getString("quality")));
     }
-    private JSObject sensorTotals(ResearchDiagnostics.SensorTotals sensor) {
-        return new JSObject().put("windows", sensor.windows).put("usableWindows", sensor.usableWindows)
+    private NativePayload sensorTotals(ResearchDiagnostics.SensorTotals sensor) {
+        return new NativePayload().put("windows", sensor.windows).put("usableWindows", sensor.usableWindows)
             .put("medianDurationMillis", sensor.medianDurationMillis() == null ? JSONObject.NULL : sensor.medianDurationMillis())
             .put("medianRateHz", sensor.medianRateHz() == null ? JSONObject.NULL : sensor.medianRateHz())
             .put("maxGapMillis", sensor.maxGapMillis == null ? JSONObject.NULL : sensor.maxGapMillis);
     }
-    static void operation(PluginCall call, String action, Boolean enabled, Boolean movement) {
+    static void operation(NativeCall call, String action, Boolean enabled, Boolean movement) {
         ResearchCapture capture = current;
         if (capture == null) { call.reject("Research collection is unavailable.", "RESEARCH_UNAVAILABLE"); return; }
         capture.main.post(() -> {
@@ -254,7 +252,7 @@ final class ResearchCapture implements SensorEventListener {
         if (pending != null) return "verification_active";
         return null;
     }
-    static void diagnosticOperation(PluginCall call, String action) {
+    static void diagnosticOperation(NativeCall call, String action) {
         ResearchCapture capture = current;
         if (capture == null) { call.reject("Diagnostic unavailable.", "DIAGNOSTIC_UNAVAILABLE"); return; }
         capture.diagnostic.operation(call, action);

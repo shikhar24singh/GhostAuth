@@ -17,3 +17,8 @@ artifacts/
 .codex-remote-attachments/
 *.jks
 *.keystore
+
+# Flutter build tools
+.dart_tool/
+.flutter-plugins-dependencies
+build/

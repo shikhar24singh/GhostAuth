@@ -1,5 +1,6 @@
 package com.ghostauth.app;
 
+import org.json.JSONArray;
 import android.app.AppOpsManager;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -15,12 +16,6 @@ import android.os.Build;
 import android.os.Process;
 import android.provider.Settings;
 import android.util.Base64;
-import com.getcapacitor.JSArray;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginCall;
-import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -28,31 +23,31 @@ import java.util.List;
 import java.util.Set;
 import java.io.ByteArrayOutputStream;
 
-@CapacitorPlugin(name = "GhostDevice")
-public class GhostDevicePlugin extends Plugin {
+public class GhostDevicePlugin extends NativeHandler {
+    GhostDevicePlugin(MainActivity activity, GhostChannels channels) { super(activity, channels); }
+
     private static volatile GhostDevicePlugin current;
     @Override public void load() { current = this; }
     @Override protected void handleOnDestroy() { if (current == this) current = null; }
     static void protectionChanged() {
         GhostDevicePlugin plugin = current;
-        if (plugin != null) plugin.notifyListeners("protectionChanged", new JSObject());
+        if (plugin != null) plugin.notifyListeners("protectionChanged", new NativePayload());
     }
 
-    @PluginMethod
-    public void getSnapshot(PluginCall call) {
+    public void getSnapshot(NativeCall call) {
         try {
             PackageManager manager = getContext().getPackageManager();
             Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
             List<ResolveInfo> activities = manager.queryIntentActivities(launcher, 0);
             Set<String> seen = new HashSet<>();
-            List<JSObject> apps = new ArrayList<>();
+            List<NativePayload> apps = new ArrayList<>();
             for (ResolveInfo entry : activities) {
                 if (entry.activityInfo == null || !entry.activityInfo.enabled
                     || !entry.activityInfo.applicationInfo.enabled || !entry.activityInfo.exported) continue;
                 String id = entry.activityInfo.packageName;
                 if (id.equals(getContext().getPackageName()) || !seen.add(id)) continue;
                 CharSequence label = manager.getApplicationLabel(entry.activityInfo.applicationInfo);
-                JSObject app = new JSObject();
+                NativePayload app = new NativePayload();
                 app.put("id", id);
                 app.put("name", label == null || label.toString().trim().isEmpty() ? id : label.toString());
                 String icon = applicationIcon(manager, entry.activityInfo.applicationInfo);
@@ -60,20 +55,20 @@ public class GhostDevicePlugin extends Plugin {
                 apps.add(app);
             }
             apps.sort(Comparator.comparing(app -> app.getString("name", ""), String.CASE_INSENSITIVE_ORDER));
-            JSArray catalog = new JSArray();
-            for (JSObject app : apps) catalog.put(app);
+            JSONArray catalog = new JSONArray();
+            for (NativePayload app : apps) catalog.put(app);
             Set<String> protectedPackages = ProtectionPreferences.packages(getContext());
             if (protectedPackages.retainAll(seen)) {
                 if (!ProtectionPreferences.store(getContext()).edit().putStringSet("packages", protectedPackages).commit())
                     throw new IllegalStateException("Selection unavailable");
             }
             NotificationManager notifications = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            JSObject permissions = new JSObject();
+            NativePayload permissions = new NativePayload();
             permissions.put("usage", usageGranted());
             permissions.put("notifications", notifications != null && notifications.areNotificationsEnabled());
-            JSObject protection = ProtectionService.status(getContext());
+            NativePayload protection = ProtectionService.status(getContext());
             permissions.put("service", protection.getBoolean("enabled", false) && protection.getBoolean("connected", false));
-            JSObject result = new JSObject();
+            NativePayload result = new NativePayload();
             result.put("apps", catalog);
             result.put("permissions", permissions);
             result.put("protection", protection);
@@ -112,8 +107,7 @@ public class GhostDevicePlugin extends Plugin {
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
-    @PluginMethod
-    public void openSettings(PluginCall call) {
+    public void openSettings(NativeCall call) {
         String permission = call.getString("permission", "");
         if (!permission.equals("usage") && !permission.equals("notifications") && !permission.equals("service")) {
             call.reject("This permission has no implemented settings flow.", "UNSUPPORTED_PERMISSION");
@@ -153,15 +147,14 @@ public class GhostDevicePlugin extends Plugin {
             Uri.parse("package:" + getContext().getPackageName()));
     }
 
-    @PluginMethod
-    public void configureProtection(PluginCall call) {
+    public void configureProtection(NativeCall call) {
         Boolean enabled = call.getBoolean("enabled");
         if (Boolean.FALSE.equals(enabled)) {
             if (ProtectionPreferences.store(getContext()).edit().putBoolean("consent", false).commit()) call.resolve();
             else call.reject("Could not disable protection.", "PROTECTION_UNAVAILABLE");
             return;
         }
-        JSArray values = call.getArray("packages");
+        JSONArray values = call.getArray("packages");
         if (values == null || values.length() > 2_000) { call.reject("Invalid app selection.", "INVALID_SELECTION"); return; }
         Set<String> selected = new HashSet<>();
         try {
@@ -187,8 +180,7 @@ public class GhostDevicePlugin extends Plugin {
         }
     }
 
-    @PluginMethod
-    public void cancelProtection(PluginCall call) {
+    public void cancelProtection(NativeCall call) {
         getActivity().runOnUiThread(() -> { ProtectionService.cancelRequest(); call.resolve(); });
     }
 }

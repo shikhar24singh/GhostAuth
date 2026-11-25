@@ -8,9 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "android:sync": "npm run build && cap sync android",
-    "android:open": "cap open android",
-    "android:apk": "npm run android:sync && node scripts/build-android.mjs",
+    "android:apk": "node scripts/build-android.mjs",
     "android:serve": "node scripts/serve-apk.mjs"
   },
   "dependencies": {

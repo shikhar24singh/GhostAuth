@@ -1,0 +1,32 @@
+name: ghostauth
+description: Android app protection and on-device motion research.
+publish_to: none
+version: 0.8.0+14
+
+environment:
+  sdk: '>=3.14.0 <4.0.0'
+  flutter: '>=3.50.1'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - public/assets/ghostauth-logo.png
+    - public/fonts/arimo-LICENSE.txt
+    - public/fonts/cousine-LICENSE.txt
+  fonts:
+    - family: Arimo
+      fonts:
+        - asset: public/fonts/arimo-regular.ttf
+        - asset: public/fonts/arimo-bold.ttf
+          weight: 700
+    - family: Cousine
+      fonts:
+        - asset: public/fonts/cousine-regular.ttf
